@@ -1,5 +1,5 @@
 // Copyright (C) 2025 Alvalen Bilyunazra
-// This file is part of Alvalens-porto-2-nextJs.
+// This file is part of Vedaang-porto-2-nextJs.
 // Licensed under the GNU GPL v3.0. See LICENSE for details.
 
 "use client";
@@ -54,7 +54,7 @@ const MyPage = () => {
 												width={500}
 												height={500}
 												className="rounded-full w-full h-full object-cover "
-												alt="Alvalens"
+												alt="Vedaang"
 												placeholder="blur"
 											/>
 										</div>
@@ -67,7 +67,7 @@ const MyPage = () => {
 											delay: 0.2,
 											type: "spring",
 										}}>
-										Alvalen Shafel
+										Vedaang Sharma
 									</motion.h3>
 									<motion.h1
 										className="text-black text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold my-2 md:my-5"
@@ -87,11 +87,12 @@ const MyPage = () => {
 											delay: 0.4,
 											type: "spring",
 										}}>
-										Hi! I&rsquo;am Alvalen, A junior fullstack developer specializing in
-										modern Web Development with a growing focus on Artificial
-										Intelligence. Passionate about building scalable,
-										user-friendly web applications and exploring AI technologies
-										such as generative models and LLM integration.
+										Hi! I&rsquo;am Vedaang Sharma, A full-stack developer specializing in modern Web Development
+										using React, Node.js, and Next.js, with a growing focus on Artificial Intelligence.
+										Passionate about building scalable, user-friendly applications and
+										deploying them on cloud platforms like AWS and Azure, while also exploring
+										mobile development and Python-based backend technologies.
+
 									</motion.p>
 									<motion.div
 										className="buttons flex flex-row justify-center items-center space-x-4 mt-10"
@@ -129,7 +130,7 @@ const MyPage = () => {
 											width={400}
 											height={550}
 											placeholder="blur"
-											alt="Alvalens"
+											alt="Vedaang"
 											className="rounded-full w-full h-full object-cover"
 										/>
 									</div>
@@ -161,7 +162,7 @@ const MyPage = () => {
 											src={MeAbout}
 											layout="fill"
 											className="object-cover"
-											alt="Alvalens"
+											alt="Vedaang"
 											placeholder="blur"
 										/>
 									</motion.div>
@@ -227,7 +228,7 @@ const MyPage = () => {
 											src={ProjectAll}
 											layout="fill"
 											className="object-cover"
-											alt="Alvalens Setup"
+											alt="Vedaang Setup"
 											placeholder="blur"
 										/>
 									</motion.div>
@@ -297,7 +298,7 @@ const MyPage = () => {
 											src={Setup}
 											layout="fill"
 											className="object-cover"
-											alt="Alvalens Setup"
+											alt="Vedaang Setup"
 											placeholder="blur"
 										/>
 									</motion.div>
@@ -335,14 +336,14 @@ const MyPage = () => {
 											delay: 0.3,
 											type: "spring",
 										}}>
-										<a href="mailto:Alvalen.shafel04@gmail.com?subject=Hello&body=Hello Alvalens,">
-											alvalen.shafel04@gmail.com
+										<a href="mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,">
+											vedaangsharma2006@gmail.com
 										</a>
 									</motion.p>
 									{/* icons */}
 									<div className="flex justify-center items-center space-x-4">
 										<motion.a
-											href="mailto:Alvalen.shafel04@gmail.com?subject=Hello&body=Hello Alvalens,"
+											href="mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,"
 											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
 											initial={{ y: 40, opacity: 0 }}
 											whileInView={{ y: 0, opacity: 1 }}
@@ -354,7 +355,7 @@ const MyPage = () => {
 										</motion.a>
 
 										<motion.a
-											href="https://github.com/Alvalens"
+											href="https://github.com/gtathelegend"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
@@ -367,7 +368,7 @@ const MyPage = () => {
 											<FontAwesomeIcon icon={faGithub} className="text-3xl" />
 										</motion.a>
 										<motion.a
-											href="https://www.instagram.com/alvalens_/"
+											href="https://www.instagram.com/gtathelegend"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
@@ -383,7 +384,7 @@ const MyPage = () => {
 											/>
 										</motion.a>
 										<motion.a
-											href="https://www.linkedin.com/in/alvalen-shafel-8a081a254/"
+											href="https://www.linkedin.com/in/vedaangsharma2006"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
@@ -395,8 +396,8 @@ const MyPage = () => {
 											}}>
 											<FontAwesomeIcon icon={faLinkedin} className="text-3xl" />
 										</motion.a>
-										<motion.a
-											href="https://discordapp.com/users/bloody#6118"
+										{/* <motion.a
+											href="https://github.com"
 											target="_blank"
 											rel="noopener noreferrer"
 											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
@@ -406,8 +407,8 @@ const MyPage = () => {
 												y: { delay: 0.5 },
 												opacity: { delay: 0.6 },
 											}}>
-											<FontAwesomeIcon icon={faDiscord} className="text-3xl" />
-										</motion.a>
+											<FontAwesomeIcon icon={faGithub} className="text-3xl" />
+										</motion.a> */}
 									</div>
 								</div>
 							</div>
