@@ -1,15 +1,15 @@
 {
-  "name": "alvalen-portfolio-website",
+  "name": "vedaang-sharma-portfolio",
   "author": {
-    "name": "Alvalen Shafelbilyunazra",
-    "email": "alvalen.shafel04@gmail.com",
-    "url": "https://alvalens.my.id"
+    "name": "Vedaang Sharma",
+    "email": "vedaangsharma2006@gmail.com",
+    "url": "https://vedaangsharma.dev"
   },
   "license": "GPL-3.0",
-  "copyright": "Copyright (C) 2025 Alvalen Shafelbilyunazra",
+  "copyright": "Copyright (C) 2025 Vedaang Sharma",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
+  "scripts": {  
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
