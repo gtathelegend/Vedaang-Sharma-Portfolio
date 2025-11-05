@@ -9,42 +9,37 @@ import Chat from "@/components/Chat";
 import ClientTopProgressBar from "@/components/ClientTopProgressBar";
 
 export const metadata = {
-    title: "Alvalens | Portofolio",
+    title: "Vedaang Sharma | Portfolio",
 
     description:
-		"My name is Alvalens, I'm a web developer and I'm passionate about it. I'm currently studying at Universitas Negeri Malang.",
+		"My name is Vedaang Sharma, I'm a web developer and I'm passionate about it. I'm currently studying at Vivekananda Global University, Jaipur, India.",
 
-    author: "Alvalen Shafelbilyunazra",
-    siteUrl: "https://www.alvalens.my.id",
-    applicationName: "Alvalens",
+    author: "Vedaang Sharma",
+    siteUrl: "https://www.vedaangsharma.dev",
+    applicationName: "Vedaang Sharma Portfolio",
 
     keywords: [
-		"alvalens",
-		"alvalen",
-		"alvalen shafel",
-		"shafel",
-		"alvalen shafelbilyunazra",
-		"alvalen shafel bilyunazra",
-		"bloodfallen",
-		"alvalen porto",
-		"alvalen um",
+		"vedaang",
+		"vedaang sharma",
+		"vedaang sharma portfolio",
+		
 	],
 
     openGraph: {
 		type: "website",
-		url: "https://www.alvalens.my.id",
-		title: "Alvalens | Portofolio",
-		site_name: "Alvalens | Portofolio",
-		description: "My name is Alvalens, This is my portofolio website.",
+		url: "https://www.vedaangsharma.dev",
+		title: "Vedaang Sharma | Portfolio",
+		site_name: "Vedaang Sharma | Portfolio",
+		description: "My name is Vedaang Sharma, This is my portfolio website.",
 		width: 1200,
 		height: 630,
 		images: [
 			{
 				url: "/og-image-rev.png",
-				alt: "Alvalens Portofolio",
+				alt: "Vedaang Sharma Portfolio",
 			},
 		],
-		site_name: "Alvalens | Portofolio",
+		site_name: "Vedaang Sharma | Portfolio",
 	}
 };
 
