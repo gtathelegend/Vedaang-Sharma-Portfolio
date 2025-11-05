@@ -14,7 +14,7 @@ import Button from "@/components/Button";
 import Me from "@/public/image/me.jpg";
 import MeAbout from "@/public/image/me2.jpg";
 import Setup from "@/public/image/setup.jpg";
-import ProjectAll from "@/public/image/projects.png";
+import ProjectAll from "@/public/image/projects.jpg";
 import Hr from "@/components/Hr";
 // icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
