@@ -9,7 +9,7 @@
   "copyright": "Copyright (C) 2025 Vedaang Sharma",
   "version": "1.0.0",
   "private": true,
-  "scripts": {  
+  "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -25,6 +25,7 @@
     "@fullpage/react-fullpage": "^0.1.48",
     "@tailwindcss/postcss": "^4.0.14",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "eslint": "9.22.0",
     "eslint-config-next": "15.2.3",
     "framer-motion": "^12.5.0",
