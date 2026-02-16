@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import { motion } from "framer-motion";
-import jsonData from "@/json/data.json";
+import { fetchJson } from "@/lib/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -57,15 +57,38 @@ function ScrollDownButton() {
 function Page(props) {
     const params = use(props.params);
     const [data, setData] = useState(null);
+    const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-		const selectedData = jsonData.Projects.find(
-			(item) => item.slug === params.slug
-		);
-		if (selectedData === undefined) {
-			setData("404");
-		} else {
-			setData(selectedData);
-		}
+		let isMounted = true;
+		const loadProject = async () => {
+			try {
+				const response = await fetchJson("/api/projects");
+				const selectedData = (response.data || []).find(
+					(item) => item.slug === params.slug
+				);
+				if (!isMounted) return;
+				if (!selectedData) {
+					setData("404");
+				} else {
+					setData(selectedData);
+					setError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setError("Unable to load this project right now.");
+				}
+			} finally {
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		loadProject();
+		return () => {
+			isMounted = false;
+		};
 	}, [params.slug]);
 
     if (data === "404") {
@@ -74,7 +97,7 @@ function Page(props) {
 				<NotFound />
 			</>
 		);
-	} else if (!data) {
+	} else if (isLoading) {
 		return (
 			<div className="relative min-h-screen w-full  gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
 				<div className="min-h-screen flex justify-center items-center w-full">
@@ -97,6 +120,12 @@ function Page(props) {
 						<div className="animate-pulse duration-500 shadow-lg bg-neutral-400 h-full w-full rounded"></div>
 					</div>
 				</div>
+			</div>
+		);
+	} else if (error) {
+		return (
+			<div className="relative min-h-screen w-full  gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
+				<p className="text-red-600">{error}</p>
 			</div>
 		);
 	}

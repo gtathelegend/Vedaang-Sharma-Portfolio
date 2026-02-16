@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Button from "@/components/Button";
 import Image from "next/image";
+import { fetchJson } from "@/lib/api";
 
 // images
 import Intervyou1 from "@/public/image/projects/web/intervyou/intervyou-1.png";
@@ -13,7 +14,6 @@ import ProjectAll from "@/public/image/projects.jpg";
 
 import Hr from "@/components/Hr";
 import ProjectCard from "./components/ProjectCard";
-import Projects from "@/json/data.json";
 import FixedButon from "@/components/FixedButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -26,10 +26,39 @@ const category = {
 
 export default function Page() {
 	const [activeCategory, setActiveCategory] = useState(1);
-	const projects = Projects.Projects.filter((item) => item.show === true);
+	const [projects, setProjects] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState("");
+	const visibleProjects = projects.filter((item) => item.show === true);
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
+	}, []);
+
+	useEffect(() => {
+		let isMounted = true;
+		const loadProjects = async () => {
+			try {
+				const response = await fetchJson("/api/projects");
+				if (isMounted) {
+					setProjects(response.data || []);
+					setError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setError("Unable to load projects right now.");
+				}
+			} finally {
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		loadProjects();
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 	return (
 		<>
@@ -253,13 +282,20 @@ export default function Page() {
 
 				{/* projects */}
 				<div className="w-screen mx-auto container gap-4 px-10 grid grid-cols-1 md:grid-cols-2 mb-10 cursor-pointer">
-					{projects.map((project, index) => (
-						<ProjectCard
-							project={project}
-							key={index}
-							activeCategory={activeCategory}
-						/>
-					))}
+					{isLoading && (
+						<div className="text-gray-500">Loading projects...</div>
+					)}
+					{!isLoading && error && (
+						<div className="text-red-600">{error}</div>
+					)}
+					{!isLoading && !error &&
+						visibleProjects.map((project, index) => (
+							<ProjectCard
+								project={project}
+								key={index}
+								activeCategory={activeCategory}
+							/>
+						))}
 				</div>
 
 				{/* view in archive btn */}

@@ -1,13 +1,11 @@
-// Copyright (C) 2025 Alvalen Bilyunazra
-// This file is part of Vedaang-porto-2-nextJs.
-// Licensed under the GNU GPL v3.0. See LICENSE for details.
-
 "use client";
 import ReactFullpage from "@fullpage/react-fullpage";
 import Image from "next/legacy/image";
 // import "../globals.css";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchJson } from "@/lib/api";
 
 // components
 import Button from "@/components/Button";
@@ -25,6 +23,49 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const MyPage = () => {
+	const [socials, setSocials] = useState([]);
+	const [socialError, setSocialError] = useState("");
+
+	useEffect(() => {
+		let isMounted = true;
+		const loadSocials = async () => {
+			try {
+				const response = await fetchJson("/api/socials");
+				if (isMounted) {
+					setSocials(response.data || []);
+					setSocialError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setSocialError("Unable to load social links right now.");
+				}
+			}
+		};
+
+		loadSocials();
+		return () => {
+			isMounted = false;
+		};
+	}, []);
+
+	const iconMap = {
+		faGithub,
+		faInstagram,
+		faLinkedin,
+		faDiscord,
+		faEnvelope,
+	};
+
+	const sortedSocials = socials
+		.slice()
+		.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+	const emailSocial = sortedSocials.find(
+		(item) => item.iconName === "faEnvelope" || item.platform === "email"
+	);
+	const emailHref = emailSocial?.url || "mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,";
+	const emailText = emailHref.startsWith("mailto:")
+		? emailHref.replace("mailto:", "").split("?")[0]
+		: emailHref;
 	const fullpageOptions = {
 		anchors: ["home", "about", "projects", "contact"],
 		scrollingSpeed: 1000,
@@ -336,66 +377,36 @@ const MyPage = () => {
 											delay: 0.3,
 											type: "spring",
 										}}>
-										<a href="mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,">
-											vedaangsharma2006@gmail.com
+										<a href={emailHref}>
+											{emailText}
 										</a>
 									</motion.p>
 									{/* icons */}
 									<div className="flex justify-center items-center space-x-4">
-										<motion.a
-											href="mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,"
-											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
-											initial={{ y: 40, opacity: 0 }}
-											whileInView={{ y: 0, opacity: 1 }}
-											transition={{
-												y: { delay: 0.1 },
-												opacity: { delay: 0.2 },
-											}}>
-											<FontAwesomeIcon icon={faEnvelope} className="text-3xl" />
-										</motion.a>
-
-										<motion.a
-											href="https://github.com/gtathelegend"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
-											initial={{ opacity: 0, y: 40 }}
-											whileInView={{ opacity: 1, y: 0 }}
-											transition={{
-												y: { delay: 0.2 },
-												opacity: { delay: 0.3 },
-											}}>
-											<FontAwesomeIcon icon={faGithub} className="text-3xl" />
-										</motion.a>
-										<motion.a
-											href="https://www.instagram.com/gtathelegend"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
-											initial={{ opacity: 0, y: 40 }}
-											whileInView={{ opacity: 1, y: 0 }}
-											transition={{
-												y: { delay: 0.3 },
-												opacity: { delay: 0.4 },
-											}}>
-											<FontAwesomeIcon
-												icon={faInstagram}
-												className="text-3xl"
-											/>
-										</motion.a>
-										<motion.a
-											href="https://www.linkedin.com/in/vedaangsharma2006"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
-											initial={{ opacity: 0, y: 40 }}
-											whileInView={{ opacity: 1, y: 0 }}
-											transition={{
-												y: { delay: 0.4 },
-												opacity: { delay: 0.5 },
-											}}>
-											<FontAwesomeIcon icon={faLinkedin} className="text-3xl" />
-										</motion.a>
+										{socialError && (
+											<div className="text-red-600 text-sm">{socialError}</div>
+										)}
+										{!socialError &&
+											sortedSocials.map((social, index) => {
+												const Icon = iconMap[social.iconName];
+												if (!Icon) return null;
+												return (
+													<motion.a
+														key={social._id || social.url}
+														href={social.url}
+														target={social.url.startsWith("mailto:") ? undefined : "_blank"}
+														rel={social.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+														className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
+														initial={{ opacity: 0, y: 40 }}
+														whileInView={{ opacity: 1, y: 0 }}
+														transition={{
+															y: { delay: 0.1 + index * 0.1 },
+															opacity: { delay: 0.2 + index * 0.1 },
+														}}>
+														<FontAwesomeIcon icon={Icon} className="text-3xl" />
+													</motion.a>
+												);
+											})}
 										{/* <motion.a
 											href="https://github.com"
 											target="_blank"

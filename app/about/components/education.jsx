@@ -9,10 +9,8 @@ import {
 	faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import Me4 from "@/public/image/me4.jpeg";
-import Me5 from "@/public/image/me5.jpg";
-import Me6 from "@/public/image/me6.jpg";
+import { useEffect, useMemo, useState } from "react";
+import { fetchJson } from "@/lib/api";
 
 function Wrapper({ children }) {
 	return (
@@ -41,92 +39,59 @@ function Wrapper({ children }) {
 
 export default function Education() {
 	const [isExpanded, setIsExpanded] = useState(false);
+	const [education, setEducation] = useState(null);
+	const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
 
-	const achievementsByYear = {
-		2025: [
-			{
-				icon: faMedal,
-				title: "1st place (Gold Medal)",
-				subtitle: "Fesmaro IT Business Competition",
-				date: "Mar 2025",
-				color: "from-yellow-400 to-orange-500",
-			},
-			{
-				icon: faAward,
-				title: "Finalist",
-				subtitle: "Hackfest Build to Billion 2025",
-				date: "Apr 2025",
-				color: "from-blue-500 to-purple-600",
-			},
-			{
-				icon: faMedal,
-				title: "3rd place (Bronze Medal)",
-				subtitle: "Faculty of Engineering Most Outstanding Student",
-				date: "Feb 2025",
-				color: "from-amber-600 to-yellow-600",
-			},
-		],
-		2024: [
-			{
-				icon: faTrophy,
-				title: "Special Award | Gold Medal | Incubation Opportunity",
-				subtitle: "Indonesia Inventor Day 2024 (IID)",
-				date: "Aug 2024",
-				color: "from-yellow-400 to-orange-500",
-			},
-			{
-				icon: faMedal,
-				title: "1st place (Gold Medal)",
-				subtitle: "Tech & Trade Expo 2024",
-				date: "Jul 2024",
-				color: "from-yellow-400 to-orange-500",
-			},
-			{
-				icon: faMedal,
-				title: "2nd place (Silver Medal)",
-				subtitle: "IdeaFest 2024",
-				date: "Jul 2024",
-				color: "from-slate-400 to-slate-500",
-			},
-			{
-				icon: faAward,
-				title: "Finalist",
-				subtitle: "37th National Student Science Week (PIMNAS)",
-				date: "Oct 2024",
-				color: "from-blue-500 to-purple-600",
-			},
-			{
-				icon: faMedal,
-				title: "3rd place (Bronze Medal)",
-				subtitle: "Student Digital Innovation Competition (LIDM)",
-				date: "Jun 2024",
-				color: "from-amber-600 to-yellow-600",
-			},
-			{
-				icon: faMedal,
-				title: "3rd place (Bronze Medal)",
-				subtitle: "Fesmaro UI/UX Design",
-				date: "Jun 2024",
-				color: "from-amber-600 to-yellow-600",
-			},
-		],
-		2023: [
-			{
-				icon: faAward,
-				title: "Finalist",
-				subtitle: "36th National Student Science Week (PIMNAS)",
-				date: "Nov 2023",
-				color: "from-blue-500 to-purple-600",
-			},
-			{
-				icon: faMedal,
-				title: "3rd place (Bronze Medal)",
-				subtitle: "FORKAFEST 3.0 Web Development competition",
-				date: "Jan 2023",
-				color: "from-amber-600 to-yellow-600",
-			},
-		],
+	useEffect(() => {
+		let isMounted = true;
+		const loadEducation = async () => {
+			try {
+				const response = await fetchJson("/api/education");
+				const first = (response.data || [])[0] || null;
+				if (isMounted) {
+					setEducation(first);
+					setError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setError("Unable to load education right now.");
+				}
+			} finally {
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		loadEducation();
+		return () => {
+			isMounted = false;
+		};
+	}, []);
+
+	const iconMap = {
+		faMedal,
+		faGraduationCap,
+		faTrophy,
+		faAward,
 	};
+
+	const achievementsByYear = useMemo(() => {
+		const grouped = {};
+		const achievements = education?.achievements || [];
+		achievements.forEach((achievement) => {
+			const year = achievement.year || new Date().getFullYear();
+			if (!grouped[year]) {
+				grouped[year] = [];
+			}
+			grouped[year].push({
+				...achievement,
+				icon: iconMap[achievement.iconName] || faAward,
+			});
+		});
+		return grouped;
+	}, [education]);
 
 	// Flatten all achievements into a single array for easier limiting
 	const allAchievements = Object.entries(achievementsByYear)
@@ -139,6 +104,8 @@ export default function Education() {
 		? allAchievements
 		: allAchievements.slice(0, 6);
 	const hasMoreAchievements = allAchievements.length > 6;
+	const summaryParagraphs = (education?.summary || "").split("\n\n");
+	const imageList = education?.images || [];
 
 	return (
 		<Wrapper>
@@ -157,7 +124,7 @@ export default function Education() {
 						Get to know more about my educational background.
 					</p>
 				</motion.div>
-				{/* Main Content */}
+					{/* Main Content */}
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					{/* Education Section - Left */}
 					<motion.div
@@ -165,96 +132,58 @@ export default function Education() {
 						initial={{ opacity: 0, x: -50 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.8, delay: 0.2 }}>
-						<div className="font-medium text-lg mb-4">2022 - Present</div>
-						<div>
-							<h2 className="font-semibold text-xl">
-								Universitas Negeri Malang
-							</h2>
-							<h3 className="text-md font-normal mb-3">
-								S1 Teknik Informatika | Computer Science
-							</h3>
-							<div className="gap-4 mb-4 flex items-stretch md:h-[300px] xl:h-[400px]">
-								<div className="flex-[1] transition-all duration-300 ease-in-out hover:flex-[3] group">
-									<Image
-										src={Me5}
-										width={400}
-										height={225}
-										alt="University"
-										className="rounded-lg w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 ease-in-out"
-									/>
+							{isLoading && (
+								<div className="text-gray-500">Loading education...</div>
+							)}
+							{!isLoading && error && (
+								<div className="text-red-600">{error}</div>
+							)}
+							{!isLoading && !error && education && (
+								<div>
+									<div className="font-medium text-lg mb-4">
+										{education.startYear} - {education.endYear}
+									</div>
+									<div>
+										<h2 className="font-semibold text-xl">
+											{education.institute}
+										</h2>
+										<h3 className="text-md font-normal mb-3">
+											{education.degree}
+										</h3>
+										{imageList.length > 0 && (
+											<div className="gap-4 mb-4 flex items-stretch md:h-[300px] xl:h-[400px]">
+												{imageList.slice(0, 3).map((image, index) => (
+													<div
+														key={`${image}-${index}`}
+														className="flex-[1] transition-all duration-300 ease-in-out hover:flex-[3] group">
+														<Image
+															src={image}
+															width={400}
+															height={225}
+															alt="Education"
+															className="rounded-lg w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 ease-in-out"
+														/>
+													</div>
+												))}
+											</div>
+										)}
+										<div className="flex items-center gap-2">
+											<div className="text-gray-600 text-justify title text-lg space-y-4">
+												{summaryParagraphs.map((paragraph, index) => (
+													<p key={index}>{paragraph}</p>
+												))}
+											</div>
+										</div>
+										{education.gpa && (
+											<div className="flex flex-wrap gap-2 mt-4 text-sm">
+												<div className="bg-gray-300 text-black px-2 py-1 rounded-2xl">
+													GPA: {education.gpa}
+												</div>
+											</div>
+										)}
+									</div>
 								</div>
-								<div className="flex-[1] transition-all duration-300 ease-in-out hover:flex-[3] group">
-									<Image
-										src={Me4}
-										width={400}
-										height={225}
-										alt="University"
-										className="rounded-lg w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 ease-in-out"
-									/>
-								</div>
-								<div className="flex-[1] transition-all duration-300 ease-in-out hover:flex-[3] group">
-									<Image
-										src={Me6}
-										width={400}
-										height={225}
-										alt="University"
-										className="rounded-lg w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 ease-in-out"
-									/>
-								</div>
-							</div>
-							<div className="flex items-center gap-2">
-								<p className="text-gray-600 text-justify title text-lg">
-									Aspiring to become a professional Software Engineer, I&rsquo;m
-									currently pursuing my Bachelor&rsquo;s degree in{" "}
-									<span className="text-black font-medium">
-										Computer Science
-									</span>{" "}
-									at{" "}
-									<span className="text-black font-medium">
-										Universitas Negeri Malang
-									</span>
-									. My journey in tech is driven by curiosity and
-									creativity—combining web development with cutting-edge AI
-									research and implementation.
-									<br />
-									<br />
-									As the{" "}
-									<span className="text-black font-medium">
-										Co-Lead of Google Developer Group on Campus (GDGoC)
-									</span>{" "}
-									at my university, I&rsquo;ve led technical initiatives,
-									mentored peers, and helped build impactful digital solutions.
-									I&rsquo;ve actively participated in various{" "}
-									<span className="text-black font-medium">
-										national or international technology competitions
-									</span>
-									, earning recognition through awards such as{" "}
-									<span className="text-black font-medium">
-										PIMNAS Finalist, Indonesia Inventor Day Gold Medalist, Top 3
-										at LIDM 2024
-									</span>
-									, and more.
-									<br />
-									<br />I am passionate about solving real-world problems
-									through code, especially at the intersection of{" "}
-									<span className="text-black font-medium">
-										Web Development
-									</span>{" "}
-									and{" "}
-									<span className="text-black font-medium">
-										Artificial Intelligence
-									</span>
-									. Constantly learning, building, and collaborating—I&rsquo;m
-									excited to keep growing and contributing to the evolving tech
-									landscape.
-								</p>
-							</div>
-							<div className="flex flex-wrap gap-2 mt-4 text-sm">
-								<div className="bg-gray-300 text-black px-2 py-1 rounded-2xl">
-									GPA: 3.9 out of 4
-								</div>
-							</div>
-						</div>
+							)}
 					</motion.div>{" "}
 					{/* Achievements Section - Right */}
 					<motion.div

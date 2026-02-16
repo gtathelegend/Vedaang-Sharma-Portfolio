@@ -1,16 +1,45 @@
 "use client";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { fetchJson } from "@/lib/api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import FixedButon from "@/components/FixedButton";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import Projects from "@/json/data.json";
 import Link from "next/link";
 
 export default function Page() {
-	const projects = Projects.Projects;
+	const [projects, setProjects] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [error, setError] = useState("");
+
+	useEffect(() => {
+		let isMounted = true;
+		const loadProjects = async () => {
+			try {
+				const response = await fetchJson("/api/projects");
+				if (isMounted) {
+					setProjects(response.data || []);
+					setError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setError("Unable to load projects right now.");
+				}
+			} finally {
+				if (isMounted) {
+					setIsLoading(false);
+				}
+			}
+		};
+
+		loadProjects();
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 	return (
 		<>
 			<main className="overflow-hidden">
@@ -80,41 +109,56 @@ export default function Page() {
 								</tr>
 							</thead>
 							<tbody>
-								{projects.map((project, index) => (
-									<tr
-										key={index}
-										className="hover:shadow-md transition-all ease duration-500">
-										<td>{project.year}</td>
-										<td>
-											<Link href={`/projects/${project.slug}`}>
-												{project.title}
-											</Link>
-										</td>
-										<td>{project.tech.map((t) => `${t}, `)}</td>
-										<td>
-											<div className="flex flex-row justify-center items-center">
-												{project.code && (
-													<a href={project.code} title="Link to GitHub">
-														<FontAwesomeIcon
-															icon={faGithub}
-															className="text-xl mr-2"
-														/>
-													</a>
-												)}
-												{project.preview && (
-													<a
-														href={project.preview}
-														title="Link to project preview">
-														<FontAwesomeIcon
-															icon={faArrowUpRightFromSquare}
-															className="text-xl"
-														/>
-													</a>
-												)}
-											</div>
+								{isLoading && (
+									<tr>
+										<td colSpan={4} className="py-6 text-center text-gray-500">
+											Loading projects...
 										</td>
 									</tr>
-								))}
+								)}
+								{!isLoading && error && (
+									<tr>
+										<td colSpan={4} className="py-6 text-center text-red-600">
+											{error}
+										</td>
+									</tr>
+								)}
+								{!isLoading && !error &&
+									projects.map((project, index) => (
+										<tr
+											key={index}
+											className="hover:shadow-md transition-all ease duration-500">
+											<td>{project.year}</td>
+											<td>
+												<Link href={`/projects/${project.slug}`}>
+													{project.title}
+												</Link>
+											</td>
+											<td>{project.tech.map((t) => `${t}, `)}</td>
+											<td>
+												<div className="flex flex-row justify-center items-center">
+													{project.code && (
+														<a href={project.code} title="Link to GitHub">
+															<FontAwesomeIcon
+																icon={faGithub}
+																className="text-xl mr-2"
+															/>
+														</a>
+													)}
+													{project.preview && (
+														<a
+															href={project.preview}
+															title="Link to project preview">
+															<FontAwesomeIcon
+																icon={faArrowUpRightFromSquare}
+																className="text-xl"
+															/>
+														</a>
+													)}
+												</div>
+											</td>
+										</tr>
+									))}
 							</tbody>
 						</table>
 					</div>

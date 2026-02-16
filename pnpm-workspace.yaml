@@ -1,5 +1,7 @@
 packages:
   - .
+  - backend
+  - admin-dashboard
   
 onlyBuiltDependencies:
   - core-js

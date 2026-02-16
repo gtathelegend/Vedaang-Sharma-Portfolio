@@ -1,124 +1,10 @@
 "use client";
 import Hr from "@/components/Hr";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchJson } from "@/lib/api";
 
-const experiences = [
-	{
-		id: 1,
-		startDate: "Sep 2023",
-		endDate: "Jan 2024",
-		company: "Universitas Negeri Malang",
-		position: "Assistant Lecturer",
-		type: "Seasonal",
-		location: "Malang, Indonesia",
-		description:
-			"Assisted in teaching and mentoring students in algorithms and data structures, focusing on practical applications and problem-solving techniques. Developed course materials and provided support in lab sessions.",
-		skills: ["Python", "C", "Algorithms", "Data Structures", "Mentoring"],
-	},
-	{
-		id: 2,
-		startDate: "Jul 2024",
-		endDate: "Jan 2025",
-		company: "Outlier AI",
-		position: "AI Trainer",
-		type: "Freelance (Remote)",
-		location: "Oakland, California",
-		description:
-			"Trained LLM models using RLFH, focusing on enhancing their understanding of human language and improving their response accuracy. Collaborated with a team of AI specialists to refine model performance and ensure high-quality outputs.",
-		skills: ["Generative AI", "RLFH", "LLM", "Prompt Engineering", "Teamwork"],
-	},
-	{
-		id: 3,
-		startDate: "Jun 2023",
-		endDate: "Feb 2025",
-		company: "PUI-PT DLI",
-		position: "Fullstack Developer",
-		type: "Freelance",
-		location: "Malang, Indonesia",
-		description:
-			"Crafted and maintained web applications using Laravel, ensuring high performance and responsiveness. Collaborated with designers and other  developers to create seamless user experiences.",
-		skills: ["Laravel", "MySQL", "PHP", "JavaScript", "Teamwork"],
-	},
-	{
-		id: 4,
-		startDate: "Apr 2025",
-		endDate: "Jul 2025",
-		company: "Vektorian Labophase",
-		position: "Front-end Developer",
-		type: "Freelance",
-		location: "Malang, Indonesia",
-		description:
-			"Developed and maintained web applications using Next.js. Focused on creating responsive and user-friendly interfaces while ensuring backend functionality. Collaborated with backend and designers to implement modern UI/UX principles.",
-		skills: ["Next.js", "Typescript", "Teamwork"],
-	},
-	{
-		id: 5,
-		startDate: "Apr 2023",
-		endDate: "Present",
-		company: "Self-Employed",
-		position: "Web Developer & AI Consultant",
-		type: "Freelance",
-		location: "Malang, Indonesia",
-		description:
-			"Developed 15+ web applications using Next.js, React, and Laravel. Provided AI consulting services, including creating custom LLMs. Focused on delivering high-quality, user-friendly applications and AI solutions.",
-		skills: [
-			"Next.js",
-			"React",
-			"Laravel",
-			"MySQL",
-			"PostgreSQL",
-			"MongoDB",
-			"JavaScript",
-			"TypeScript",
-			"Gemini AI",
-		],
-	},
-	{
-		id: 6,
-		startDate: "Aug 2023",
-		endDate: "Present",
-		company: "PT Hafdzamedia Teknologi Aplikasi",
-		position: "Fullstack Web Developer",
-		type: "Part-time",
-		location: "Malang, Indonesia",
-		description:
-			"Developed and maintained web applications using React, Next.js, and Laravel. Focused on creating responsive and user-friendly interfaces while ensuring backend functionality.",
-		skills: [
-			"React",
-			"Next.js",
-			"Laravel",
-			"MySQL",
-			"JavaScript",
-			"TypeScript",
-			"Teamwork",
-		],
-	},
-	{
-		id: 7,
-		startDate: "Feb 2025",
-		endDate: "Present",
-		company: "Joki Proyek",
-		position: "IT Implementation Specialist",
-		type: "Internship (Remote)",
-		location: "Malang, Indonesia",
-		description:
-			"Developed and maintained current internal web applications using Next.js & and Laravel. Fixed bugs and implemented new features to enhance user experience. Collaborated with the team to ensure smooth deployment and functionality of applications.",
-		skills: [
-			"Next.js",
-			"Laravel",
-			"MySQL",
-			"PostgreSQL",
-			"JavaScript",
-			"TypeScript",
-			"MongoDB",
-			"Docker",
-			"Teamwork",
-		],
-	},
-];
-
-experiences.reverse();
+const emptyExperiences = [];
 
 function Title() {
 	return (
@@ -240,7 +126,33 @@ function Wrapper({ children }) {
 
 export default function Experience() {
 	const [showAll, setShowAll] = useState(false);
-	const displayedExperiences = showAll ? experiences : experiences.slice(0, 3);
+	const [experiences, setExperiences] = useState(emptyExperiences);
+	const [error, setError] = useState("");
+	const displayedExperiences = showAll
+		? experiences
+		: experiences.slice(0, 3);
+
+	useEffect(() => {
+		let isMounted = true;
+		const loadExperience = async () => {
+			try {
+				const response = await fetchJson("/api/experience");
+				if (isMounted) {
+					setExperiences(response.data || []);
+					setError("");
+				}
+			} catch (err) {
+				if (isMounted) {
+					setError("Unable to load experience right now.");
+				}
+			}
+		};
+
+		loadExperience();
+		return () => {
+			isMounted = false;
+		};
+	}, []);
 
 	return (
 		<>
@@ -256,8 +168,12 @@ export default function Experience() {
 					{/* Experience cards */}
 					<div className="space-y-12 md:space-y-16 relative">
 						<AnimatePresence>
-							{displayedExperiences.map((experience, index) => (
-								<div key={experience.id} className="relative">
+							{error && (
+								<div className="text-red-600 text-center">{error}</div>
+							)}
+							{!error &&
+								displayedExperiences.map((experience, index) => (
+								<div key={experience._id || index} className="relative">
 									{/* Timeline period card - flows naturally above content */}
 									<TimelineCard
 										experience={experience}
