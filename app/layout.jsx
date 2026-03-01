@@ -1,12 +1,11 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 import "./nprogress.css";
 import { Analytics } from "@vercel/analytics/react";
-import Chat from "@/components/Chat";
 import ClientTopProgressBar from "@/components/ClientTopProgressBar";
+import ShellChrome from "@/components/ShellChrome";
 
 export const metadata = {
     title: "Vedaang Sharma | Portfolio",
@@ -48,9 +47,8 @@ export default function RootLayout({ children }) {
 		<html lang="en">
 			<body>
 				<ClientTopProgressBar />
-				<Navbar />
+				<ShellChrome />
 				{children}
-				<Chat />
 				<Analytics />
 			</body>
 		</html>

@@ -1,40 +1,37 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const auth = require("../middleware/auth");
+const { sendError, sendOk } = require("../utils/http");
 
-const signToken = (userId) => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    throw new Error("JWT_SECRET is required");
-  }
-  return jwt.sign({ id: userId }, secret, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-  });
-};
+const buildCookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  maxAge: 1000 * 60 * 60 * 24,
+});
 
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      res.status(400);
-      return next(new Error("Email and password are required"));
+      return sendError(res, 400, "Email and password are required");
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: email.toLowerCase() }).select("+passwordHash");
     if (!user) {
-      res.status(401);
-      return next(new Error("Invalid credentials"));
+      return sendError(res, 401, "Invalid credentials");
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      res.status(401);
-      return next(new Error("Invalid credentials"));
+      return sendError(res, 401, "Invalid credentials");
     }
 
-    const token = signToken(user._id);
+    const token = auth.signAuthToken(user);
 
-    return res.json({
-      token,
+    res.cookie(auth.TOKEN_COOKIE_NAME, token, buildCookieOptions());
+
+    return sendOk(res, {
       user: {
         id: user._id,
         name: user.name,
@@ -47,4 +44,27 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { login };
+const logout = async (req, res) => {
+  res.cookie(auth.TOKEN_COOKIE_NAME, "", {
+    ...buildCookieOptions(),
+    maxAge: 0,
+  });
+  return sendOk(res, { message: "Logged out" });
+};
+
+const me = async (req, res) => {
+  if (!req.user) {
+    return sendError(res, 401, "Unauthorized");
+  }
+
+  return sendOk(res, {
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role,
+    },
+  });
+};
+
+module.exports = { login, logout, me };

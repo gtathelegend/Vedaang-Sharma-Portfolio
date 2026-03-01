@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { clearToken } from "../lib/auth.js";
+import { clearSession } from "../lib/auth.js";
 
 const Topbar = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    clearToken();
+  const handleLogout = async () => {
+    await clearSession();
     navigate("/admin/login");
   };
 

@@ -173,7 +173,7 @@ export default function Experience() {
 							)}
 							{!error &&
 								displayedExperiences.map((experience, index) => (
-								<div key={experience._id || index} className="relative">
+								<div key={experience._id || experience.id || index} className="relative">
 									{/* Timeline period card - flows naturally above content */}
 									<TimelineCard
 										experience={experience}

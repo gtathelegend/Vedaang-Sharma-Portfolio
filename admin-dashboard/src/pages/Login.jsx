@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../lib/api.js";
-import { setToken } from "../lib/auth.js";
 import Toast from "../components/Toast.jsx";
 import useToast from "../hooks/useToast.js";
 
@@ -19,8 +18,7 @@ const Login = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post("/api/auth/login", form);
-      setToken(response.data.token);
+      await api.post("/api/auth/login", form);
       navigate("/admin/dashboard");
     } catch (error) {
       showToast("Login failed. Check credentials.", "error");

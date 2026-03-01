@@ -15,14 +15,18 @@ const createAdmin = async () => {
 
   const existing = await User.findOne({ email: ADMIN_EMAIL.toLowerCase() });
   if (existing) {
-    console.log("Admin user already exists");
+    existing.name = ADMIN_NAME || existing.name;
+    existing.passwordHash = ADMIN_PASSWORD;
+    existing.role = "admin";
+    await existing.save();
+    console.log("Admin user updated");
     return;
   }
 
   const user = new User({
     name: ADMIN_NAME || "Admin",
     email: ADMIN_EMAIL.toLowerCase(),
-    password: ADMIN_PASSWORD,
+    passwordHash: ADMIN_PASSWORD,
     role: "admin",
   });
 

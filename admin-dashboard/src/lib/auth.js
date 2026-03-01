@@ -1,31 +1,30 @@
-const TOKEN_KEY = "portfolioAdminToken";
-
-export const setToken = (token) => {
-  localStorage.setItem(TOKEN_KEY, token);
-};
-
-export const getToken = () => {
-  return localStorage.getItem(TOKEN_KEY);
-};
-
-export const clearToken = () => {
-  localStorage.removeItem(TOKEN_KEY);
-};
-
-const parseJwt = (token) => {
+export const getSessionUser = async () => {
   try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    return JSON.parse(atob(base64));
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/me`,
+      {
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = await response.json();
+    return payload?.data?.user || null;
   } catch (error) {
     return null;
   }
 };
 
-export const isAuthenticated = () => {
-  const token = getToken();
-  if (!token) return false;
-  const payload = parseJwt(token);
-  if (!payload || !payload.exp) return true;
-  return payload.exp * 1000 > Date.now();
+export const clearSession = async () => {
+  try {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    return null;
+  }
 };
