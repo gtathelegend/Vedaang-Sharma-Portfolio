@@ -1,7 +1,8 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { CodepenIcon, WebhookIcon, ActivityIcon } from "./icons"
+import { ActivityIcon, CodepenIcon, MobileIcon, WebhookIcon } from "./icons";
 
 const skillCategories = {
 	web: {
@@ -24,9 +25,19 @@ const skillCategories = {
 			"Laravel",
 			"Flask",
 			"Django",
-			"Firebase"
+			"Firebase",
 		],
-		tools: ["Visual Studio Code", "Git", "Github", "Figma", "Vite", "Docker", "Kubernetes", "Google Cloud", "Postman"],
+		tools: [
+			"Visual Studio Code",
+			"Git",
+			"GitHub",
+			"Figma",
+			"Vite",
+			"Docker",
+			"Kubernetes",
+			"Google Cloud",
+			"Postman",
+		],
 	},
 	api: {
 		title: "REST API",
@@ -46,7 +57,16 @@ const skillCategories = {
 			"MongoDB",
 			"Firebase",
 		],
-		tools: ["Postman", "Docker", "Kubernetes", "Swagger", "Git", "Github", "Google Cloud", "IBM Cloud"],
+		tools: [
+			"Postman",
+			"Docker",
+			"Kubernetes",
+			"Swagger",
+			"Git",
+			"GitHub",
+			"Google Cloud",
+			"IBM Cloud",
+		],
 	},
 	ai: {
 		title: "AI & Machine Learning",
@@ -76,17 +96,8 @@ const skillCategories = {
 		title: "Mobile Development",
 		icon: MobileIcon,
 		description: "Cross-platform mobile app development",
-		languages: [
-			"React Native",
-			"JavaScript",
-			"TypeScript",
-			"Dart",
-			"Flutter",
-		],
-		tools: [
-			"Android Studio",
-			"React Native CLI",
-		],
+		languages: ["React Native", "JavaScript", "TypeScript", "Dart", "Flutter"],
+		tools: ["Android Studio", "React Native CLI"],
 	},
 };
 
@@ -94,143 +105,94 @@ function SkillCard({ skill, isSelected, onClick }) {
 	const Icon = skill.icon;
 
 	return (
-		<motion.div
+		<motion.button
+			type="button"
 			onClick={onClick}
-			className={`relative cursor-pointer group p-6 rounded-2xl backdrop-blur-lg border transition-all duration-300 ${
+			className={`relative w-full text-left cursor-pointer group p-6 rounded-2xl backdrop-blur-lg border transition-all duration-300 ${
 				isSelected
 					? "bg-white/20 border-black border-2 shadow-lg"
 					: "bg-white/10 border-gray-300/20 hover:bg-white/20 hover:border-gray-300/30"
-					import { useEffect, useMemo, useState } from "react";
-			whileHover={{
-					import { fetchJson } from "@/lib/api";
-				scale: 1.05,
-					const categoryMeta = {
-						frontend: {
-							title: "Frontend",
-							icon: CodepenIcon,
-							description: "UI and client-side development",
-						},
-						backend: {
-							title: "Backend",
-							icon: WebhookIcon,
-							description: "APIs, services, and data layers",
-						},
-						tools: {
-							title: "Tools",
-							icon: ActivityIcon,
-							description: "Developer tooling and platforms",
-						},
-					};
-							transition={{ delay: 0.5 + index * 0.1 }}
-							className="px-4 py-2 bg-gradient-to-r from-gray-300/60 to-gray-100/40 
-						const [selectedCategory, setSelectedCategory] = useState("frontend");
-						const [skills, setSkills] = useState([]);
-						const [error, setError] = useState("");
-						const [isLoading, setIsLoading] = useState(true);
+			}`}
+			whileHover={{ scale: 1.03 }}
+			whileTap={{ scale: 0.98 }}>
+			<div className="flex items-center gap-4 mb-3">
+				<div className="rounded-full p-2 bg-white/30">
+					<Icon className="w-5 h-5" />
+				</div>
+				<h3 className="text-xl font-semibold text-gray-900">{skill.title}</h3>
+			</div>
+			<p className="text-gray-700 text-sm leading-relaxed">{skill.description}</p>
+		</motion.button>
+	);
+}
 
-						useEffect(() => {
-							let isMounted = true;
-							const loadSkills = async () => {
-								try {
-									const response = await fetchJson("/api/skills");
-									if (isMounted) {
-										setSkills(response.data || []);
-										setError("");
-									}
-								} catch (err) {
-									if (isMounted) {
-										setError("Unable to load skills right now.");
-									}
-								} finally {
-									if (isMounted) {
-										setIsLoading(false);
-									}
-								}
-							};
+function SkillDetails({ selectedSkill }) {
+	return (
+		<motion.div
+			key={selectedSkill.title}
+			initial={{ opacity: 0, y: 12 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, y: -12 }}
+			transition={{ duration: 0.25 }}
+			className="rounded-2xl border border-gray-300/30 bg-white/20 backdrop-blur-lg p-6">
+			<h3 className="text-2xl font-semibold mb-4 text-gray-900">{selectedSkill.title}</h3>
 
-							loadSkills();
-							return () => {
-								isMounted = false;
-							};
-						}, []);
+			<div className="mb-5">
+				<h4 className="font-medium text-gray-800 mb-3">Technologies</h4>
+				<div className="flex flex-wrap gap-2">
+					{selectedSkill.languages.map((language) => (
+						<span
+							key={language}
+							className="px-3 py-1.5 rounded-full text-sm bg-gray-200/70 text-gray-800">
+							{language}
+						</span>
+					))}
+				</div>
+			</div>
 
-						const skillCategories = useMemo(() => {
-							const tools = skills
-								.filter((skill) => skill.category === "tools")
-								.map((skill) => skill.name);
-
-							return Object.keys(categoryMeta).reduce((acc, key) => {
-								const categorySkills = skills
-									.filter((skill) => skill.category === key)
-									.map((skill) => skill.name);
-
-								if (categorySkills.length === 0 && key !== "tools") {
-									return acc;
-								}
-
-								acc[key] = {
-									...categoryMeta[key],
-									languages: key === "tools" ? tools : categorySkills,
-									tools,
-								};
-								return acc;
-							}, {});
-						}, [skills]);
-
-						useEffect(() => {
-							const keys = Object.keys(skillCategories);
-							if (keys.length && !skillCategories[selectedCategory]) {
-								setSelectedCategory(keys[0]);
-							}
-						}, [skillCategories, selectedCategory]);
-
-						const selectedSkill = skillCategories[selectedCategory];
-									 backdrop-blur-sm hover:scale-105 transition-transform cursor-default
-									 hover:bg-gradient-to-r hover:from-gray-400/60 hover:to-gray-200/50">
+			<div>
+				<h4 className="font-medium text-gray-800 mb-3">Tools</h4>
+				<div className="flex flex-wrap gap-2">
+					{selectedSkill.tools.map((tool) => (
+						<span
+							key={tool}
+							className="px-3 py-1.5 rounded-full text-sm bg-gray-200/70 text-gray-800">
 							{tool}
-									{/* Skill Categories Grid */}
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-										{isLoading && (
-											<div className="text-gray-500">Loading skills...</div>
-										)}
-										{!isLoading && error && (
-											<div className="text-red-600">{error}</div>
-										)}
-										{!isLoading && !error &&
-											Object.entries(skillCategories).map(([key, skill], index) => (
-			</motion.div>
+						</span>
+					))}
+				</div>
+			</div>
 		</motion.div>
 	);
 }
 
 export default function Skills() {
 	const [selectedCategory, setSelectedCategory] = useState("web");
+	const selectedSkill = skillCategories[selectedCategory];
+
 	return (
 		<div className="relative">
 			<div className="mx-auto container px-6 py-20">
 				<motion.div
-										))}
+					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.6 }}
-
-									{/* Skill Details */}
-									<AnimatePresence>
-										{selectedSkill && (
-											<SkillDetails selectedSkill={selectedSkill} />
-										)}
-									</AnimatePresence>
-						category to see the specific technologies and tools I work with.
+					viewport={{ once: true }}
+					className="mb-10">
+					<h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Skills</h2>
+					<p className="text-gray-700 max-w-2xl">
+						Select a category to see the specific technologies and tools I work with.
 					</p>
 				</motion.div>
 
-				{/* Skill Categories Grid */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 					{Object.entries(skillCategories).map(([key, skill], index) => (
 						<motion.div
 							key={key}
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							transition={{ delay: index * 0.1 }}>
+							transition={{ delay: index * 0.1 }}
+							viewport={{ once: true }}>
 							<SkillCard
 								skill={skill}
 								isSelected={selectedCategory === key}
@@ -240,9 +202,8 @@ export default function Skills() {
 					))}
 				</div>
 
-				{/* Skill Details */}
 				<AnimatePresence mode="wait">
-					<SkillDetails selectedSkill={skillCategories[selectedCategory]} />
+					<SkillDetails selectedSkill={selectedSkill} />
 				</AnimatePresence>
 			</div>
 		</div>
