@@ -11,7 +11,7 @@ import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
 const emptyForm = {
   company: "",
-  role: "",
+  position: "",
   startDate: "",
   endDate: "",
   description: "",
@@ -54,15 +54,15 @@ export default function AdminExperiencePage() {
   const openEdit = (item) => {
     setEditing(item);
     setForm({
-      company: item.company,
-      role: item.role,
-      startDate: item.startDate,
-      endDate: item.endDate,
-      description: item.description,
-      type: item.type || "",
-      location: item.location || "",
-      skills: item.skills || [],
-      sortOrder: item.sortOrder || 0,
+      company: item.company ?? "",
+      position: item.position ?? "",
+      startDate: item.startDate ?? item.start_date ?? "",
+      endDate: item.endDate ?? item.end_date ?? "",
+      description: item.description ?? "",
+      type: item.type ?? "",
+      location: item.location ?? "",
+      skills: item.skills ?? [],
+      sortOrder: item.sortOrder ?? item.sort_order ?? 0,
     });
     setModalOpen(true);
   };
@@ -76,7 +76,7 @@ export default function AdminExperiencePage() {
     event.preventDefault();
     try {
       if (editing) {
-        await adminFetch(`/api/experience/${editing._id}`, {
+        await adminFetch(`/api/experience/${editing.id}`, {
           method: "PUT",
           body: JSON.stringify(form),
         });
@@ -110,7 +110,10 @@ export default function AdminExperiencePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Experience</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">
+        <button
+          onClick={openCreate}
+          className="px-4 py-2 bg-slate-900 text-white rounded-md"
+        >
           Add Experience
         </button>
       </div>
@@ -123,22 +126,31 @@ export default function AdminExperiencePage() {
             <thead className="bg-slate-100 text-slate-600">
               <tr>
                 <th className="text-left px-4 py-3">Company</th>
-                <th className="text-left px-4 py-3">Role</th>
+                <th className="text-left px-4 py-3">Position</th>
                 <th className="text-left px-4 py-3">Dates</th>
                 <th className="text-right px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item._id} className="border-t">
+                <tr key={item.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{item.company}</td>
-                  <td className="px-4 py-3">{item.role}</td>
-                  <td className="px-4 py-3">{item.startDate} - {item.endDate}</td>
+                  <td className="px-4 py-3">{item.position}</td>
+                  <td className="px-4 py-3">
+                    {item.startDate ?? item.start_date} –{" "}
+                    {item.endDate ?? item.end_date}
+                  </td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">
+                    <button
+                      onClick={() => openEdit(item)}
+                      className="text-slate-700 hover:underline"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(item._id)} className="text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   </td>
@@ -149,20 +161,69 @@ export default function AdminExperiencePage() {
         </div>
       )}
 
-      <AdminModal open={modalOpen} title={editing ? "Edit Experience" : "Add Experience"} onClose={() => setModalOpen(false)}>
+      <AdminModal
+        open={modalOpen}
+        title={editing ? "Edit Experience" : "Add Experience"}
+        onClose={() => setModalOpen(false)}
+      >
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AdminFormInput label="Company" name="company" value={form.company} onChange={handleChange} required />
-            <AdminFormInput label="Role" name="role" value={form.role} onChange={handleChange} required />
-            <AdminFormInput label="Start Date" name="startDate" value={form.startDate} onChange={handleChange} required />
-            <AdminFormInput label="End Date" name="endDate" value={form.endDate} onChange={handleChange} required />
-            <AdminFormInput label="Type" name="type" value={form.type} onChange={handleChange} />
-            <AdminFormInput label="Location" name="location" value={form.location} onChange={handleChange} />
-            <AdminFormInput label="Sort Order" name="sortOrder" value={form.sortOrder} onChange={handleChange} type="number" />
+            <AdminFormInput
+              label="Company"
+              name="company"
+              value={form.company}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Position / Role"
+              name="position"
+              value={form.position}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Start Date (e.g. Jan 2023)"
+              name="startDate"
+              value={form.startDate}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="End Date (e.g. Dec 2023 or Present)"
+              name="endDate"
+              value={form.endDate}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Employment Type (e.g. Full-time)"
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+            />
+            <AdminFormInput
+              label="Location"
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+            />
+            <AdminFormInput
+              label="Sort Order"
+              name="sortOrder"
+              value={form.sortOrder}
+              onChange={handleChange}
+              type="number"
+            />
           </div>
-          <AdminFormTextarea label="Description" name="description" value={form.description} onChange={handleChange} />
+          <AdminFormTextarea
+            label="Description"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+          />
           <AdminTagInput
-            label="Skills"
+            label="Skills Used"
             values={form.skills}
             onChange={(values) => setForm((prev) => ({ ...prev, skills: values }))}
             placeholder="Add skill"
@@ -175,7 +236,10 @@ export default function AdminExperiencePage() {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-slate-900 text-white"
+            >
               Save
             </button>
           </div>

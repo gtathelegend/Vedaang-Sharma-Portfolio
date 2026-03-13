@@ -124,9 +124,13 @@ export default function Page() {
 									</tr>
 								)}
 								{!isLoading && !error &&
-									projects.map((project, index) => (
+									projects.map((project, index) => {
+										const tech = project.techStack || project.tech_stack || project.tech || [];
+										const githubUrl = project.githubLink || project.github_link || project.code || "";
+										const liveUrl = project.liveLink || project.live_link || project.preview || "";
+										return (
 										<tr
-											key={index}
+											key={project.id || index}
 											className="hover:shadow-md transition-all ease duration-500">
 											<td>{project.year}</td>
 											<td>
@@ -134,20 +138,20 @@ export default function Page() {
 													{project.title}
 												</Link>
 											</td>
-											<td>{project.tech.map((t) => `${t}, `)}</td>
+											<td>{tech.map((t) => `${t}, `)}</td>
 											<td>
 												<div className="flex flex-row justify-center items-center">
-													{project.code && (
-														<a href={project.code} title="Link to GitHub">
+													{githubUrl && (
+														<a href={githubUrl} title="Link to GitHub">
 															<FontAwesomeIcon
 																icon={faGithub}
 																className="text-xl mr-2"
 															/>
 														</a>
 													)}
-													{project.preview && (
+													{liveUrl && (
 														<a
-															href={project.preview}
+															href={liveUrl}
 															title="Link to project preview">
 															<FontAwesomeIcon
 																icon={faArrowUpRightFromSquare}
@@ -158,7 +162,8 @@ export default function Page() {
 												</div>
 											</td>
 										</tr>
-									))}
+										);
+									})}
 							</tbody>
 						</table>
 					</div>

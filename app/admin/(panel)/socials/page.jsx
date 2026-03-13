@@ -47,10 +47,10 @@ export default function AdminSocialsPage() {
   const openEdit = (item) => {
     setEditing(item);
     setForm({
-      platform: item.platform,
-      url: item.url,
-      iconName: item.iconName,
-      sortOrder: item.sortOrder || 0,
+      platform: item.platform ?? "",
+      url: item.url ?? "",
+      iconName: item.iconName ?? item.icon_name ?? "",
+      sortOrder: item.sortOrder ?? item.sort_order ?? 0,
     });
     setModalOpen(true);
   };
@@ -66,7 +66,7 @@ export default function AdminSocialsPage() {
       const payload = { ...form, sortOrder: Number(form.sortOrder) };
 
       if (editing) {
-        await adminFetch(`/api/socials/${editing._id}`, {
+        await adminFetch(`/api/socials/${editing.id}`, {
           method: "PUT",
           body: JSON.stringify(payload),
         });
@@ -101,7 +101,10 @@ export default function AdminSocialsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Social Links</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">
+        <button
+          onClick={openCreate}
+          className="px-4 py-2 bg-slate-900 text-white rounded-md"
+        >
           Add Social
         </button>
       </div>
@@ -122,16 +125,22 @@ export default function AdminSocialsPage() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item._id} className="border-t">
+                <tr key={item.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{item.platform}</td>
-                  <td className="px-4 py-3">{item.url}</td>
-                  <td className="px-4 py-3">{item.iconName}</td>
-                  <td className="px-4 py-3">{item.sortOrder}</td>
+                  <td className="px-4 py-3 max-w-[200px] truncate">{item.url}</td>
+                  <td className="px-4 py-3">{item.iconName ?? item.icon_name}</td>
+                  <td className="px-4 py-3">{item.sortOrder ?? item.sort_order}</td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">
+                    <button
+                      onClick={() => openEdit(item)}
+                      className="text-slate-700 hover:underline"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(item._id)} className="text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   </td>
@@ -142,12 +151,40 @@ export default function AdminSocialsPage() {
         </div>
       )}
 
-      <AdminModal open={modalOpen} title={editing ? "Edit Social" : "Add Social"} onClose={() => setModalOpen(false)}>
+      <AdminModal
+        open={modalOpen}
+        title={editing ? "Edit Social" : "Add Social"}
+        onClose={() => setModalOpen(false)}
+      >
         <form onSubmit={handleSave} className="space-y-4">
-          <AdminFormInput label="Platform" name="platform" value={form.platform} onChange={handleChange} required />
-          <AdminFormInput label="URL" name="url" value={form.url} onChange={handleChange} required />
-          <AdminFormInput label="Icon Name" name="iconName" value={form.iconName} onChange={handleChange} required />
-          <AdminFormInput label="Sort Order" name="sortOrder" value={form.sortOrder} onChange={handleChange} type="number" />
+          <AdminFormInput
+            label="Platform (e.g. GitHub)"
+            name="platform"
+            value={form.platform}
+            onChange={handleChange}
+            required
+          />
+          <AdminFormInput
+            label="URL or mailto: link"
+            name="url"
+            value={form.url}
+            onChange={handleChange}
+            required
+          />
+          <AdminFormInput
+            label="FontAwesome Icon Name (e.g. faGithub, faLinkedin, faEnvelope)"
+            name="iconName"
+            value={form.iconName}
+            onChange={handleChange}
+            required
+          />
+          <AdminFormInput
+            label="Sort Order (lower = first)"
+            name="sortOrder"
+            value={form.sortOrder}
+            onChange={handleChange}
+            type="number"
+          />
           <div className="flex justify-end gap-3">
             <button
               type="button"
@@ -156,7 +193,10 @@ export default function AdminSocialsPage() {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-slate-900 text-white"
+            >
               Save
             </button>
           </div>

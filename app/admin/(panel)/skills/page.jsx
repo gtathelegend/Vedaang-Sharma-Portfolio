@@ -8,7 +8,14 @@ import AdminFormSelect from "@/app/admin/components/AdminFormSelect";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
-const emptyForm = { name: "", category: "frontend", level: "beginner" };
+const CATEGORY_LABELS = {
+  web: "Web Development",
+  api: "REST API / Backend",
+  ai: "AI & Machine Learning",
+  mobile: "Mobile Development",
+};
+
+const emptyForm = { name: "", category: "web", skillType: "technology" };
 
 export default function AdminSkillsPage() {
   const [skills, setSkills] = useState([]);
@@ -42,7 +49,11 @@ export default function AdminSkillsPage() {
 
   const openEdit = (skill) => {
     setEditing(skill);
-    setForm({ name: skill.name, category: skill.category, level: skill.level });
+    setForm({
+      name: skill.name,
+      category: skill.category,
+      skillType: skill.skill_type ?? skill.skillType ?? "technology",
+    });
     setModalOpen(true);
   };
 
@@ -55,7 +66,7 @@ export default function AdminSkillsPage() {
     event.preventDefault();
     try {
       if (editing) {
-        await adminFetch(`/api/skills/${editing._id}`, {
+        await adminFetch(`/api/skills/${editing.id}`, {
           method: "PUT",
           body: JSON.stringify(form),
         });
@@ -89,7 +100,10 @@ export default function AdminSkillsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Skills</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">
+        <button
+          onClick={openCreate}
+          className="px-4 py-2 bg-slate-900 text-white rounded-md"
+        >
           Add Skill
         </button>
       </div>
@@ -103,21 +117,31 @@ export default function AdminSkillsPage() {
               <tr>
                 <th className="text-left px-4 py-3">Name</th>
                 <th className="text-left px-4 py-3">Category</th>
-                <th className="text-left px-4 py-3">Level</th>
+                <th className="text-left px-4 py-3">Type</th>
                 <th className="text-right px-4 py-3">Actions</th>
               </tr>
             </thead>
             <tbody>
               {skills.map((skill) => (
-                <tr key={skill._id} className="border-t">
+                <tr key={skill.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{skill.name}</td>
-                  <td className="px-4 py-3">{skill.category}</td>
-                  <td className="px-4 py-3">{skill.level}</td>
+                  <td className="px-4 py-3">
+                    {CATEGORY_LABELS[skill.category] ?? skill.category}
+                  </td>
+                  <td className="px-4 py-3 capitalize">
+                    {skill.skill_type ?? skill.skillType}
+                  </td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(skill)} className="text-slate-700 hover:underline">
+                    <button
+                      onClick={() => openEdit(skill)}
+                      className="text-slate-700 hover:underline"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(skill._id)} className="text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDelete(skill.id)}
+                      className="text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   </td>
@@ -128,9 +152,19 @@ export default function AdminSkillsPage() {
         </div>
       )}
 
-      <AdminModal open={modalOpen} title={editing ? "Edit Skill" : "Add Skill"} onClose={() => setModalOpen(false)}>
+      <AdminModal
+        open={modalOpen}
+        title={editing ? "Edit Skill" : "Add Skill"}
+        onClose={() => setModalOpen(false)}
+      >
         <form onSubmit={handleSave} className="space-y-4">
-          <AdminFormInput label="Skill Name" name="name" value={form.name} onChange={handleChange} required />
+          <AdminFormInput
+            label="Skill Name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <AdminFormSelect
               label="Category"
@@ -138,20 +172,20 @@ export default function AdminSkillsPage() {
               value={form.category}
               onChange={handleChange}
               options={[
-                { value: "frontend", label: "Frontend" },
-                { value: "backend", label: "Backend" },
-                { value: "tools", label: "Tools" },
+                { value: "web", label: "Web Development" },
+                { value: "api", label: "REST API / Backend" },
+                { value: "ai", label: "AI & Machine Learning" },
+                { value: "mobile", label: "Mobile Development" },
               ]}
             />
             <AdminFormSelect
-              label="Level"
-              name="level"
-              value={form.level}
+              label="Type"
+              name="skillType"
+              value={form.skillType}
               onChange={handleChange}
               options={[
-                { value: "beginner", label: "Beginner" },
-                { value: "intermediate", label: "Intermediate" },
-                { value: "advanced", label: "Advanced" },
+                { value: "technology", label: "Technology / Language" },
+                { value: "tool", label: "Tool / Platform" },
               ]}
             />
           </div>
@@ -163,7 +197,10 @@ export default function AdminSkillsPage() {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-slate-900 text-white"
+            >
               Save
             </button>
           </div>

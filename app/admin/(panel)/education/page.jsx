@@ -62,14 +62,14 @@ export default function AdminEducationPage() {
   const openEdit = (item) => {
     setEditing(item);
     setForm({
-      institute: item.institute,
-      degree: item.degree,
-      startYear: item.startYear,
-      endYear: item.endYear,
-      summary: item.summary || "",
-      gpa: item.gpa || "",
-      images: item.images || [],
-      achievements: item.achievements || [],
+      institute: item.institute ?? "",
+      degree: item.degree ?? "",
+      startYear: item.startYear ?? item.start_year ?? "",
+      endYear: item.endYear ?? item.end_year ?? "",
+      summary: item.summary ?? "",
+      gpa: item.gpa ?? "",
+      images: item.images ?? [],
+      achievements: item.achievements ?? [],
     });
     setModalOpen(true);
   };
@@ -113,7 +113,7 @@ export default function AdminEducationPage() {
       };
 
       if (editing) {
-        await adminFetch(`/api/education/${editing._id}`, {
+        await adminFetch(`/api/education/${editing.id}`, {
           method: "PUT",
           body: JSON.stringify(payload),
         });
@@ -148,7 +148,10 @@ export default function AdminEducationPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Education</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">
+        <button
+          onClick={openCreate}
+          className="px-4 py-2 bg-slate-900 text-white rounded-md"
+        >
           Add Education
         </button>
       </div>
@@ -168,15 +171,24 @@ export default function AdminEducationPage() {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item._id} className="border-t">
+                <tr key={item.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{item.institute}</td>
                   <td className="px-4 py-3">{item.degree}</td>
-                  <td className="px-4 py-3">{item.startYear} - {item.endYear}</td>
+                  <td className="px-4 py-3">
+                    {item.startYear ?? item.start_year} –{" "}
+                    {item.endYear ?? item.end_year}
+                  </td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">
+                    <button
+                      onClick={() => openEdit(item)}
+                      className="text-slate-700 hover:underline"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(item._id)} className="text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   </td>
@@ -187,68 +199,131 @@ export default function AdminEducationPage() {
         </div>
       )}
 
-      <AdminModal open={modalOpen} title={editing ? "Edit Education" : "Add Education"} onClose={() => setModalOpen(false)}>
+      <AdminModal
+        open={modalOpen}
+        title={editing ? "Edit Education" : "Add Education"}
+        onClose={() => setModalOpen(false)}
+      >
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AdminFormInput label="Institute" name="institute" value={form.institute} onChange={handleChange} required />
-            <AdminFormInput label="Degree" name="degree" value={form.degree} onChange={handleChange} required />
-            <AdminFormInput label="Start Year" name="startYear" value={form.startYear} onChange={handleChange} required />
-            <AdminFormInput label="End Year" name="endYear" value={form.endYear} onChange={handleChange} required />
-            <AdminFormInput label="GPA" name="gpa" value={form.gpa} onChange={handleChange} />
+            <AdminFormInput
+              label="Institute / University"
+              name="institute"
+              value={form.institute}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Degree / Programme"
+              name="degree"
+              value={form.degree}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Start Year"
+              name="startYear"
+              value={form.startYear}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="End Year (or Expected)"
+              name="endYear"
+              value={form.endYear}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="GPA / CGPA"
+              name="gpa"
+              value={form.gpa}
+              onChange={handleChange}
+            />
           </div>
 
-          <AdminFormTextarea label="Summary" name="summary" value={form.summary} onChange={handleChange} />
+          <AdminFormTextarea
+            label="Summary"
+            name="summary"
+            value={form.summary}
+            onChange={handleChange}
+          />
 
           <AdminTagInput
-            label="Images"
+            label="Images (URLs)"
             values={form.images}
-            onChange={(values) => setForm((prev) => ({ ...prev, images: values }))}
+            onChange={(values) =>
+              setForm((prev) => ({ ...prev, images: values }))
+            }
             placeholder="Add image URL"
           />
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Achievements</h3>
-              <button type="button" onClick={addAchievement} className="px-3 py-2 bg-slate-900 text-white rounded-md">
+              <button
+                type="button"
+                onClick={addAchievement}
+                className="px-3 py-2 bg-slate-900 text-white rounded-md text-sm"
+              >
                 Add Achievement
               </button>
             </div>
 
             {form.achievements.map((achievement, index) => (
-              <div key={`${achievement.title || "item"}-${index}`} className="border border-slate-200 rounded-lg p-4 space-y-3">
+              <div
+                key={`${achievement.title || "item"}-${index}`}
+                className="border border-slate-200 rounded-lg p-4 space-y-3"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <AdminFormInput
                     label="Year"
                     value={achievement.year}
-                    onChange={(event) => updateAchievement(index, "year", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "year", e.target.value)
+                    }
                   />
                   <AdminFormInput
-                    label="Date"
+                    label="Date (e.g. March 2024)"
                     value={achievement.date}
-                    onChange={(event) => updateAchievement(index, "date", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "date", e.target.value)
+                    }
                   />
                   <AdminFormInput
                     label="Title"
                     value={achievement.title}
-                    onChange={(event) => updateAchievement(index, "title", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "title", e.target.value)
+                    }
                   />
                   <AdminFormInput
-                    label="Subtitle"
+                    label="Subtitle / Organiser"
                     value={achievement.subtitle}
-                    onChange={(event) => updateAchievement(index, "subtitle", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "subtitle", e.target.value)
+                    }
                   />
                   <AdminFormInput
-                    label="Gradient Color"
+                    label="Gradient (e.g. from-blue-400 to-blue-600)"
                     value={achievement.color}
-                    onChange={(event) => updateAchievement(index, "color", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "color", e.target.value)
+                    }
                   />
                   <AdminFormInput
-                    label="Icon Name"
+                    label="Icon (faAward, faMedal, faTrophy, faGraduationCap)"
                     value={achievement.iconName}
-                    onChange={(event) => updateAchievement(index, "iconName", event.target.value)}
+                    onChange={(e) =>
+                      updateAchievement(index, "iconName", e.target.value)
+                    }
                   />
                 </div>
-                <button type="button" onClick={() => removeAchievement(index)} className="text-red-600 text-sm">
+                <button
+                  type="button"
+                  onClick={() => removeAchievement(index)}
+                  className="text-red-600 text-sm"
+                >
                   Remove achievement
                 </button>
               </div>
@@ -263,7 +338,10 @@ export default function AdminEducationPage() {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-slate-900 text-white"
+            >
               Save
             </button>
           </div>

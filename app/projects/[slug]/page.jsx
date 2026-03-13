@@ -154,7 +154,7 @@ function Page(props) {
 								Technology
 							</h2>
 							<p className="text-2xl font-normal text-neutral-900">
-								{data.tech.join(", ")}
+								{(data.techStack || data.tech_stack || data.tech || []).join(", ")}
 							</p>
 						</div>
 						<div>
@@ -165,14 +165,14 @@ function Page(props) {
 								{data.year}
 							</p>
 						</div>
-						{data.preview && (
+						{(data.liveLink || data.live_link || data.preview) && (
 							<div>
 								<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
 									Preview
 								</h2>
 								<p className="text-2xl font-normal text-neutral-900">
 									<a
-										href={data.preview}
+										href={data.liveLink || data.live_link || data.preview}
 										target="_blank"
 										rel="noopener noreferrer">
 										Preview{" "}
@@ -184,14 +184,14 @@ function Page(props) {
 								</p>
 							</div>
 						)}
-						{data.code && (
+						{(data.githubLink || data.github_link || data.code) && (
 							<div>
 								<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
 									Source Code
 								</h2>
 								<p className="text-2xl font-normal text-neutral-900">
 									<a
-										href={data.code}
+										href={data.githubLink || data.github_link || data.code}
 										target="_blank"
 										rel="noopener noreferrer">
 										Github{" "}
@@ -208,7 +208,7 @@ function Page(props) {
 						<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
 							Description
 						</h2>
-						{data.desc.map((desc, index) => (
+						{(data.description || data.desc || []).map((desc, index) => (
 							<p
 								key={index}
 								className="text-xl text-justify tracking-wide font-normal text-gray-500 mb-5">

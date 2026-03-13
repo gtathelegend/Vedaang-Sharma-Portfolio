@@ -19,13 +19,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
 const category = {
-	1: "Web Development",
-	2: "AI & Machine Learning",
-	9: "Other",
+	web: "Web Development",
+	ai: "AI & Machine Learning",
+	other: "Other",
 };
 
 export default function Page() {
-	const [activeCategory, setActiveCategory] = useState(1);
+	const [activeCategory, setActiveCategory] = useState("web");
 	const [projects, setProjects] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState("");

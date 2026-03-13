@@ -9,6 +9,8 @@ import AdminTagInput from "@/app/admin/components/AdminTagInput";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
+const CATEGORIES = ["web", "ai", "other"];
+
 const emptyForm = {
   title: "",
   slug: "",
@@ -60,11 +62,11 @@ export default function AdminProjectsPage() {
       title: project.title || "",
       slug: project.slug || "",
       year: project.year || "",
-      description: project.description || project.desc || [],
-      techStack: project.techStack || project.tech || [],
-      githubLink: project.githubLink || project.code || "",
-      liveLink: project.liveLink || project.preview || "",
-      imageUrl: project.imageUrl || project.thumbnail || "",
+      description: project.description || [],
+      techStack: project.techStack || project.tech_stack || [],
+      githubLink: project.githubLink || project.github_link || "",
+      liveLink: project.liveLink || project.live_link || "",
+      imageUrl: project.thumbnail || "",
       images: project.images || [],
       category: project.category || [],
       featured: project.featured || false,
@@ -81,24 +83,28 @@ export default function AdminProjectsPage() {
     }));
   };
 
+  const toggleCategory = (cat) => {
+    setForm((prev) => ({
+      ...prev,
+      category: prev.category.includes(cat)
+        ? prev.category.filter((c) => c !== cat)
+        : [...prev.category, cat],
+    }));
+  };
+
   const handleSave = async (event) => {
     event.preventDefault();
     try {
-      const payload = {
-        ...form,
-        category: form.category.map((value) => Number(value)),
-      };
-
       if (editing) {
-        await adminFetch(`/api/projects/${editing._id}`, {
+        await adminFetch(`/api/projects/${editing.id}`, {
           method: "PUT",
-          body: JSON.stringify(payload),
+          body: JSON.stringify(form),
         });
         showToast("Project updated");
       } else {
         await adminFetch("/api/projects", {
           method: "POST",
-          body: JSON.stringify(payload),
+          body: JSON.stringify(form),
         });
         showToast("Project created");
       }
@@ -106,7 +112,7 @@ export default function AdminProjectsPage() {
       setModalOpen(false);
       fetchProjects();
     } catch (error) {
-      showToast("Save failed", "error");
+      showToast(error.message || "Save failed", "error");
     }
   };
 
@@ -142,6 +148,7 @@ export default function AdminProjectsPage() {
               <tr>
                 <th className="text-left px-4 py-3">Title</th>
                 <th className="text-left px-4 py-3">Year</th>
+                <th className="text-left px-4 py-3">Category</th>
                 <th className="text-left px-4 py-3">Featured</th>
                 <th className="text-left px-4 py-3">Visible</th>
                 <th className="text-right px-4 py-3">Actions</th>
@@ -149,16 +156,25 @@ export default function AdminProjectsPage() {
             </thead>
             <tbody>
               {projects.map((project) => (
-                <tr key={project._id} className="border-t">
+                <tr key={project.id} className="border-t">
                   <td className="px-4 py-3 font-medium">{project.title}</td>
                   <td className="px-4 py-3">{project.year}</td>
+                  <td className="px-4 py-3">
+                    {(project.category || []).join(", ")}
+                  </td>
                   <td className="px-4 py-3">{project.featured ? "Yes" : "No"}</td>
                   <td className="px-4 py-3">{project.show ? "Yes" : "No"}</td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(project)} className="text-slate-700 hover:underline">
+                    <button
+                      onClick={() => openEdit(project)}
+                      className="text-slate-700 hover:underline"
+                    >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(project._id)} className="text-red-600 hover:underline">
+                    <button
+                      onClick={() => handleDelete(project.id)}
+                      className="text-red-600 hover:underline"
+                    >
                       Delete
                     </button>
                   </td>
@@ -176,22 +192,32 @@ export default function AdminProjectsPage() {
       >
         <form onSubmit={handleSave} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AdminFormInput label="Title" name="title" value={form.title} onChange={handleChange} required />
-            <AdminFormInput label="Slug" name="slug" value={form.slug} onChange={handleChange} required />
-            <AdminFormInput label="Year" name="year" value={form.year} onChange={handleChange} />
             <AdminFormInput
-              label="Category IDs (comma separated)"
-              name="category"
-              value={form.category.join(",")}
-              onChange={(event) =>
-                setForm((prev) => ({
-                  ...prev,
-                  category: event.target.value
-                    .split(",")
-                    .map((item) => item.trim())
-                    .filter(Boolean),
-                }))
-              }
+              label="Title"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Slug (URL-friendly ID)"
+              name="slug"
+              value={form.slug}
+              onChange={handleChange}
+              required
+            />
+            <AdminFormInput
+              label="Year"
+              name="year"
+              value={form.year}
+              onChange={handleChange}
+              type="number"
+            />
+            <AdminFormInput
+              label="Thumbnail Image URL"
+              name="imageUrl"
+              value={form.imageUrl}
+              onChange={handleChange}
             />
           </div>
 
@@ -203,7 +229,7 @@ export default function AdminProjectsPage() {
                 ...prev,
                 description: event.target.value
                   .split("\n")
-                  .map((item) => item.trim())
+                  .map((s) => s.trim())
                   .filter(Boolean),
               }))
             }
@@ -212,35 +238,69 @@ export default function AdminProjectsPage() {
           <AdminTagInput
             label="Tech Stack"
             values={form.techStack}
-            onChange={(values) => setForm((prev) => ({ ...prev, techStack: values }))}
-            placeholder="Add tech"
+            onChange={(values) =>
+              setForm((prev) => ({ ...prev, techStack: values }))
+            }
+            placeholder="Add technology"
           />
 
           <AdminTagInput
-            label="Images"
+            label="Additional Images (URLs)"
             values={form.images}
-            onChange={(values) => setForm((prev) => ({ ...prev, images: values }))}
+            onChange={(values) =>
+              setForm((prev) => ({ ...prev, images: values }))
+            }
             placeholder="Add image URL"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AdminFormInput label="GitHub Link" name="githubLink" value={form.githubLink} onChange={handleChange} />
-            <AdminFormInput label="Live Link" name="liveLink" value={form.liveLink} onChange={handleChange} />
             <AdminFormInput
-              label="Thumbnail Image URL"
-              name="imageUrl"
-              value={form.imageUrl}
+              label="GitHub Link"
+              name="githubLink"
+              value={form.githubLink}
+              onChange={handleChange}
+            />
+            <AdminFormInput
+              label="Live Preview Link"
+              name="liveLink"
+              value={form.liveLink}
               onChange={handleChange}
             />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div>
+            <p className="text-sm font-medium text-slate-700 mb-2">Category</p>
+            <div className="flex gap-3 flex-wrap">
+              {CATEGORIES.map((cat) => (
+                <label key={cat} className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.category.includes(cat)}
+                    onChange={() => toggleCategory(cat)}
+                  />
+                  <span className="capitalize">{cat === "ai" ? "AI & ML" : cat}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
+              <input
+                type="checkbox"
+                name="featured"
+                checked={form.featured}
+                onChange={handleChange}
+              />
               Featured
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="show" checked={form.show} onChange={handleChange} />
+              <input
+                type="checkbox"
+                name="show"
+                checked={form.show}
+                onChange={handleChange}
+              />
               Visible on site
             </label>
           </div>
@@ -253,7 +313,10 @@ export default function AdminProjectsPage() {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-md bg-slate-900 text-white"
+            >
               Save
             </button>
           </div>
