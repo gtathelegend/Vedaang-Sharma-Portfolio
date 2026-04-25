@@ -9,6 +9,11 @@ module.exports = withBundleAnalyzer({
 				protocol: "https",
 				hostname: "i.scdn.co",
 			},
+			{
+				protocol: "https",
+				hostname: "*.supabase.co",
+				pathname: "/storage/v1/object/public/**",
+			},
 		],
 		// Add image optimization settings
 		formats: ["image/avif", "image/webp"],

@@ -99,7 +99,7 @@
       ],
       "year": "2024",
       "preview": "",
-      "code": "https://github.com/Alvalens/web-javanese-translation",
+      "code": "https://github.com/Vedaang/web-javanese-translation",
       "thumbnail": "/image/projects/ai/javanese-translation/javanese-translation-thumbnail.jpg",
       "images": [
         "/image/projects/ai/javanese-translation/javanese-translation1.png",
@@ -125,7 +125,7 @@
       ],
       "year": "2024",
       "preview": "",
-      "code": "https://github.com/Alvalens/heart-attack-prediction",
+      "code": "https://github.com/Vedaang/heart-attack-prediction",
       "thumbnail": "/image/projects/ai/heart-attack-prediction/heart-attack-prediction-thumbnail.jpg",
       "images": [
         "/image/projects/ai/heart-attack-prediction/heart-attack1.png",
@@ -154,7 +154,7 @@
       ],
       "year": "2024",
       "preview": "https://generative-trivia.vercel.app/",
-      "code": "https://github.com/Alvalens/generative-trivia",
+      "code": "https://github.com/Vedaang/generative-trivia",
       "thumbnail": "/image/projects/web/trivia/trivia-thumbnail.png",
       "images": [
         "/image/projects/web/trivia/trivia1.png",
@@ -234,8 +234,8 @@
         "RandomZone is a feature that allows the player to get a random number of steps. The 3D dice is a feature that allows the player to roll a 3D dice. The game also has a few other features menuy screen and also loading screen.", "Beside that the game also has a audio theme that will play when the game is started. The game also has a few sound effects such as dice roll sound, and a sound when the player win the game."
       ],
       "year": "2023",
-      "preview": "https://github.com/Alvalens/ludo-game/releases/tag/pre-release",
-      "code": "https://github.com/Alvalens/ludo-game",
+      "preview": "https://github.com/Vedaang/ludo-game/releases/tag/pre-release",
+      "code": "https://github.com/Vedaang/ludo-game",
       "thumbnail": "/image/projects/other/LUDOang/ludo-thumbnail.png",
       "images": [
         "/image/projects/other/LUDOang/ludo1.png",
@@ -281,7 +281,7 @@
       ],
       "year": "2023",
       "preview": "https://react-chat-rouge.vercel.app",
-      "code": "https://github.com/Alvalens/react-realtime-chat",
+      "code": "https://github.com/Vedaang/react-realtime-chat",
       "thumbnail": "/image/projects/web/react-chat/chat-thumbnail.png",
       "images": [
         "/image/projects/web/react-chat/chat1.png",
@@ -311,7 +311,7 @@
       ],
       "year": "2023",
       "preview": "https://react-tools-flax.vercel.app",
-      "code": "https://github.com/Alvalens/react-tools",
+      "code": "https://github.com/Vedaang/react-tools",
       "thumbnail": "/image/projects/web/tools/tools-thumbnail.png",
       "images": [
         "/image/projects/web/tools/tools.png",
@@ -335,7 +335,7 @@
         "Aleph is a Discord bot that I created for my dircord server to use. The bot is built using Python and the discord.py library. The bot has image grabber feauture that takes argument (keywords) and returns an image from the internet.", "Other than that this bot has a few other features such as utility command to delete a messages, and a command to get the server's ping. This bot is still in development and I plan to add more features in the future."],
       "year": "2023",
       "preview": "",
-      "code": "https://github.com/Alvalens/aleph-discord-bot",
+      "code": "https://github.com/Vedaang/aleph-discord-bot",
       "thumbnail": "/image/projects/other/bot/bot-thumbnail.png",
       "images": [
         "/image/projects/other/bot/bot1.png",

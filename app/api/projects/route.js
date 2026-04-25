@@ -10,7 +10,10 @@ export async function GET() {
     .select("*")
     .order("sort_order", { ascending: true });
 
-  if (error) return NextResponse.json({ message: error.message }, { status: 500 });
+  if (error) {
+    console.error("[GET /api/projects]", error);
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
   return NextResponse.json({ data: data.map(mapProject) });
 }
 
@@ -21,7 +24,8 @@ export async function POST(request) {
 
   const body = await request.json();
   const admin = createAdminClient();
-  const { data, error } = await admin.from("projects").insert({
+
+  const record = {
     title:       body.title,
     slug:        body.slug,
     year:        body.year ? Number(body.year) : null,
@@ -34,10 +38,19 @@ export async function POST(request) {
     images:      body.images || [],
     featured:    body.featured ?? false,
     show:        body.show ?? true,
-    status:      body.status || "published",
-    sort_order:  body.sort_order || 0,
-  }).select().single();
+    sort_order:  Number(body.sort_order) || 0,
+  };
 
-  if (error) return NextResponse.json({ message: error.message }, { status: 500 });
+  // Only add optional columns if they have values (guards against missing columns)
+  if (body.status)    record.status   = body.status;
+  if (body.seo_title) record.seo_title = body.seo_title;
+  if (body.seo_desc)  record.seo_desc  = body.seo_desc;
+
+  const { data, error } = await admin.from("projects").insert(record).select().single();
+
+  if (error) {
+    console.error("[POST /api/projects]", error);
+    return NextResponse.json({ message: error.message, details: error.details, hint: error.hint }, { status: 500 });
+  }
   return NextResponse.json({ data: mapProject(data) }, { status: 201 });
 }
