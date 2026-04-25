@@ -1,243 +1,405 @@
 "use client";
 import { useState, useEffect, use } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { fetchJson } from "@/lib/api";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faChevronLeft,
+  faCalendar,
+  faCode,
+  faLayerGroup,
+  faImages,
+} from "@fortawesome/free-solid-svg-icons";
 import NotFound from "@/app/not-found";
 import Image from "next/image";
 import BlurImage from "@/public/image/placeholder/blur.jpg";
-import FixedButon from "@/components/FixedButton";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
 
-function ScrollDownButton() {
-  const [isAtBottom, setIsAtBottom] = useState(false);
+/* ─── tiny helpers ─────────────────────────────────────── */
 
-  const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    if (scrollTop < document.documentElement.scrollHeight - document.documentElement.clientHeight) {
-
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "smooth",
-      });
-				setIsAtBottom(true);
-			
-    } else {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-			setIsAtBottom(false);
-    }
-  };
-
+function Tag({ label }) {
   return (
-    <div className="fixed bottom-5 left-0 right-0 flex justify-center items-center mb-10">
-      <motion.div
-        className="h-10 w-10 bg-neutral-900 rounded-full flex justify-center items-center cursor-pointer"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleScroll}
-      >
-        <FontAwesomeIcon
-          icon={isAtBottom ? faChevronUp : faChevronDown}
-          className="text-white text-2xl"
-        />
-      </motion.div>
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700 border border-neutral-200">
+      {label}
+    </span>
+  );
+}
+
+function MetaBlock({ icon, label, children }) {
+  return (
+    <div className="flex gap-3 items-start">
+      <div className="mt-0.5 w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
+        <FontAwesomeIcon icon={icon} className="text-neutral-500 text-sm" />
+      </div>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 mb-0.5">{label}</p>
+        <div className="text-neutral-800 font-medium">{children}</div>
+      </div>
     </div>
   );
 }
 
-
-function Page(props) {
-    const params = use(props.params);
-    const [data, setData] = useState(null);
-    const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-		let isMounted = true;
-		const loadProject = async () => {
-			try {
-				const response = await fetchJson("/api/projects");
-				const selectedData = (response.data || []).find(
-					(item) => item.slug === params.slug
-				);
-				if (!isMounted) return;
-				if (!selectedData) {
-					setData("404");
-				} else {
-					setData(selectedData);
-					setError("");
-				}
-			} catch (err) {
-				if (isMounted) {
-					setError("Unable to load this project right now.");
-				}
-			} finally {
-				if (isMounted) {
-					setIsLoading(false);
-				}
-			}
-		};
-
-		loadProject();
-		return () => {
-			isMounted = false;
-		};
-	}, [params.slug]);
-
-    if (data === "404") {
-		return (
-			<>
-				<NotFound />
-			</>
-		);
-	} else if (isLoading) {
-		return (
-			<div className="relative min-h-screen w-full  gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
-				<div className="min-h-screen flex justify-center items-center w-full">
-					<div className="mx-auto grid grid-cols-1 md:grid-cols-2  w-full">
-						<div className="flex justify-center items-start flex-col mb-5 space-y-10 w-ful p-4">
-							<div className="animate-pulse bg-neutral-400 h-20 w-full rounded shadow-lg"></div>
-							<div className="animate-pulse bg-neutral-400 h-20 w-full rounded shadow-lg"></div>
-							<div className="animate-pulse bg-neutral-400 h-20 w-full rounded shadow-lg"></div>
-							<div className="animate-pulse bg-neutral-400 h-20 w-full rounded shadow-lg"></div>
-							<div className="animate-pulse bg-neutral-400 h-20 w-full rounded shadow-lg"></div>
-						</div>
-						<div className="flex justify-start items-start flex-col mb-5 w-full p-4">
-							<div className="animate-pulse duration-500 shadow-lg bg-neutral-400 rounded  w-full h-full "></div>
-						</div>
-					</div>
-				</div>
-				{/* images */}
-				<div className="mx-auto grid grid-cols-1 p-5 md:p-20  w-full h-auto">
-					<div className="w-full h-auto aspect-video">
-						<div className="animate-pulse duration-500 shadow-lg bg-neutral-400 h-full w-full rounded"></div>
-					</div>
-				</div>
-			</div>
-		);
-	} else if (error) {
-		return (
-			<div className="relative min-h-screen w-full  gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
-				<p className="text-red-600">{error}</p>
-			</div>
-		);
-	}
-    return (
-		<div className="relative min-h-screen w-full gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
-			<FixedButon href="/projects">
-				<FontAwesomeIcon
-					icon={faChevronLeft}
-					className="text-black pr-10"
-				/>
-			</FixedButon>
-			<ScrollDownButton />
-			<div className="min-h-screen flex justify-center items-center">
-				<div className="mx-auto grid grid-cols-1 md:grid-cols-2  mt-10 md:mt-0">
-					<div className="min-h-screen sm:min-h-0 flex justify-center items-start flex-col mb-5 space-y-10 mx-auto">
-						<div>
-							<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-								Project
-							</h2>
-							<h1 className="text-4xl font-medium text-neutral-900">
-								{data.title}
-							</h1>
-						</div>
-						<div>
-							<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-								Technology
-							</h2>
-							<p className="text-2xl font-normal text-neutral-900">
-								{data.tech.join(", ")}
-							</p>
-						</div>
-						<div>
-							<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-								Year
-							</h2>
-							<p className="text-2xl font-normal text-neutral-900">
-								{data.year}
-							</p>
-						</div>
-						{data.preview && (
-							<div>
-								<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-									Preview
-								</h2>
-								<p className="text-2xl font-normal text-neutral-900">
-									<a
-										href={data.preview}
-										target="_blank"
-										rel="noopener noreferrer">
-										Preview{" "}
-										<FontAwesomeIcon
-											icon={faArrowUpRightFromSquare}
-											className="ml-3"
-										/>
-									</a>
-								</p>
-							</div>
-						)}
-						{data.code && (
-							<div>
-								<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-									Source Code
-								</h2>
-								<p className="text-2xl font-normal text-neutral-900">
-									<a
-										href={data.code}
-										target="_blank"
-										rel="noopener noreferrer">
-										Github{" "}
-										<FontAwesomeIcon
-											icon={faGithub}
-											className="ml-3"
-										/>
-									</a>
-								</p>
-							</div>
-						)}
-					</div>
-					<div className="flex justify-start items-start flex-col mb-5 ">
-						<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400">
-							Description
-						</h2>
-						{data.desc.map((desc, index) => (
-							<p
-								key={index}
-								className="text-xl text-justify tracking-wide font-normal text-gray-500 mb-5">
-								{desc}
-							</p>
-						))}
-					</div>
-				</div>
-			</div>
-			{/* images */}
-			<div className="mx-auto grid grid-cols-1 p-5 md:p-20 w-full">
-				<div className="w-full h-auto text-center flex flex-col justify-center ">
-					{data.images.map((image, index) => (
-						<Image
-							key={index}
-							src={image}
-							alt={`Project Image ${index + 1}`}
-							className="mb-5 h-auto max-h-screen max-w-7xl mx-auto"
-							width={1920}
-							height={1080}
-							blurDataURL={BlurImage.src}
-							layout="responsive"
-							objectFit="contain"
-						/>
-					))}
-				</div>
-			</div>
-		</div>
-	);
+/* ─── loading skeleton ─────────────────────────────────── */
+function Skeleton() {
+  return (
+    <div className="min-h-screen bg-white animate-pulse">
+      <div className="h-[55vh] bg-neutral-200 w-full" />
+      <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="h-10 bg-neutral-200 rounded w-2/3" />
+          <div className="h-4 bg-neutral-200 rounded w-full" />
+          <div className="h-4 bg-neutral-200 rounded w-5/6" />
+          <div className="h-4 bg-neutral-200 rounded w-4/6" />
+        </div>
+        <div className="space-y-4">
+          <div className="h-6 bg-neutral-200 rounded w-1/2" />
+          <div className="h-4 bg-neutral-200 rounded w-full" />
+          <div className="h-4 bg-neutral-200 rounded w-2/3" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default Page;
+/* ─── image lightbox ───────────────────────────────────── */
+function Lightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const esc = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="relative max-w-5xl w-full max-h-[90vh]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Image
+            src={src}
+            alt={alt}
+            width={1920}
+            height={1080}
+            className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
+          />
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full text-white text-lg flex items-center justify-center transition"
+          >
+            ✕
+          </button>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ─── main page ────────────────────────────────────────── */
+export default function Page(props) {
+  const params = use(props.params);
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [lightbox, setLightbox] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    fetchJson("/api/projects")
+      .then((res) => {
+        if (!mounted) return;
+        const found = (res.data || []).find((p) => p.slug === params.slug);
+        setData(found || "404");
+      })
+      .catch(() => mounted && setError("Unable to load this project."))
+      .finally(() => mounted && setIsLoading(false));
+    return () => { mounted = false; };
+  }, [params.slug]);
+
+  if (isLoading) return <Skeleton />;
+  if (data === "404") return <NotFound />;
+  if (error) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-red-500">{error}</p>
+    </div>
+  );
+
+  const desc = data.desc || data.description || [];
+  const tech = data.tech || data.techStack || [];
+  const thumbnail = data.thumbnail || data.imageUrl || null;
+  const images = data.images || [];
+
+  return (
+    <div className="bg-white min-h-screen">
+      {/* ── Back button ── */}
+      <Link
+        href="/projects"
+        className="fixed top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur border border-neutral-200 rounded-full text-sm font-medium text-neutral-700 hover:bg-white transition shadow-sm"
+      >
+        <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
+        All Projects
+      </Link>
+
+      {/* ── Hero / Thumbnail ── */}
+      <motion.div
+        className="relative w-full h-[55vh] md:h-[65vh] bg-neutral-900 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {thumbnail ? (
+          <Image
+            src={thumbnail}
+            alt={data.title}
+            fill
+            priority
+            className="object-cover opacity-70"
+            sizes="100vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 to-neutral-950" />
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+        {/* Hero text */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            {data.year && (
+              <span className="inline-block mb-3 text-xs font-semibold uppercase tracking-widest text-white/60 border border-white/20 px-3 py-1 rounded-full">
+                {data.year}
+              </span>
+            )}
+            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              {data.title}
+            </h1>
+            {/* Tech tags in hero */}
+            {tech.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {tech.slice(0, 6).map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-white/80 backdrop-blur border border-white/10"
+                  >
+                    {t}
+                  </span>
+                ))}
+                {tech.length > 6 && (
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-white/80">
+                    +{tech.length - 6} more
+                  </span>
+                )}
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* ── Main content ── */}
+      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+        {/* Description column (2/3) */}
+        <motion.div
+          className="lg:col-span-2 space-y-8"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1 h-6 bg-neutral-900 rounded-full" />
+              <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                About this project
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {desc.length > 0 ? (
+                desc.map((para, i) => (
+                  <p key={i} className="text-neutral-600 text-lg leading-relaxed">
+                    {para}
+                  </p>
+                ))
+              ) : (
+                <p className="text-neutral-400 italic">No description provided.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Full tech stack */}
+          {tech.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-1 h-6 bg-neutral-900 rounded-full" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                  Tech Stack
+                </h2>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {tech.map((t) => <Tag key={t} label={t} />)}
+              </div>
+            </div>
+          )}
+
+          {/* CTA buttons */}
+          <div className="flex flex-wrap gap-3 pt-2">
+            {data.preview && (
+              <a
+                href={data.preview}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition"
+              >
+                <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+                Live Preview
+              </a>
+            )}
+            {data.code && (
+              <a
+                href={data.code}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-neutral-300 text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition"
+              >
+                <FontAwesomeIcon icon={faGithub} />
+                Source Code
+              </a>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Sidebar (1/3) */}
+        <motion.aside
+          className="space-y-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+        >
+          <div className="rounded-2xl border border-neutral-200 p-6 space-y-6 bg-neutral-50">
+            {data.year && (
+              <MetaBlock icon={faCalendar} label="Year">
+                {data.year}
+              </MetaBlock>
+            )}
+
+            {data.status && (
+              <MetaBlock icon={faLayerGroup} label="Status">
+                <span className={`capitalize px-2 py-0.5 rounded-full text-xs font-semibold ${
+                  data.status === "published" ? "bg-green-100 text-green-700" :
+                  data.status === "draft" ? "bg-yellow-100 text-yellow-700" :
+                  "bg-neutral-200 text-neutral-600"
+                }`}>
+                  {data.status}
+                </span>
+              </MetaBlock>
+            )}
+
+            {tech.length > 0 && (
+              <MetaBlock icon={faCode} label="Technologies">
+                <p className="text-sm text-neutral-600 leading-relaxed">
+                  {tech.join(" · ")}
+                </p>
+              </MetaBlock>
+            )}
+
+            {images.length > 0 && (
+              <MetaBlock icon={faImages} label="Screenshots">
+                <p className="text-sm text-neutral-600">{images.length} image{images.length !== 1 ? "s" : ""}</p>
+              </MetaBlock>
+            )}
+          </div>
+
+          {/* Quick links card */}
+          {(data.preview || data.code) && (
+            <div className="rounded-2xl border border-neutral-200 p-6 space-y-3 bg-white">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-4">Links</p>
+              {data.preview && (
+                <a
+                  href={data.preview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between group px-4 py-3 rounded-xl bg-neutral-900 text-white hover:bg-neutral-700 transition"
+                >
+                  <span className="text-sm font-medium">Live Preview</span>
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs text-white/60 group-hover:text-white transition" />
+                </a>
+              )}
+              {data.code && (
+                <a
+                  href={data.code}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between group px-4 py-3 rounded-xl border border-neutral-200 text-neutral-800 hover:bg-neutral-50 transition"
+                >
+                  <span className="text-sm font-medium">GitHub Repo</span>
+                  <FontAwesomeIcon icon={faGithub} className="text-neutral-400 group-hover:text-neutral-800 transition" />
+                </a>
+              )}
+            </div>
+          )}
+        </motion.aside>
+      </div>
+
+      {/* ── Image Gallery ── */}
+      {images.length > 0 && (
+        <section className="max-w-6xl mx-auto px-6 pb-20">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-1 h-6 bg-neutral-900 rounded-full" />
+            <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+              Screenshots
+            </h2>
+          </div>
+          <div className={`grid gap-4 ${images.length === 1 ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}>
+            {images.map((img, i) => (
+              <motion.div
+                key={i}
+                className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-100 cursor-zoom-in group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                onClick={() => setLightbox({ src: img, alt: `Screenshot ${i + 1}` })}
+              >
+                <Image
+                  src={img}
+                  alt={`${data.title} screenshot ${i + 1}`}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition duration-300 flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition text-white text-sm font-medium bg-black/50 px-3 py-1.5 rounded-full">
+                    Click to expand
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Lightbox */}
+      {lightbox && (
+        <Lightbox
+          src={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
+    </div>
+  );
+}
