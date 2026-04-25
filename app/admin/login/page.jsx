@@ -1,49 +1,35 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { apiUrl } from "@/lib/api";
-import { isAdminAuthenticated, setAdminToken } from "@/lib/adminAuth";
+import { createClient } from "@/lib/supabase/client";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
 function AdminLoginContent() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm]       = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { toast, showToast } = useAdminToast();
-  const nextPath = searchParams.get("next") || "/admin/dashboard";
+  const router                = useRouter();
+  const searchParams          = useSearchParams();
+  const { toast, showToast }  = useAdminToast();
+  const nextPath              = searchParams.get("next") || "/admin/dashboard";
 
-  useEffect(() => {
-    if (isAdminAuthenticated()) {
-      router.replace(nextPath);
-    }
-  }, [nextPath, router]);
-
-  const handleChange = (event) => {
-    setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await fetch(apiUrl("/api/auth/login"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
       });
-
-      const body = await response.json();
-
-      if (!response.ok) {
-        throw new Error(body?.message || "Login failed");
-      }
-
-      setAdminToken(body.token);
+      if (error) throw error;
       router.push(nextPath);
+      router.refresh();
     } catch (error) {
       showToast(error.message || "Login failed", "error");
     } finally {
@@ -59,42 +45,23 @@ function AdminLoginContent() {
       >
         <div>
           <h1 className="text-2xl font-semibold">Admin Login</h1>
-          <p className="text-slate-500 text-sm">Use your admin credentials</p>
+          <p className="text-slate-500 text-sm">Use your Supabase credentials</p>
         </div>
-
         <label className="flex flex-col gap-2 text-sm">
           <span>Email</span>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            className="rounded-md border border-slate-300 px-3 py-2"
-            required
-          />
+          <input type="email" name="email" value={form.email} onChange={handleChange}
+            className="rounded-md border border-slate-300 px-3 py-2" required />
         </label>
-
         <label className="flex flex-col gap-2 text-sm">
           <span>Password</span>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            className="rounded-md border border-slate-300 px-3 py-2"
-            required
-          />
+          <input type="password" name="password" value={form.password} onChange={handleChange}
+            className="rounded-md border border-slate-300 px-3 py-2" required />
         </label>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-slate-900 text-white py-2 rounded-md hover:bg-slate-800 transition"
-        >
+        <button type="submit" disabled={loading}
+          className="w-full bg-slate-900 text-white py-2 rounded-md hover:bg-slate-800 transition">
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
-
       <AdminToast toast={toast} />
     </div>
   );

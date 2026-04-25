@@ -6,6 +6,7 @@ import AdminModal from "@/app/admin/components/AdminModal";
 import AdminFormInput from "@/app/admin/components/AdminFormInput";
 import AdminFormTextarea from "@/app/admin/components/AdminFormTextarea";
 import AdminTagInput from "@/app/admin/components/AdminTagInput";
+import AdminImageUpload from "@/app/admin/components/AdminImageUpload";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
@@ -216,22 +217,35 @@ export default function AdminProjectsPage() {
             placeholder="Add tech"
           />
 
-          <AdminTagInput
-            label="Images"
-            values={form.images}
-            onChange={(values) => setForm((prev) => ({ ...prev, images: values }))}
-            placeholder="Add image URL"
-          />
+          <div className="space-y-2 p-4 border border-slate-200 rounded-md">
+            <AdminTagInput
+              label="Images (URLs)"
+              values={form.images}
+              onChange={(values) => setForm((prev) => ({ ...prev, images: values }))}
+              placeholder="Add image URL"
+            />
+            <AdminImageUpload 
+              label="Or upload a gallery image" 
+              onUpload={(url) => setForm(prev => ({ ...prev, images: [...prev.images, url] }))} 
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <AdminFormInput label="GitHub Link" name="githubLink" value={form.githubLink} onChange={handleChange} />
             <AdminFormInput label="Live Link" name="liveLink" value={form.liveLink} onChange={handleChange} />
-            <AdminFormInput
-              label="Thumbnail Image URL"
-              name="imageUrl"
-              value={form.imageUrl}
-              onChange={handleChange}
-            />
+            
+            <div className="space-y-2 p-4 border border-slate-200 rounded-md">
+              <AdminFormInput
+                label="Thumbnail Image URL"
+                name="imageUrl"
+                value={form.imageUrl}
+                onChange={handleChange}
+              />
+              <AdminImageUpload 
+                label="Or upload a thumbnail" 
+                onUpload={(url) => setForm(prev => ({ ...prev, imageUrl: url }))} 
+              />
+            </div>
           </div>
 
           <div className="flex items-center gap-4">

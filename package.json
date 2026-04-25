@@ -17,6 +17,8 @@
     "generate-sitemap": "node generate-sitemap.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "@supabase/ssr": "^0.6.1",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",

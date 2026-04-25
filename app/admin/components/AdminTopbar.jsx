@@ -1,14 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { clearAdminToken } from "@/lib/adminAuth";
+import { createClient } from "@/lib/supabase/client";
 
 export default function AdminTopbar() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    clearAdminToken();
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
     router.push("/admin/login");
+    router.refresh();
   };
 
   return (
