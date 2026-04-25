@@ -3,112 +3,69 @@
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/lib/adminApi";
 import AdminModal from "@/app/admin/components/AdminModal";
+import AdminConfirmModal from "@/app/admin/components/AdminConfirmModal";
+import AdminSearchInput from "@/app/admin/components/AdminSearchInput";
 import AdminFormInput from "@/app/admin/components/AdminFormInput";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
-const emptyForm = {
-  platform: "",
-  url: "",
-  iconName: "",
-  sortOrder: 0,
-};
+const emptyForm = { platform: "", url: "", iconName: "", sortOrder: 0 };
 
 export default function AdminSocialsPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const { toast, showToast } = useAdminToast();
 
   const fetchItems = async () => {
     setLoading(true);
-    try {
-      const response = await adminFetch("/api/socials");
-      setItems(response.data || []);
-    } catch (error) {
-      showToast("Failed to load socials", "error");
-    } finally {
-      setLoading(false);
-    }
+    try { const res = await adminFetch("/api/socials"); setItems(res.data || []); }
+    catch { showToast("Failed to load socials", "error"); }
+    finally { setLoading(false); }
   };
+  useEffect(() => { fetchItems(); }, []);
 
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  const openCreate = () => {
-    setEditing(null);
-    setForm(emptyForm);
-    setModalOpen(true);
-  };
-
+  const openCreate = () => { setEditing(null); setForm(emptyForm); setModalOpen(true); };
   const openEdit = (item) => {
     setEditing(item);
-    setForm({
-      platform: item.platform,
-      url: item.url,
-      iconName: item.iconName,
-      sortOrder: item.sortOrder || 0,
-    });
+    setForm({ platform: item.platform, url: item.url, iconName: item.iconName, sortOrder: item.sortOrder || 0 });
     setModalOpen(true);
   };
+  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = async (event) => {
-    event.preventDefault();
+  const handleSave = async (e) => {
+    e.preventDefault();
     try {
       const payload = { ...form, sortOrder: Number(form.sortOrder) };
-
-      if (editing) {
-        await adminFetch(`/api/socials/${editing._id}`, {
-          method: "PUT",
-          body: JSON.stringify(payload),
-        });
-        showToast("Social link updated");
-      } else {
-        await adminFetch("/api/socials", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        showToast("Social link created");
-      }
-
-      setModalOpen(false);
-      fetchItems();
-    } catch (error) {
-      showToast("Save failed", "error");
-    }
+      if (editing) await adminFetch(`/api/socials/${editing._id}`, { method: "PUT", body: JSON.stringify(payload) });
+      else await adminFetch("/api/socials", { method: "POST", body: JSON.stringify(payload) });
+      showToast(editing ? "Social link updated" : "Social link created");
+      setModalOpen(false); fetchItems();
+    } catch { showToast("Save failed", "error"); }
   };
 
-  const handleDelete = async (itemId) => {
-    if (!window.confirm("Delete this link?")) return;
-    try {
-      await adminFetch(`/api/socials/${itemId}`, { method: "DELETE" });
-      showToast("Social link deleted");
-      fetchItems();
-    } catch (error) {
-      showToast("Delete failed", "error");
-    }
+  const handleDelete = async () => {
+    try { await adminFetch(`/api/socials/${confirmId}`, { method: "DELETE" }); showToast("Social link deleted"); fetchItems(); }
+    catch { showToast("Delete failed", "error"); }
+    finally { setConfirmId(null); }
   };
+
+  const filtered = items.filter((i) =>
+    i.platform?.toLowerCase().includes(search.toLowerCase()) || i.url?.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Social Links</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">
-          Add Social
-        </button>
+        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">Add Social</button>
       </div>
-
-      {loading ? (
-        <div className="text-slate-500">Loading socials...</div>
-      ) : (
+      <AdminSearchInput value={search} onChange={setSearch} placeholder="Search socials..." />
+      {loading ? <div className="text-slate-500">Loading socials...</div> : (
         <div className="bg-white rounded-xl shadow overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-slate-100 text-slate-600">
@@ -121,48 +78,38 @@ export default function AdminSocialsPage() {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
-                <tr key={item._id} className="border-t">
+              {filtered.map((item) => (
+                <tr key={item._id} className="border-t hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium">{item.platform}</td>
-                  <td className="px-4 py-3">{item.url}</td>
-                  <td className="px-4 py-3">{item.iconName}</td>
+                  <td className="px-4 py-3 truncate max-w-xs text-slate-500">{item.url}</td>
+                  <td className="px-4 py-3 font-mono text-xs">{item.iconName}</td>
                   <td className="px-4 py-3">{item.sortOrder}</td>
                   <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(item._id)} className="text-red-600 hover:underline">
-                      Delete
-                    </button>
+                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">Edit</button>
+                    <button onClick={() => setConfirmId(item._id)} className="text-red-600 hover:underline">Delete</button>
                   </td>
                 </tr>
               ))}
+              {filtered.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">No social links found</td></tr>}
             </tbody>
           </table>
         </div>
       )}
-
       <AdminModal open={modalOpen} title={editing ? "Edit Social" : "Add Social"} onClose={() => setModalOpen(false)}>
         <form onSubmit={handleSave} className="space-y-4">
           <AdminFormInput label="Platform" name="platform" value={form.platform} onChange={handleChange} required />
-          <AdminFormInput label="URL" name="url" value={form.url} onChange={handleChange} required />
-          <AdminFormInput label="Icon Name" name="iconName" value={form.iconName} onChange={handleChange} required />
+          <AdminFormInput label="URL" name="url" value={form.url} onChange={handleChange} required type="url" />
+          <AdminFormInput label="Icon Name (e.g. faGithub)" name="iconName" value={form.iconName} onChange={handleChange} required />
           <AdminFormInput label="Sort Order" name="sortOrder" value={form.sortOrder} onChange={handleChange} type="number" />
           <div className="flex justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => setModalOpen(false)}
-              className="px-4 py-2 rounded-md border border-slate-300"
-            >
-              Cancel
-            </button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">
-              Save
-            </button>
+            <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-md border border-slate-300">Cancel</button>
+            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">Save</button>
           </div>
         </form>
       </AdminModal>
-
+      <AdminConfirmModal open={!!confirmId} title="Delete social link?"
+        description="This will permanently remove this social link."
+        onConfirm={handleDelete} onCancel={() => setConfirmId(null)} />
       <AdminToast toast={toast} />
     </div>
   );
