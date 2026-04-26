@@ -2,114 +2,332 @@
 
 import { useEffect, useState } from "react";
 import { adminFetch } from "@/lib/adminApi";
-import AdminModal from "@/app/admin/components/AdminModal";
-import AdminConfirmModal from "@/app/admin/components/AdminConfirmModal";
-import AdminSearchInput from "@/app/admin/components/AdminSearchInput";
-import AdminFormInput from "@/app/admin/components/AdminFormInput";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
-const emptyForm = { platform: "", url: "", iconName: "", sortOrder: 0 };
+// Platform definitions — icon is a FontAwesome class name string for display,
+// color is used for the card accent strip.
+const PLATFORMS = [
+  {
+    key: "linkedin",
+    label: "LinkedIn",
+    placeholder: "https://linkedin.com/in/your-profile",
+    icon: "💼",
+    color: "#0A66C2",
+    iconName: "faLinkedin",
+    description: "Professional network profile",
+  },
+  {
+    key: "github",
+    label: "GitHub",
+    placeholder: "https://github.com/your-username",
+    icon: "🐙",
+    color: "#24292e",
+    iconName: "faGithub",
+    description: "Open source & code repositories",
+  },
+  {
+    key: "email",
+    label: "Email",
+    placeholder: "mailto:you@example.com",
+    icon: "✉️",
+    color: "#EA4335",
+    iconName: "faEnvelope",
+    description: "Direct email contact",
+    hint: "Use mailto: prefix, e.g. mailto:you@example.com",
+  },
+  {
+    key: "medium",
+    label: "Medium",
+    placeholder: "https://medium.com/@your-username",
+    icon: "✍️",
+    color: "#000000",
+    iconName: "faMedium",
+    description: "Blog posts & articles",
+  },
+  {
+    key: "google_scholar",
+    label: "Google Scholar",
+    placeholder: "https://scholar.google.com/citations?user=...",
+    icon: "🎓",
+    color: "#4285F4",
+    iconName: "faGraduationCap",
+    description: "Academic publications & citations",
+  },
+  {
+    key: "researchgate",
+    label: "ResearchGate",
+    placeholder: "https://www.researchgate.net/profile/your-name",
+    icon: "🔬",
+    color: "#00CCBB",
+    iconName: "faResearchgate",
+    description: "Research papers & academic work",
+  },
+  {
+    key: "google_skills",
+    label: "Google Developer Profile",
+    placeholder: "https://developers.google.com/profile/u/your-id",
+    icon: "🔷",
+    color: "#34A853",
+    iconName: "faGoogle",
+    description: "Google developer badges & skills",
+  },
+  {
+    key: "credly",
+    label: "Credly",
+    placeholder: "https://www.credly.com/users/your-username",
+    icon: "🏅",
+    color: "#FF6B2B",
+    iconName: "faAward",
+    description: "Digital badges & certifications",
+  },
+  {
+    key: "accredible",
+    label: "Accredible",
+    placeholder: "https://www.credential.net/profile/your-profile",
+    icon: "📜",
+    color: "#6C3FC5",
+    iconName: "faCertificate",
+    description: "Digital credentials & certificates",
+  },
+];
 
 export default function AdminSocialsPage() {
-  const [items, setItems] = useState([]);
+  // Map of platform key → { id, url } for what's saved in the DB
+  const [saved, setSaved] = useState({});
+  const [links, setLinks] = useState(() =>
+    Object.fromEntries(PLATFORMS.map((p) => [p.key, ""]))
+  );
+  const [saving, setSaving] = useState(null); // key of the platform being saved
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [confirmId, setConfirmId] = useState(null);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyForm);
   const { toast, showToast } = useAdminToast();
 
-  const fetchItems = async () => {
+  // Load existing social links from DB
+  const fetchLinks = async () => {
     setLoading(true);
-    try { const res = await adminFetch("/api/socials"); setItems(res.data || []); }
-    catch { showToast("Failed to load socials", "error"); }
-    finally { setLoading(false); }
-  };
-  useEffect(() => { fetchItems(); }, []);
-
-  const openCreate = () => { setEditing(null); setForm(emptyForm); setModalOpen(true); };
-  const openEdit = (item) => {
-    setEditing(item);
-    setForm({ platform: item.platform, url: item.url, iconName: item.iconName, sortOrder: item.sortOrder || 0 });
-    setModalOpen(true);
-  };
-  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
-
-  const handleSave = async (e) => {
-    e.preventDefault();
     try {
-      const payload = { ...form, sortOrder: Number(form.sortOrder) };
-      if (editing) await adminFetch(`/api/socials/${editing._id}`, { method: "PUT", body: JSON.stringify(payload) });
-      else await adminFetch("/api/socials", { method: "POST", body: JSON.stringify(payload) });
-      showToast(editing ? "Social link updated" : "Social link created");
-      setModalOpen(false); fetchItems();
-    } catch { showToast("Save failed", "error"); }
+      const res = await adminFetch("/api/socials");
+      const items = res.data || [];
+      const map = {};
+      const vals = {};
+      items.forEach((item) => {
+        // Match by iconName (how we save) or platform key
+        const match = PLATFORMS.find(
+          (p) =>
+            p.iconName === item.iconName ||
+            p.key === item.platform ||
+            p.label.toLowerCase() === item.platform?.toLowerCase()
+        );
+        if (match) {
+          map[match.key] = item;
+          vals[match.key] = item.url || "";
+        }
+      });
+      setSaved(map);
+      setLinks((prev) => ({ ...prev, ...vals }));
+    } catch {
+      showToast("Failed to load links", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = async () => {
-    try { await adminFetch(`/api/socials/${confirmId}`, { method: "DELETE" }); showToast("Social link deleted"); fetchItems(); }
-    catch { showToast("Delete failed", "error"); }
-    finally { setConfirmId(null); }
+  useEffect(() => { fetchLinks(); }, []);
+
+  const handleSavePlatform = async (platform) => {
+    const url = links[platform.key].trim();
+    setSaving(platform.key);
+    try {
+      const existing = saved[platform.key];
+      if (url === "") {
+        // If empty and exists — delete it
+        if (existing) {
+          await adminFetch(`/api/socials/${existing._id}`, { method: "DELETE" });
+          showToast(`${platform.label} removed`);
+        }
+      } else if (existing) {
+        // Update
+        await adminFetch(`/api/socials/${existing._id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            platform: platform.key,
+            url,
+            iconName: platform.iconName,
+            sortOrder: PLATFORMS.indexOf(platform),
+          }),
+        });
+        showToast(`${platform.label} updated`);
+      } else {
+        // Create
+        await adminFetch("/api/socials", {
+          method: "POST",
+          body: JSON.stringify({
+            platform: platform.key,
+            url,
+            iconName: platform.iconName,
+            sortOrder: PLATFORMS.indexOf(platform),
+          }),
+        });
+        showToast(`${platform.label} saved`);
+      }
+      await fetchLinks();
+    } catch {
+      showToast("Save failed", "error");
+    } finally {
+      setSaving(null);
+    }
   };
 
-  const filtered = items.filter((i) =>
-    i.platform?.toLowerCase().includes(search.toLowerCase()) || i.url?.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleSaveAll = async () => {
+    setSaving("__all__");
+    let success = 0;
+    for (const platform of PLATFORMS) {
+      const url = links[platform.key].trim();
+      const existing = saved[platform.key];
+      try {
+        if (url === "" && existing) {
+          await adminFetch(`/api/socials/${existing._id}`, { method: "DELETE" });
+        } else if (url !== "" && existing) {
+          await adminFetch(`/api/socials/${existing._id}`, {
+            method: "PUT",
+            body: JSON.stringify({
+              platform: platform.key,
+              url,
+              iconName: platform.iconName,
+              sortOrder: PLATFORMS.indexOf(platform),
+            }),
+          });
+          success++;
+        } else if (url !== "") {
+          await adminFetch("/api/socials", {
+            method: "POST",
+            body: JSON.stringify({
+              platform: platform.key,
+              url,
+              iconName: platform.iconName,
+              sortOrder: PLATFORMS.indexOf(platform),
+            }),
+          });
+          success++;
+        }
+      } catch { /* skip individual failures */ }
+    }
+    await fetchLinks();
+    setSaving(null);
+    showToast(`All links saved (${success} active)`);
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-4 animate-pulse">
+        <div className="h-8 bg-slate-200 rounded w-48" />
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-24 bg-slate-200 rounded-xl" />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl">
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Social Links</h2>
-        <button onClick={openCreate} className="px-4 py-2 bg-slate-900 text-white rounded-md">Add Social</button>
-      </div>
-      <AdminSearchInput value={search} onChange={setSearch} placeholder="Search socials..." />
-      {loading ? <div className="text-slate-500">Loading socials...</div> : (
-        <div className="bg-white rounded-xl shadow overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-100 text-slate-600">
-              <tr>
-                <th className="text-left px-4 py-3">Platform</th>
-                <th className="text-left px-4 py-3">URL</th>
-                <th className="text-left px-4 py-3">Icon</th>
-                <th className="text-left px-4 py-3">Order</th>
-                <th className="text-right px-4 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((item) => (
-                <tr key={item._id} className="border-t hover:bg-slate-50">
-                  <td className="px-4 py-3 font-medium">{item.platform}</td>
-                  <td className="px-4 py-3 truncate max-w-xs text-slate-500">{item.url}</td>
-                  <td className="px-4 py-3 font-mono text-xs">{item.iconName}</td>
-                  <td className="px-4 py-3">{item.sortOrder}</td>
-                  <td className="px-4 py-3 text-right space-x-2">
-                    <button onClick={() => openEdit(item)} className="text-slate-700 hover:underline">Edit</button>
-                    <button onClick={() => setConfirmId(item._id)} className="text-red-600 hover:underline">Delete</button>
-                  </td>
-                </tr>
-              ))}
-              {filtered.length === 0 && <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">No social links found</td></tr>}
-            </tbody>
-          </table>
+        <div>
+          <h2 className="text-2xl font-semibold">Social Links</h2>
+          <p className="text-sm text-slate-500 mt-0.5">Add your profiles. Leave blank to hide from the site.</p>
         </div>
-      )}
-      <AdminModal open={modalOpen} title={editing ? "Edit Social" : "Add Social"} onClose={() => setModalOpen(false)}>
-        <form onSubmit={handleSave} className="space-y-4">
-          <AdminFormInput label="Platform" name="platform" value={form.platform} onChange={handleChange} required />
-          <AdminFormInput label="URL" name="url" value={form.url} onChange={handleChange} required type="url" />
-          <AdminFormInput label="Icon Name (e.g. faGithub)" name="iconName" value={form.iconName} onChange={handleChange} required />
-          <AdminFormInput label="Sort Order" name="sortOrder" value={form.sortOrder} onChange={handleChange} type="number" />
-          <div className="flex justify-end gap-3">
-            <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-md border border-slate-300">Cancel</button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-slate-900 text-white">Save</button>
-          </div>
-        </form>
-      </AdminModal>
-      <AdminConfirmModal open={!!confirmId} title="Delete social link?"
-        description="This will permanently remove this social link."
-        onConfirm={handleDelete} onCancel={() => setConfirmId(null)} />
+        <button
+          onClick={handleSaveAll}
+          disabled={saving === "__all__"}
+          className="px-5 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition disabled:opacity-50"
+        >
+          {saving === "__all__" ? "Saving..." : "Save All"}
+        </button>
+      </div>
+
+      {/* Platform cards */}
+      <div className="space-y-3">
+        {PLATFORMS.map((platform) => {
+          const isSaved = !!saved[platform.key];
+          const isSavingThis = saving === platform.key;
+          const value = links[platform.key];
+          const isDirty = value !== (saved[platform.key]?.url || "");
+
+          return (
+            <div
+              key={platform.key}
+              className="bg-white rounded-xl border border-slate-200 overflow-hidden"
+            >
+              {/* Color accent strip */}
+              <div className="h-1 w-full" style={{ backgroundColor: platform.color }} />
+
+              <div className="p-4">
+                <div className="flex items-start gap-3">
+                  {/* Icon + label */}
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0"
+                    style={{ backgroundColor: platform.color + "15" }}
+                  >
+                    {platform.icon}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-semibold text-slate-800 text-sm">{platform.label}</span>
+                      {isSaved && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
+                          ✓ Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-400 mb-2">{platform.description}</p>
+
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        value={value}
+                        onChange={(e) =>
+                          setLinks((prev) => ({ ...prev, [platform.key]: e.target.value }))
+                        }
+                        placeholder={platform.placeholder}
+                        className="flex-1 text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 bg-slate-50"
+                      />
+                      <button
+                        onClick={() => handleSavePlatform(platform)}
+                        disabled={!!saving || !isDirty}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
+                          isDirty
+                            ? "bg-slate-900 text-white hover:bg-slate-700"
+                            : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                        } disabled:opacity-50`}
+                      >
+                        {isSavingThis ? "Saving…" : value === "" && isSaved ? "Remove" : "Save"}
+                      </button>
+                    </div>
+
+                    {platform.hint && (
+                      <p className="text-xs text-amber-600 mt-1">💡 {platform.hint}</p>
+                    )}
+
+                    {/* Live link preview */}
+                    {isSaved && saved[platform.key]?.url && (
+                      <a
+                        href={saved[platform.key].url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-slate-400 hover:text-slate-600 underline truncate block mt-1 max-w-xs"
+                      >
+                        {saved[platform.key].url}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       <AdminToast toast={toast} />
     </div>
   );
