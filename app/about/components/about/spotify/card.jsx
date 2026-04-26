@@ -60,6 +60,7 @@ useEffect(() => {
 									<a
 										href={result.songUrl ? encodeURI(result.songUrl) : "#"}
 										target="_blank"
+										rel="noopener noreferrer"
 										className="block font-semibold w-full truncate text-blue-500">
 										{result.title}
 									</a>

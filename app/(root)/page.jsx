@@ -1,25 +1,31 @@
 "use client";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchJson } from "@/lib/api";
 
-import Button from "@/components/Button";
 import Me from "@/public/image/me.jpg";
 import MeAbout from "@/public/image/me2.jpg";
 import Setup from "@/public/image/setup.jpg";
 import ProjectAll from "@/public/image/projects.jpg";
-import Hr from "@/components/Hr";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub }    from "@fortawesome/free-brands-svg-icons";
-import { faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faLinkedin }  from "@fortawesome/free-brands-svg-icons";
-import { faDiscord }   from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope }  from "@fortawesome/free-solid-svg-icons";
+import { faGithub, faLinkedin, faMedium, faGoogle, faResearchgate } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope, faAward, faCertificate, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
 
-const iconMap = { faGithub, faInstagram, faLinkedin, faDiscord, faEnvelope };
+// Platform key → display config (must match the `platform` field saved in DB)
+const PLATFORM_CONFIG = {
+	linkedin:      { label: "LinkedIn",           icon: faLinkedin,       color: "#0A66C2", emoji: "💼", tier: 1 },
+	github:        { label: "GitHub",             icon: faGithub,         color: "#24292e", emoji: "🖥", tier: 1 },
+	email:         { label: "Email",              icon: faEnvelope,       color: "#EA4335", emoji: "✉️", tier: 1 },
+	medium:        { label: "Medium",             icon: faMedium,         color: "#000000", emoji: "✏️", tier: 2 },
+	google_scholar:{ label: "Google Scholar",     icon: faGraduationCap,  color: "#4285F4", emoji: "🎓", tier: 2 },
+	researchgate:  { label: "ResearchGate",       icon: faResearchgate,   color: "#00CCBB", emoji: "🔬", tier: 2 },
+	google_skills: { label: "Google Dev Profile", icon: faGoogle,         color: "#34A853", emoji: "📷", tier: 3 },
+	credly:        { label: "Credly",             icon: faAward,          color: "#FF6B2B", emoji: "🏅", tier: 3 },
+	accredible:    { label: "Accredible",         icon: faCertificate,    color: "#6C3FC5", emoji: "📜", tier: 3 },
+};
 
 const sectionVariants = {
 	hidden: { opacity: 0 },
@@ -56,6 +62,7 @@ const fadeUp = {
 export default function MyPage() {
 	const [socials, setSocials]           = useState([]);
 	const [socialError, setSocialError]   = useState("");
+	const [settings, setSettings]         = useState(null);
 
 	/* apply scroll-snap to <html> only while this page is mounted */
 	useEffect(() => {
@@ -72,229 +79,325 @@ export default function MyPage() {
 
 	useEffect(() => {
 		let isMounted = true;
-		fetchJson("/api/socials")
-			.then((res) => { if (isMounted) setSocials(res.data || []); })
-			.catch(() => { if (isMounted) setSocialError("Unable to load social links."); });
+		Promise.all([
+			fetchJson("/api/socials").catch(() => ({ data: [] })),
+			fetchJson("/api/settings").catch(() => ({ data: {} })),
+		]).then(([socialsRes, settingsRes]) => {
+			if (!isMounted) return;
+			setSocials(socialsRes.data || []);
+			setSettings(settingsRes.data || {});
+		}).catch(() => {
+			if (isMounted) setSocialError("Unable to load data.");
+		});
 		return () => { isMounted = false; };
 	}, []);
 
 	const sortedSocials = socials.slice().sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 	const emailSocial   = sortedSocials.find((s) => s.iconName === "faEnvelope" || s.platform === "email");
-	const emailHref     = emailSocial?.url || "mailto:vedaangsharma2006@gmail.com?subject=Hello&body=Hello Vedaang,";
-	const emailText     = emailHref.startsWith("mailto:") ? emailHref.replace("mailto:", "").split("?")[0] : emailHref;
+
+	// Settings with fallbacks
+	const fullName     = settings?.full_name     || "Vedaang Sharma";
+	const tagline      = settings?.tagline        || "Full Stack Developer";
+	const heroSubtitle = settings?.hero_subtitle  || "Hi! I\u2019m Vedaang Sharma, a full-stack developer specialising in modern web development using React, Node.js, and Next.js, with a growing focus on Artificial Intelligence.";
+	const cvUrl        = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
+	const emailHref    = settings?.email
+		? (settings.email.startsWith("mailto:") ? settings.email : `mailto:${settings.email}`)
+		: emailSocial?.url || "mailto:vedaangsharma2006@gmail.com";
+	const emailText    = emailHref.startsWith("mailto:") ? emailHref.replace("mailto:", "").split("?")[0] : emailHref;
 
 	return (
 		<div>
-			{/* ── SECTION 1 · Home ─────────────────────────────────────────── */}
-			<section
-				id="home"
-				className="h-screen flex items-center"
-				style={{ scrollSnapAlign: "start" }}>
-				<div className="mx-auto container grid grid-cols-1 md:grid-cols-3 gap-4 p-10 overflow-hidden md:px-20">
+			{/* ── SECTION 1 · Home ─────────────────────────────────── */}
+			<section id="home" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
 
-					{/* text block */}
-					<div className="col-span-2 flex flex-col justify-center items-center md:items-start text-center md:text-start">
-
-						{/* mobile avatar */}
-						<div className="block md:hidden col-span-1 mx-auto my-10">
-							<div className="bg-slate-500 rounded-full h-60 w-60 grayscale hover:grayscale-0 transition-all ease duration-300 overflow-hidden">
-								<Image src={Me} width={240} height={240} className="rounded-full object-cover" alt="Vedaang" placeholder="blur" />
-							</div>
-						</div>
-
-						<motion.h3
-							className="uppercase text-xl mb-3 font-normal tracking-[.5rem] text-gray-500"
-							variants={slideLeft} custom={0.1}
-							initial="hidden" animate="visible">
-							Vedaang Sharma
-						</motion.h3>
-
-						<motion.h1
-							className="text-black text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold my-2 md:my-5"
-							variants={slideLeft} custom={0.25}
-							initial="hidden" animate="visible">
-							Full Stack Developer
-						</motion.h1>
-
-						<motion.p
-							className="title text-md 2xl:text-xl mt-4 tracking-wider text-gray-500 leading-[1.7rem]"
-							variants={slideLeft} custom={0.4}
-							initial="hidden" animate="visible">
-							Hi! I&rsquo;m Vedaang Sharma, a full-stack developer specialising in modern
-							web development using React, Node.js, and Next.js, with a growing focus on
-							Artificial Intelligence. Passionate about building scalable, user-friendly
-							applications and deploying them on cloud platforms like AWS and Azure, while
-							also exploring mobile development and Python-based backend technologies.
-						</motion.p>
-
-						<motion.div
-							className="buttons flex flex-row justify-center items-center space-x-4 mt-10"
-							variants={fadeUp} custom={0.55}
-							initial="hidden" animate="visible">
-							<Button variation="primary">
-								<Link href="/docs/cv.pdf" target="_blank" rel="noopener noreferrer" download>
-									Download CV
-								</Link>
-							</Button>
-							<Button variation="secondary">
-								<a href="#contact">Contact Me</a>
-							</Button>
-						</motion.div>
-					</div>
-
-					{/* desktop avatar */}
-					<motion.div
-						className="hidden md:flex col-span-1 mx-auto justify-center items-center"
-						variants={slideRight} custom={0.35}
-						initial="hidden" animate="visible">
-						<div className="rounded-full lg:px-12 grayscale hover:grayscale-0 transition-all ease duration-300 overflow-hidden">
-							<Image src={Me} width={400} height={550} placeholder="blur" alt="Vedaang"
-								className="rounded-full object-cover" />
-						</div>
-					</motion.div>
-				</div>
-			</section>
-
-			{/* ── SECTION 2 · About ────────────────────────────────────────── */}
-			<section
-				id="about"
-				className="h-screen relative flex justify-center items-center overflow-hidden"
-				style={{ scrollSnapAlign: "start" }}>
-
-				<motion.div
-					className="z-0 mb-48 md:mb-0 md:absolute top-1/4 md:right-[10%] md:-translate-y-16"
-					variants={slideRight} custom={0.3}
-					initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.3 }}>
-					<div className="bg-slate-300 rounded-sm h-[400px] md:h-[600px] w-[80vw] md:w-[30vw] grayscale hover:grayscale-0 relative overflow-hidden">
-						<Image src={MeAbout} layout="fill" className="object-cover" alt="Vedaang" placeholder="blur" />
+				{/* Right – full-height photo */}
+				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
+					variants={slideRight} custom={0.1} initial="hidden" animate="visible">
+					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+						<Image src={Me} fill className="object-cover object-top" alt={fullName} placeholder="blur" priority />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
 
-				<div className="z-10 w-full absolute md:w-auto md:left-[10%] top-[60%] md:top-1/3 col-span-2 flex flex-col justify-center items-start text-start px-10 py-5">
-					<motion.h1
-						className="bg-white lg:bg-transparent bg-opacity-50 px-3 text-black text-5xl md:text-8xl font-bold"
-						variants={slideLeft} custom={0.1}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
+				{/* Left – content */}
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+					{/* Mobile avatar */}
+					<div className="flex md:hidden justify-center mb-8">
+						<div className="w-28 h-28 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-300 ring-2 ring-gray-200">
+							<Image src={Me} width={112} height={112} className="object-cover object-top" alt={fullName} placeholder="blur" />
+						</div>
+					</div>
+
+					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
+						variants={slideLeft} custom={0.05} initial="hidden" animate="visible">
+						{fullName}
+					</motion.p>
+					<motion.h1 className="text-black text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold leading-tight mb-4"
+						variants={slideLeft} custom={0.15} initial="hidden" animate="visible">
+						{tagline}
+					</motion.h1>
+					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+						variants={slideLeft} custom={0.28} initial="hidden" animate="visible">
+						{heroSubtitle}
+					</motion.p>
+
+					<motion.div className="flex flex-wrap gap-4 mb-7"
+						variants={fadeUp} custom={0.38} initial="hidden" animate="visible">
+						<div className="flex flex-col">
+							<span className="text-xl font-bold text-gray-900">10+</span>
+							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Projects</span>
+						</div>
+						<div className="w-px h-8 bg-gray-200 mt-1" />
+						<div className="flex flex-col">
+							<span className="text-xl font-bold text-gray-900">5+</span>
+							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Certifications</span>
+						</div>
+						<div className="w-px h-8 bg-gray-200 mt-1" />
+						<div className="flex flex-col">
+							<span className="text-xl font-bold text-gray-900">3+</span>
+							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Years Coding</span>
+						</div>
+					</motion.div>
+
+					<motion.div className="flex gap-3" variants={fadeUp} custom={0.48} initial="hidden" animate="visible">
+						<a href={cvUrl} target="_blank" rel="noopener noreferrer" download
+							className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+							Download CV
+						</a>
+						<a href="#contact"
+							className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+							Contact Me
+						</a>
+					</motion.div>
+				</div>
+
+				{/* Animated scroll cue */}
+				<motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+					initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
+					<span className="text-[10px] uppercase tracking-widest text-gray-300">scroll</span>
+					<motion.div className="w-px h-8 bg-gray-300 origin-top"
+						animate={{ scaleY: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.6 }} />
+				</motion.div>
+			</section>
+
+			{/* ── SECTION 2 · About ────────────────────────────────── */}
+			<section id="about" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
+
+				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
+					variants={slideRight} custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
+					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+						<Image src={MeAbout} fill className="object-cover object-center" alt="About" placeholder="blur" />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
+					</div>
+				</motion.div>
+
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
+						variants={slideLeft} custom={0.05} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						About Me
-					</motion.h1>
-					<Hr />
-					<motion.p
-						className="title text-xl mt-4 tracking-wider text-gray-500 leading-[1.7rem] mb-5"
-						variants={slideLeft} custom={0.2}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						A brief introduction about me and my interest.
 					</motion.p>
-					<motion.div
-						variants={fadeUp} custom={0.3}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						<Button variation="primary">
-							<Link href="/about">Learn More</Link>
-						</Button>
+					<motion.h2 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+						variants={slideLeft} custom={0.15} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						Who I Am
+					</motion.h2>
+					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+						variants={slideLeft} custom={0.25} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						A passionate developer who turns ideas into production-ready applications — specialising in full-stack
+						web development, AI integration, and cloud-native architectures.
+					</motion.p>
+
+					<motion.div className="grid grid-cols-3 gap-3 mb-7 max-w-xs"
+						variants={fadeUp} custom={0.35} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						{[{ v: "3+", l: "Years coding" },{ v: "10+", l: "Projects built" },{ v: "5+", l: "Tech stacks" }].map(s => (
+							<div key={s.l} className="text-center p-3 rounded-xl bg-gray-50 border border-gray-100">
+								<p className="text-xl font-bold text-gray-900">{s.v}</p>
+								<p className="text-[10px] text-gray-400 mt-0.5 leading-tight">{s.l}</p>
+							</div>
+						))}
+					</motion.div>
+
+					<motion.div variants={fadeUp} custom={0.42} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						<Link href="/about"
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+							Learn More →
+						</Link>
 					</motion.div>
 				</div>
 			</section>
 
-			{/* ── SECTION 3 · Projects ─────────────────────────────────────── */}
-			<section
-				id="projects"
-				className="h-screen relative flex justify-center items-center overflow-hidden"
-				style={{ scrollSnapAlign: "start" }}>
+			{/* ── SECTION 3 · Projects ─────────────────────────────── */}
+			<section id="projects" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
 
-				<motion.div
-					className="z-0 mb-48 md:mb-0 md:absolute top-1/4 md:right-[10%] md:-translate-y-16"
-					variants={slideRight} custom={0.3}
-					initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.3 }}>
-					<div className="bg-slate-300 rounded-sm h-[400px] md:h-[600px] w-[80vw] md:w-[30vw] grayscale hover:grayscale-0 relative overflow-hidden">
-						<Image src={ProjectAll} layout="fill" className="object-cover" alt="Projects" placeholder="blur" />
+				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
+					variants={slideRight} custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
+					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+						<Image src={ProjectAll} fill className="object-cover object-center" alt="Projects" placeholder="blur" />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
 
-				<div className="z-10 w-full absolute md:w-auto md:left-[10%] top-[60%] md:top-1/3 flex flex-col justify-center items-start text-start px-10 py-5">
-					<motion.h1
-						className="bg-white lg:bg-transparent bg-opacity-50 px-3 text-black text-5xl md:text-8xl font-bold"
-						variants={slideLeft} custom={0.1}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						My Projects
-					</motion.h1>
-					<Hr />
-					<motion.p
-						className="title text-xl mt-4 tracking-wider text-gray-500 leading-[1.7rem] mb-5"
-						variants={slideLeft} custom={0.2}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						Some of my projects that I have done{" "}
-						<span className="bg-transparent md:bg-gray-100 bg-opacity-50 xl:bg-transparent">
-							and currently working on.
-						</span>
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
+						variants={slideLeft} custom={0.05} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						My Work
 					</motion.p>
-					<motion.div
-						variants={fadeUp} custom={0.3}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						<Button variation="primary">
-							<Link href="/projects">View Projects</Link>
-						</Button>
+					<motion.h2 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+						variants={slideLeft} custom={0.15} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						Projects
+					</motion.h2>
+					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+						variants={slideLeft} custom={0.25} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						A curated collection of things I&apos;ve built — from AI-powered web apps to scalable backend systems.
+						Each project reflects a problem solved and a skill sharpened.
+					</motion.p>
+
+					<motion.div className="flex flex-wrap gap-2 mb-7"
+						variants={fadeUp} custom={0.35} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						{["Web Apps","AI & ML","Mobile","Open Source"].map(tag => (
+							<span key={tag} className="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 border border-gray-200">{tag}</span>
+						))}
+					</motion.div>
+
+					<motion.div variants={fadeUp} custom={0.42} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						<Link href="/projects"
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+							View All Projects →
+						</Link>
 					</motion.div>
 				</div>
 			</section>
 
-			{/* ── SECTION 4 · Contact ──────────────────────────────────────── */}
+
+			{/* ── SECTION 4 · Contact ──────────────────────────────── */}
 			<section
 				id="contact"
-				className="h-screen relative flex justify-center items-center overflow-hidden"
+				className="h-screen relative flex justify-center items-center overflow-hidden bg-white"
 				style={{ scrollSnapAlign: "start" }}>
 
+				{/* Background image (right side) */}
 				<motion.div
-					className="z-0 mb-48 md:mb-0 md:absolute top-1/4 md:right-[10%] md:-translate-y-16"
-					variants={slideRight} custom={0.3}
-					initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.3 }}>
-					<div className="bg-slate-300 rounded-sm h-[400px] md:h-[600px] w-[80vw] md:w-[30vw] grayscale hover:grayscale-0 relative overflow-hidden">
-						<Image src={Setup} layout="fill" className="object-cover" alt="Setup" placeholder="blur" />
+					className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[38vw]"
+					variants={slideRight} custom={0.2}
+					initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
+					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+						<Image src={Setup} fill className="object-cover" alt="Setup" placeholder="blur" />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent" />
 					</div>
 				</motion.div>
 
-				<div className="z-10 w-full absolute md:w-auto md:left-[10%] top-[60%] md:top-1/3 flex flex-col justify-center items-start text-start px-10 overflow-hidden">
+				{/* Content */}
+				<div className="z-10 w-full md:w-[58%] md:absolute md:left-[5%] top-[8%] md:top-auto flex flex-col justify-center px-8 md:px-14 py-8 overflow-y-auto max-h-screen">
+
+					{/* Heading */}
+					<motion.p
+						className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
+						variants={slideLeft} custom={0.05}
+						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						Let&apos;s Connect
+					</motion.p>
 					<motion.h1
-						className="bg-white lg:bg-transparent bg-opacity-50 px-3 text-black text-5xl md:text-8xl font-bold mb-3"
+						className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mb-3"
 						variants={slideLeft} custom={0.1}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
+						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						Get In Touch
 					</motion.h1>
-					<Hr />
 					<motion.p
-						className="title text-xl mt-4 tracking-wider text-gray-500 leading-[1.7rem] md:mb-5"
-						variants={slideLeft} custom={0.2}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						Feel free to contact me if you have any{" "}
-						<span className="bg-transparent md:bg-gray-100 bg-opacity-50 xl:bg-transparent">
-							questions or just want to say hi.
-						</span>
-					</motion.p>
-					<motion.p
-						className="title text-xl mt-4 tracking-wider text-gray-500 leading-[1.7rem] mb-5"
-						variants={slideLeft} custom={0.3}
-						initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-						<a href={emailHref} className="hover:text-gray-700 transition-colors">{emailText}</a>
+						className="text-gray-600 text-base mt-1 mb-6 tracking-wide leading-relaxed max-w-lg"
+						variants={slideLeft} custom={0.15}
+						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						Feel free to reach out — whether it&apos;s a project, collaboration, or just a hello.
 					</motion.p>
 
-					{/* social icons */}
-					<div className="flex justify-start items-center space-x-4">
-						{socialError && <span className="text-red-600 text-sm">{socialError}</span>}
-						{!socialError && sortedSocials.map((social, i) => {
-							const Icon = iconMap[social.iconName];
-							if (!Icon) return null;
-							return (
-								<motion.a
-									key={social._id || social.id || social.url}
-									href={social.url}
-									target={social.url.startsWith("mailto:") ? undefined : "_blank"}
-									rel={social.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-									className="flex justify-center items-center bg-gray-700 w-14 h-14 rounded-full text-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300"
-									variants={fadeUp} custom={0.35 + i * 0.1}
-									initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.5 }}>
-									<FontAwesomeIcon icon={Icon} className="text-3xl" />
-								</motion.a>
-							);
-						})}
-					</div>
+					{/* ── TIER 1: Primary – Email, GitHub, LinkedIn ── */}
+					<motion.div
+						className="mb-5"
+						variants={fadeUp} custom={0.2}
+						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+						<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Connect</p>
+						<div className="flex flex-wrap gap-3">
+							{sortedSocials.filter(s => ["email","github","linkedin"].includes(s.platform)).map((social, i) => {
+								const cfg = PLATFORM_CONFIG[social.platform];
+								if (!cfg || !social.url) return null;
+								const isEmail = social.url.startsWith("mailto:");
+								return (
+									<motion.a
+										key={social.platform}
+										href={social.url}
+										target={isEmail ? undefined : "_blank"}
+										rel={isEmail ? undefined : "noopener noreferrer"}
+										whileHover={{ y: -3, scale: 1.03 }}
+										whileTap={{ scale: 0.97 }}
+										className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl text-white text-sm font-semibold shadow-md transition-shadow hover:shadow-lg"
+										style={{ backgroundColor: cfg.color }}>
+										<FontAwesomeIcon icon={cfg.icon} className="text-base" />
+										{cfg.label}
+									</motion.a>
+								);
+							})}
+						</div>
+					</motion.div>
+
+					{/* ── TIER 2: Academic & Writing ── */}
+					{sortedSocials.some(s => ["medium","google_scholar","researchgate"].includes(s.platform)) && (
+						<motion.div
+							className="mb-5"
+							variants={fadeUp} custom={0.32}
+							initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+							<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Research &amp; Writing</p>
+							<div className="flex flex-wrap gap-2">
+								{sortedSocials.filter(s => ["medium","google_scholar","researchgate"].includes(s.platform)).map((social) => {
+									const cfg = PLATFORM_CONFIG[social.platform];
+									if (!cfg || !social.url) return null;
+									return (
+										<motion.a
+											key={social.platform}
+											href={social.url}
+											target="_blank" rel="noopener noreferrer"
+											whileHover={{ y: -2, scale: 1.02 }}
+											className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors hover:text-white"
+											style={{ borderColor: cfg.color, color: cfg.color }}
+											onMouseEnter={e => { e.currentTarget.style.backgroundColor = cfg.color; e.currentTarget.style.color = "#fff"; }}
+											onMouseLeave={e => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.color = cfg.color; }}>
+											<FontAwesomeIcon icon={cfg.icon} className="text-sm" />
+											{cfg.label}
+										</motion.a>
+									);
+								})}
+							</div>
+						</motion.div>
+					)}
+
+					{/* ── TIER 3: Certifications ── */}
+					{sortedSocials.some(s => ["credly","accredible","google_skills"].includes(s.platform)) && (
+						<motion.div
+							variants={fadeUp} custom={0.44}
+							initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+							<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Credentials &amp; Certifications</p>
+							<div className="flex flex-wrap gap-2">
+								{sortedSocials.filter(s => ["credly","accredible","google_skills"].includes(s.platform)).map((social) => {
+									const cfg = PLATFORM_CONFIG[social.platform];
+									if (!cfg || !social.url) return null;
+									return (
+										<motion.a
+											key={social.platform}
+											href={social.url}
+											target="_blank" rel="noopener noreferrer"
+											whileHover={{ scale: 1.05 }}
+											className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white shadow-sm"
+											style={{ backgroundColor: cfg.color }}>
+											<span>{cfg.emoji}</span>
+											{cfg.label}
+										</motion.a>
+									);
+								})}
+							</div>
+						</motion.div>
+					)}
+
+					{/* Fallback email if no socials loaded */}
+					{sortedSocials.length === 0 && (
+						<a href={emailHref} className="text-gray-600 hover:text-gray-900 transition-colors text-lg mt-2">{emailText}</a>
+					)}
 				</div>
 			</section>
 		</div>

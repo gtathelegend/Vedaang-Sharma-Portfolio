@@ -2,144 +2,62 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Button from "@/components/Button";
 import Image from "next/image";
 import { fetchJson } from "@/lib/api";
-
 import ProjectAll from "@/public/image/projects.jpg";
 import BlurImage from "@/public/image/placeholder/blur.jpg";
-
-import Hr from "@/components/Hr";
 import ProjectCard from "./components/ProjectCard";
-import FixedButon from "@/components/FixedButton";
+import FixedButton from "@/components/FixedButton";
+import SectionHeader from "@/components/SectionHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 function FeaturedHighlight({ project }) {
 	if (!project) return null;
-
 	const images = project.images?.length ? project.images : [];
 	const thumbnail = project.thumbnail || project.imageUrl || BlurImage.src;
 	const desc = project.desc || project.description || [];
 	const tech = project.tech || project.techStack || [];
-
-	const displayImages = [
-		images[0] || thumbnail,
-		images[1] || thumbnail,
-		images[2] || thumbnail,
-	];
+	const displayImages = [images[0] || thumbnail, images[1] || thumbnail, images[2] || thumbnail];
+	const githubUrl = project.githubLink || project.code;
+	const liveUrl = project.liveLink || project.preview;
 
 	return (
-		<>
-			<div className="mt-10 flex flex-col justify-start items-center w-full pl-10 md:pl-32">
-				<div className="flex justify-center items-center flex-col my-5 self-start">
-					<Hr variant="long" />
-					<h1 className="text-3xl font-bold mt-3">Highlight</h1>
-				</div>
-			</div>
-			<div className="relative w-screen mx-auto container gap-4 px-10 grid grid-cols-1 md:grid-cols-2 mb-10">
-				{/* stacked images */}
-				<div className="flex justify-center items-start flex-col mb-5">
+		<div className="py-16 px-8 md:px-16">
+			<SectionHeader label="Featured" heading="Highlight" />
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+				<div className="flex justify-center items-start flex-col">
 					<div className="images relative w-full aspect-square">
-						<div className="absolute top-28 left-10 h-[40%] aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-150 z-10">
-							<motion.div
-								initial={{ opacity: 0, scale: 0.5, x: 100 }}
-								whileInView={{ opacity: 1, scale: 1, x: 0 }}
-								className="w-full h-full shadow-lg relative">
-								<Image
-									src={displayImages[0]}
-									alt={project.title}
-									fill
-									sizes="300px"
-									className="object-cover"
-									blurDataURL={BlurImage.src}
-									placeholder="blur"
-								/>
-							</motion.div>
-						</div>
-						<div className="absolute top-10 right-28 h-[30%] aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-150">
-							<motion.div
-								initial={{ opacity: 0, scale: 0.5, x: -100 }}
-								whileInView={{ opacity: 1, scale: 1, x: 0 }}
-								transition={{ delay: 0.3 }}
-								className="w-full h-full shadow-lg relative">
-								<Image
-									src={displayImages[2]}
-									alt={project.title}
-									fill
-									sizes="200px"
-									className="object-cover"
-									blurDataURL={BlurImage.src}
-									placeholder="blur"
-								/>
-							</motion.div>
-						</div>
-						<div className="absolute bottom-10 md:bottom-26 right-20 h-[35%] aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-150">
-							<motion.div
-								initial={{ opacity: 0, scale: 0.5, x: -100 }}
-								whileInView={{ opacity: 1, scale: 1, x: 0 }}
-								transition={{ delay: 0.5 }}
-								className="w-full h-full shadow-lg relative">
-								<Image
-									src={displayImages[1]}
-									alt={project.title}
-									fill
-									sizes="250px"
-									className="object-cover"
-									blurDataURL={BlurImage.src}
-									placeholder="blur"
-								/>
-							</motion.div>
-						</div>
+						{displayImages.map((img, i) => (
+							<div key={i} className={`absolute ${i === 0 ? "top-28 left-10 h-[40%]" : i === 1 ? "bottom-10 md:bottom-26 right-20 h-[35%]" : "top-10 right-28 h-[30%]"} aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-110 hover:z-20`}>
+								<motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.2 }} viewport={{ once: true }} className="w-full h-full shadow-lg rounded-lg overflow-hidden relative">
+									<Image src={img} alt={project.title} fill sizes="300px" className="object-cover" blurDataURL={BlurImage.src} placeholder="blur" />
+								</motion.div>
+							</div>
+						))}
 					</div>
 				</div>
-
-				{/* text + links */}
-				<motion.div
-					className="flex justify-center items-start flex-col mb-5 md:px-10"
-					initial={{ opacity: 0, x: 200 }}
-					whileInView={{ opacity: 1, x: 0 }}
-					transition={{ delay: 0.5, type: "spring" }}>
-					<h2 className="text-2xl font-bold tracking-wider mb-3">{project.title}</h2>
-					{tech.length > 0 && (
-						<p className="text-xs text-gray-400 uppercase tracking-widest mb-3">
-							{tech.join(" · ")}
-						</p>
-					)}
-					<p className="text-gray-600 text-justify title text-lg">
-						{desc[0] || ""}
-					</p>
-					<div className="mt-4 flex flex-wrap gap-2">
-						<Button variation="primary">
-							<Link href={`/projects/${project.slug}`}>More</Link>
-						</Button>
-						{(project.liveLink || project.preview) && (
-							<Button variation="secondary">
-								<a
-									href={project.liveLink || project.preview}
-									target="_blank"
-									rel="noopener noreferrer">
-									Preview{" "}
-									<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-1 text-sm" />
-								</a>
-							</Button>
+				<motion.div className="flex justify-center items-start flex-col md:px-10" initial={{ opacity: 0, x: 60 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, type: "spring" }} viewport={{ once: true }}>
+					<h2 className="text-2xl font-bold tracking-wider mb-3 text-gray-900">{project.title}</h2>
+					{tech.length > 0 && <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">{tech.join(" · ")}</p>}
+					<p className="text-gray-600 text-justify text-base leading-relaxed">{desc[0] || ""}</p>
+					<div className="mt-4 flex flex-wrap gap-3">
+						<Link href={`/projects/${project.slug}`} className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">More</Link>
+						{liveUrl && (
+							<a href={liveUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition inline-flex items-center gap-2">
+								Preview <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-sm" />
+							</a>
 						)}
-						{(project.githubLink || project.code) && (
-							<Button variation="secondary">
-								<a
-									href={project.githubLink || project.code}
-									target="_blank"
-									rel="noopener noreferrer">
-									GitHub{" "}
-									<FontAwesomeIcon icon={faGithub} className="ml-1 text-sm" />
-								</a>
-							</Button>
+						{githubUrl && (
+							<a href={githubUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition inline-flex items-center gap-2">
+								GitHub <FontAwesomeIcon icon={faGithub} className="text-sm" />
+							</a>
 						)}
 					</div>
 				</motion.div>
 			</div>
-		</>
+		</div>
 	);
 }
 
@@ -150,29 +68,18 @@ export default function Page() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState("");
 
-	const visibleProjects = projects.filter(
-		(item) => item.show === true && item.status !== "draft" && item.status !== "archived"
-	);
+	const visibleProjects = projects.filter((item) => item.show === true && item.status !== "draft" && item.status !== "archived");
 	const featuredProject = visibleProjects.find((p) => p.featured);
 	const gridProjects = visibleProjects.filter((p) => !p.featured);
 
-	useEffect(() => {
-		window.scrollTo(0, 0);
-	}, []);
+	useEffect(() => { window.scrollTo(0, 0); }, []);
 
 	useEffect(() => {
 		let isMounted = true;
 		const loadData = async () => {
 			try {
-				const [projRes, catRes] = await Promise.all([
-					fetchJson("/api/projects"),
-					fetchJson("/api/categories"),
-				]);
-				if (isMounted) {
-					setProjects(projRes.data || []);
-					setCategories(catRes.data || []);
-					setError("");
-				}
+				const [projRes, catRes] = await Promise.all([fetchJson("/api/projects"), fetchJson("/api/categories")]);
+				if (isMounted) { setProjects(projRes.data || []); setCategories(catRes.data || []); setError(""); }
 			} catch (err) {
 				if (isMounted) setError("Unable to load projects right now.");
 			} finally {
@@ -184,125 +91,79 @@ export default function Page() {
 	}, []);
 
 	return (
-		<>
-			<main className="overflow-hidden">
-				<FixedButon href="/#projects">
-					<FontAwesomeIcon icon={faChevronLeft} className="text-black pr-10" />
-				</FixedButon>
+		<main className="overflow-hidden bg-white">
+			<FixedButton href="/#projects">
+				<FontAwesomeIcon icon={faChevronLeft} className="text-black pr-10" />
+			</FixedButton>
 
-				{/* hero */}
-				<div className="relative h-screen w-screen gap-4 p-10 flex justify-center items-center flex-col mb-10 overflow-hidden">
-					<div className="z-0 mb-48 md:mb-0 md:absolute top-1/4 md:right-[10%] md:-translate-y-16">
-						<motion.div
-							initial={{ scale: 1 }}
-							animate={{ scale: 1.6 }}
-							transition={{ duration: 1, ease: "circOut" }}
-							className="bg-slate-300 rounded-sm h-[400px] md:h-[600px] w-[80vw] md:w-[30vw] grayscale hover:grayscale-0 relative">
-							<Image
-								src={ProjectAll}
-								alt="Projects"
-								fill
-								className="object-cover"
-								placeholder="blur"
-							/>
-						</motion.div>
+			{/* Hero – home-page pattern */}
+			<section className="relative h-screen flex justify-center items-center overflow-hidden">
+				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
+					initial={{ x: 80, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}>
+					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+						<Image src={ProjectAll} alt="Projects" fill className="object-cover" placeholder="blur" />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
-					<div className="z-10 w-full absolute md:w-auto md:left-[10%] top-[60%] md:top-1/3 col-span-2 flex flex-col justify-center items-start md:items-start text-start px-10 pt-4 backdrop-filter backdrop-blur-sm md:backdrop-blur-none md:backdrop-filter-none bg-gray-100 bg-opacity-50 md:bg-transparent md:pt-0">
-						<h1 className="md:bg-white bg-transparent lg:bg-transparent bg-opacity-50 md-px-0 text-black text-5xl md:text-8xl font-bold">
-							My Projects
-						</h1>
-						<Hr />
-						<p className="title text-xl mt-4 tracking-wider text-gray-900 leading-[1.7rem] mb-5">
-							List of my projects that I have done and{" "}
-							<span className="bg-transparent md:bg-gray-100 bg-opacity-50 xl:bg-transparent">
-								currently working on.
-							</span>
-						</p>
-						<motion.div
-							initial={{ opacity: 0, y: 100 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.5, ease: "circOut" }}
-							onClick={() => window.scrollTo({ top: 1000, behavior: "smooth" })}
-							className="mb-3">
-							<Button variation="primary">Scroll Down</Button>
-						</motion.div>
-					</div>
+				</motion.div>
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
+						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.05 }}>Portfolio</motion.p>
+					<motion.h1 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.15 }}>My Projects</motion.h1>
+					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.25 }}>
+						A collection of projects I have built and am currently working on.
+					</motion.p>
+					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", delay: 0.35 }}>
+						<a href="#project-grid" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+							Scroll Down ↓
+						</a>
+					</motion.div>
 				</div>
+			</section>
 
-				{/* featured / highlight — only shown when a project has featured=true */}
-				{!isLoading && !error && <FeaturedHighlight project={featuredProject} />}
+			{!isLoading && !error && <FeaturedHighlight project={featuredProject} />}
 
-				{/* all projects */}
-				<div className="mt-16 flex flex-col justify-start items-center w-full pl-10 md:pl-32">
-					<div className="flex justify-center items-center flex-col my-5 self-start">
-						<Hr variant="long" />
-						<motion.h1
-							className="text-3xl font-bold mt-3"
-							initial={{ opacity: 0, x: -200 }}
-							whileInView={{ opacity: 1, x: 0 }}
-							transition={{ delay: 0.7, type: "spring" }}>
-							{featuredProject ? "Other Note Worthy Projects" : "All Projects"}
-						</motion.h1>
-					</div>
-				</div>
+			{/* All projects */}
+			<div id="project-grid" className="px-8 md:px-16 py-16">
+				<SectionHeader label="All Work" heading={featuredProject ? "Other Note Worthy Projects" : "All Projects"} />
 
-				{/* category filter */}
-				<motion.div
-					initial={{ opacity: 0, x: 200 }}
-					whileInView={{ opacity: 1, x: 0 }}
-					transition={{ type: "spring" }}
-					className="flex flex-row justify-center items-start flex-wrap gap-3 md:gap-5 my-5">
+				{/* Category filter */}
+				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ type: "spring" }} viewport={{ once: true }}
+					className="flex flex-row justify-start items-start flex-wrap gap-3 my-8">
 					<button
-						className={`px-2 md:px-4 py-2 rounded-lg cursor-pointer transition-all ease duration-300 ${
-							activeCategory === null
-								? "bg-gray-300 text-black"
-								: "bg-gray-700 text-white hover:bg-gray-300 hover:text-black"
+						className={`px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 ${
+							activeCategory === null ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
 						}`}
-						onClick={() => setActiveCategory(null)}>
-						All
-					</button>
+						onClick={() => setActiveCategory(null)}>All</button>
 					{categories.map((cat) => (
-						<button
-							key={cat.id}
-							className={`px-2 md:px-4 py-2 rounded-lg cursor-pointer transition-all ease duration-300 ${
-								activeCategory === cat.id
-									? "bg-gray-300 text-black hover:bg-gray-700 hover:text-white"
-									: "bg-gray-700 text-white hover:bg-gray-300 hover:text-black"
+						<button key={cat.id}
+							className={`px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 ${
+								activeCategory === cat.id ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
 							}`}
-							onClick={() => setActiveCategory(cat.id)}>
-							{cat.name}
-						</button>
+							onClick={() => setActiveCategory(cat.id)}>{cat.name}</button>
 					))}
 				</motion.div>
 
-				{/* project grid */}
-				<div className="w-screen mx-auto container gap-4 px-10 grid grid-cols-1 md:grid-cols-2 mb-10 cursor-pointer">
+				{/* Project grid */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					{isLoading && <div className="text-gray-500">Loading projects...</div>}
 					{!isLoading && error && <div className="text-red-600">{error}</div>}
-					{!isLoading && !error && (featuredProject ? gridProjects : visibleProjects).map((project, index) => (
-						<ProjectCard
-							project={project}
-							key={project.id || project._id || index}
-							activeCategory={activeCategory}
-						/>
+					{!isLoading && !error && (featuredProject ? gridProjects : visibleProjects).map((project) => (
+						<ProjectCard project={project} key={project.id || project._id || project.slug} activeCategory={activeCategory} />
 					))}
 					{!isLoading && !error && visibleProjects.length === 0 && (
-						<p className="text-gray-500 col-span-2 text-center py-10">
-							No projects to show yet.
-						</p>
+						<p className="text-gray-500 col-span-2 text-center py-10">No projects to show yet.</p>
 					)}
 				</div>
 
-				{/* archive link */}
-				<motion.div
-					initial={{ opacity: 0 }}
-					whileInView={{ opacity: 1 }}
-					className="flex justify-center items-center flex-col my-5">
-					<Button variation="primary">
-						<Link href="projects/archive">View In Archive</Link>
-					</Button>
+				{/* Archive link */}
+				<motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="flex justify-center items-center mt-12">
+					<Link href="/projects/archive" className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+						View In Archive
+					</Link>
 				</motion.div>
-			</main>
-		</>
+			</div>
+		</main>
 	);
 }

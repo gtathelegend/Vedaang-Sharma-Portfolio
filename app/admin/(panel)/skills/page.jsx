@@ -27,7 +27,15 @@ export default function AdminSkillsPage() {
 
   const fetchItems = async () => {
     setLoading(true);
-    try { const res = await adminFetch("/api/skills"); setItems(res.data || []); }
+    try {
+      const res = await adminFetch("/api/skills");
+      // GET now returns { frontend:[...], backend:[...] } — flatten to a flat array for the table
+      const data = res.data;
+      const flat = Array.isArray(data)
+        ? data
+        : Object.values(data || {}).flat();
+      setItems(flat);
+    }
     catch { showToast("Failed to load skills", "error"); }
     finally { setLoading(false); }
   };

@@ -3,28 +3,29 @@ import React from "react";
 import Link from "next/link";
 
 const NotFound = () => (
-	<div>
-		<div className="relative min-h-screen w-full  gap-4 p-10 flex justify-center items-center flex-col mb-10 ">
-			<div className="min-h-screen flex justify-center items-center">
-				<div className="mx-auto grid grid-cols-1   ">
-					<div className="flex justify-center items-center flex-col mb-5 space-y-10">
-						<div>
-							<h2 className="uppercase font-normal text-lg tracking-[8px] text-neutral-400 text-center">
-								Page not found
-							</h2>
-							<h1 className="text-4xl font-medium text-neutral-900 text-center">
-								404
-							</h1>
-						</div>
-						<div>
-							<button
-								onClick={() => window.history.back()}
-								className="text-lg text-neutral-900 hover:text-neutral-800 text-center border-2 border-gray-800 rounded-xl p-3 py-2 mt-2">
-								Go Back
-							</button>
-						</div>
-					</div>
-				</div>
+	<div className="relative min-h-screen w-full flex justify-center items-center bg-white">
+		<div className="flex flex-col items-center space-y-8 px-8">
+			<div className="text-center">
+				<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3">
+					Page not found
+				</p>
+				<h1 className="text-7xl md:text-9xl font-bold text-gray-900">
+					404
+				</h1>
+				<p className="text-gray-600 mt-4 max-w-md">
+					The page you&apos;re looking for doesn&apos;t exist or has been moved.
+				</p>
+			</div>
+			<div className="flex gap-3">
+				<Link href="/"
+					className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
+					Go Home
+				</Link>
+				<button
+					onClick={() => window.history.back()}
+					className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+					Go Back
+				</button>
 			</div>
 		</div>
 	</div>

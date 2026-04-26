@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════════
+   Design Tokens — Single Source of Truth
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+	/* ── Brand ── */
+	--color-accent: #1e40af;
+	--color-accent-hover: #1e3a8a;
+	--color-accent-light: #dbeafe;
+	--color-accent-muted: #93c5fd;
+
+	/* ── Surfaces ── */
+	--color-bg: #ffffff;
+	--color-bg-alt: #f9fafb;
+	--color-surface: #ffffff;
+	--color-surface-hover: #f3f4f6;
+
+	/* ── Text ── */
+	--color-text: #111827;
+	--color-text-secondary: #4b5563;
+	--color-text-muted: #6b7280;
+	--color-text-faint: #9ca3af;
+
+	/* ── Borders ── */
+	--color-border: #e5e7eb;
+	--color-border-light: #f3f4f6;
+
+	/* ── Radius ── */
+	--radius-sm: 0.5rem;
+	--radius-md: 0.75rem;
+	--radius-lg: 1rem;
+	--radius-xl: 1.25rem;
+	--radius-2xl: 1.5rem;
+	--radius-full: 9999px;
+
+	/* ── Shadows ── */
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+	/* ── Typography scale (fluid) ── */
+	--font-body: var(--font-poppins), system-ui, sans-serif;
+	--font-heading: var(--font-jost), system-ui, sans-serif;
+}

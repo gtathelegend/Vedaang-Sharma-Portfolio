@@ -1,15 +1,7 @@
 "use client"
-import Sidebar from "@/components/Sidebar";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
-
-export default function RootLayout({ children }) {
+export default function Layout({ children }) {
 	return (
 		<>
-			<Sidebar />
-			<Analytics />
-			<SpeedInsights />
 			{children}
 		</>
 	);
