@@ -7,50 +7,31 @@ import {
 	faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 
+const navItems = [
+	{ id: "home",     icon: faHome },
+	{ id: "about",    icon: faUser },
+	{ id: "projects", icon: faFolderOpen },
+	{ id: "contact",  icon: faEnvelope },
+];
 
 const Sidebar = () => {
-	const handleMoveToSection = (index) => {
-		fullpage_api.moveTo(index);
-		fullpage_api.getActiveSection();
+	const scrollTo = (id) => {
+		document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 	};
 
-	const containIsActive = (index) => {
-		if (fullpage_api.getActiveSection().index === index) {
-			return "bg-gray-500";
-		}
-		return "";
-	};
 	return (
-		<div className="hidden md:flex fixed z-40 bg-gray-700 h-[50vh] w-14  flex-col justify-between items-center p-4 left-0 top-1/4 rounded-e-3xl">
-			<ul
-				id="sidebar"
-				className="flex flex-col justify-evenly items-center h-full  text-gray-50">
-				<li data-menuanchor="home" className="active">
-					<button onClick={() => handleMoveToSection(1)}>
-						<FontAwesomeIcon icon={faHome} className="text-xl" />
-					</button>
-				</li>
-				<li data-menuanchor="about">
-					<button onClick={() => handleMoveToSection(2)}>
-						<FontAwesomeIcon icon={faUser} className="text-xl" />
-					</button>
-				</li>
-				<li data-menuanchor="projects">
-					<button onClick={() => handleMoveToSection(3)}>
-						<FontAwesomeIcon
-							icon={faFolderOpen}
-							className="text-xl"
-						/>
-					</button>
-				</li>
-				<li data-menuanchor="contact">
-					<button onClick={() => handleMoveToSection(4)}>
-						<FontAwesomeIcon
-							icon={faEnvelope}
-							className="text-xl"
-						/>
-					</button>
-				</li>
+		<div className="hidden md:flex fixed z-40 bg-gray-700 h-[50vh] w-14 flex-col justify-between items-center p-4 left-0 top-1/4 rounded-e-3xl">
+			<ul className="flex flex-col justify-evenly items-center h-full text-gray-50">
+				{navItems.map(({ id, icon }) => (
+					<li key={id}>
+						<button
+							onClick={() => scrollTo(id)}
+							aria-label={id}
+							className="hover:text-gray-300 transition-colors">
+							<FontAwesomeIcon icon={icon} className="text-xl" />
+						</button>
+					</li>
+				))}
 			</ul>
 		</div>
 	);
