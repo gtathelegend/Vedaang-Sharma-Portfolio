@@ -24,13 +24,13 @@ function FeaturedHighlight({ project }) {
 	const liveUrl = project.liveLink || project.preview;
 
 	return (
-		<div className="py-16 px-8 md:px-16">
+		<div className="py-12 md:py-16 px-6 sm:px-8 md:px-16">
 			<SectionHeader label="Featured" heading="Highlight" />
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
 				<div className="flex justify-center items-start flex-col">
 					<div className="images relative w-full aspect-square">
 						{displayImages.map((img, i) => (
-							<div key={i} className={`absolute ${i === 0 ? "top-28 left-10 h-[40%]" : i === 1 ? "bottom-10 md:bottom-26 right-20 h-[35%]" : "top-10 right-28 h-[30%]"} aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-110 hover:z-20`}>
+							<div key={i} className={`absolute ${i === 0 ? "top-[20%] left-[10%] h-[40%]" : i === 1 ? "bottom-[10%] md:bottom-[15%] right-[15%] h-[35%]" : "top-[10%] right-[20%] h-[30%]"} aspect-video grayscale hover:grayscale-0 transition-all ease duration-300 hover:scale-110 hover:z-20`}>
 								<motion.div initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.2 }} viewport={{ once: true }} className="w-full h-full shadow-lg rounded-lg overflow-hidden relative">
 									<Image src={img} alt={project.title} fill sizes="300px" className="object-cover" blurDataURL={BlurImage.src} placeholder="blur" />
 								</motion.div>
@@ -39,9 +39,9 @@ function FeaturedHighlight({ project }) {
 					</div>
 				</div>
 				<motion.div className="flex justify-center items-start flex-col md:px-10" initial={{ opacity: 0, x: 60 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.3, type: "spring" }} viewport={{ once: true }}>
-					<h2 className="text-2xl font-bold tracking-wider mb-3 text-gray-900">{project.title}</h2>
+					<h2 className="text-xl sm:text-2xl font-bold tracking-wider mb-3 text-gray-900">{project.title}</h2>
 					{tech.length > 0 && <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">{tech.join(" · ")}</p>}
-					<p className="text-gray-600 text-justify text-base leading-relaxed">{desc[0] || ""}</p>
+					<p className="text-gray-600 text-justify text-sm sm:text-base leading-relaxed">{desc[0] || ""}</p>
 					<div className="mt-4 flex flex-wrap gap-3">
 						<Link href={`/projects/${project.slug}`} className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">More</Link>
 						{liveUrl && (
@@ -97,20 +97,20 @@ export default function Page() {
 			</FixedButton>
 
 			{/* Hero – home-page pattern */}
-			<section className="relative h-screen flex justify-center items-center overflow-hidden">
+			<section className="relative min-h-[100svh] md:h-screen flex justify-center items-center overflow-hidden pt-20 md:pt-0 pb-10 md:pb-0">
 				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
 					initial={{ x: 80, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}>
 					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
-						<Image src={ProjectAll} alt="Projects" fill className="object-cover" placeholder="blur" />
+						<Image src={ProjectAll} alt="Projects" fill className="object-cover" placeholder="blur" sizes="(max-width: 768px) 0px, 40vw" />
 						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
-				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-6 sm:px-8 md:px-14">
 					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
 						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.05 }}>Portfolio</motion.p>
-					<motion.h1 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+					<motion.h1 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
 						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.15 }}>My Projects</motion.h1>
-					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+					<motion.p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-lg mb-7"
 						initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.25 }}>
 						A collection of projects I have built and am currently working on.
 					</motion.p>
@@ -125,20 +125,20 @@ export default function Page() {
 			{!isLoading && !error && <FeaturedHighlight project={featuredProject} />}
 
 			{/* All projects */}
-			<div id="project-grid" className="px-8 md:px-16 py-16">
+			<div id="project-grid" className="px-6 sm:px-8 md:px-16 py-12 md:py-16">
 				<SectionHeader label="All Work" heading={featuredProject ? "Other Note Worthy Projects" : "All Projects"} />
 
 				{/* Category filter */}
 				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ type: "spring" }} viewport={{ once: true }}
-					className="flex flex-row justify-start items-start flex-wrap gap-3 my-8">
+					className="flex flex-row justify-start items-start flex-wrap gap-2 sm:gap-3 my-6 md:my-8">
 					<button
-						className={`px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 ${
+						className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ${
 							activeCategory === null ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
 						}`}
 						onClick={() => setActiveCategory(null)}>All</button>
 					{categories.map((cat) => (
 						<button key={cat.id}
-							className={`px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer transition-all duration-300 ${
+							className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold cursor-pointer transition-all duration-300 ${
 								activeCategory === cat.id ? "bg-gray-900 text-white" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
 							}`}
 							onClick={() => setActiveCategory(cat.id)}>{cat.name}</button>
@@ -146,7 +146,7 @@ export default function Page() {
 				</motion.div>
 
 				{/* Project grid */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
 					{isLoading && <div className="text-gray-500">Loading projects...</div>}
 					{!isLoading && error && <div className="text-red-600">{error}</div>}
 					{!isLoading && !error && (featuredProject ? gridProjects : visibleProjects).map((project) => (

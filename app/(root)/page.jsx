@@ -13,6 +13,7 @@ import ProjectAll from "@/public/image/projects.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin, faMedium, faGoogle, faResearchgate } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faAward, faCertificate, faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import ContactForm from "@/components/ContactForm";
 
 // Platform key → display config (must match the `platform` field saved in DB)
 const PLATFORM_CONFIG = {
@@ -64,13 +65,28 @@ export default function MyPage() {
 	const [socialError, setSocialError]   = useState("");
 	const [settings, setSettings]         = useState(null);
 
-	/* apply scroll-snap to <html> only while this page is mounted */
+	/* Apply scroll-snap on desktop only — mobile keeps natural flow so the
+	   contact form / longer sections never get clipped by 100vh snapping. */
 	useEffect(() => {
+		const mq = window.matchMedia("(min-width: 768px)");
 		const html = document.documentElement;
-		html.style.scrollSnapType    = "y mandatory";
-		html.style.overflowY         = "scroll";
-		html.style.scrollBehavior    = "smooth";
+
+		const apply = () => {
+			if (mq.matches) {
+				html.style.scrollSnapType = "y mandatory";
+				html.style.overflowY      = "scroll";
+				html.style.scrollBehavior = "smooth";
+			} else {
+				html.style.scrollSnapType = "";
+				html.style.overflowY      = "";
+				html.style.scrollBehavior = "smooth";
+			}
+		};
+
+		apply();
+		mq.addEventListener?.("change", apply);
 		return () => {
+			mq.removeEventListener?.("change", apply);
 			html.style.scrollSnapType = "";
 			html.style.overflowY      = "";
 			html.style.scrollBehavior = "";
@@ -108,19 +124,19 @@ export default function MyPage() {
 	return (
 		<div>
 			{/* ── SECTION 1 · Home ─────────────────────────────────── */}
-			<section id="home" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
+			<section id="home" className="min-h-[100svh] md:h-screen relative flex justify-center items-center overflow-hidden bg-white pt-20 md:pt-0 pb-10 md:pb-0" style={{ scrollSnapAlign: "start" }}>
 
 				{/* Right – full-height photo */}
 				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
 					variants={slideRight} custom={0.1} initial="hidden" animate="visible">
 					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
-						<Image src={Me} fill className="object-cover object-top" alt={fullName} placeholder="blur" priority />
+						<Image src={Me} fill className="object-cover object-top" alt={fullName} placeholder="blur" priority sizes="(max-width: 768px) 0px, 40vw" />
 						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
 
 				{/* Left – content */}
-				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-6 sm:px-8 md:px-14">
 					{/* Mobile avatar */}
 					<div className="flex md:hidden justify-center mb-8">
 						<div className="w-28 h-28 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-300 ring-2 ring-gray-200">
@@ -132,34 +148,34 @@ export default function MyPage() {
 						variants={slideLeft} custom={0.05} initial="hidden" animate="visible">
 						{fullName}
 					</motion.p>
-					<motion.h1 className="text-black text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold leading-tight mb-4"
+					<motion.h1 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl font-bold leading-tight mb-4"
 						variants={slideLeft} custom={0.15} initial="hidden" animate="visible">
 						{tagline}
 					</motion.h1>
-					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+					<motion.p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-lg mb-7"
 						variants={slideLeft} custom={0.28} initial="hidden" animate="visible">
 						{heroSubtitle}
 					</motion.p>
 
-					<motion.div className="flex flex-wrap gap-4 mb-7"
+					<motion.div className="flex flex-wrap gap-3 sm:gap-4 mb-7"
 						variants={fadeUp} custom={0.38} initial="hidden" animate="visible">
 						<div className="flex flex-col">
-							<span className="text-xl font-bold text-gray-900">10+</span>
+							<span className="text-lg sm:text-xl font-bold text-gray-900">10+</span>
 							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Projects</span>
 						</div>
 						<div className="w-px h-8 bg-gray-200 mt-1" />
 						<div className="flex flex-col">
-							<span className="text-xl font-bold text-gray-900">5+</span>
+							<span className="text-lg sm:text-xl font-bold text-gray-900">5+</span>
 							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Certifications</span>
 						</div>
 						<div className="w-px h-8 bg-gray-200 mt-1" />
 						<div className="flex flex-col">
-							<span className="text-xl font-bold text-gray-900">3+</span>
+							<span className="text-lg sm:text-xl font-bold text-gray-900">3+</span>
 							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Years Coding</span>
 						</div>
 					</motion.div>
 
-					<motion.div className="flex gap-3" variants={fadeUp} custom={0.48} initial="hidden" animate="visible">
+					<motion.div className="flex flex-wrap gap-3" variants={fadeUp} custom={0.48} initial="hidden" animate="visible">
 						<a href={cvUrl} target="_blank" rel="noopener noreferrer" download
 							className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">
 							Download CV
@@ -171,8 +187,8 @@ export default function MyPage() {
 					</motion.div>
 				</div>
 
-				{/* Animated scroll cue */}
-				<motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+				{/* Animated scroll cue (desktop only) */}
+				<motion.div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-1"
 					initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
 					<span className="text-[10px] uppercase tracking-widest text-gray-300">scroll</span>
 					<motion.div className="w-px h-8 bg-gray-300 origin-top"
@@ -181,26 +197,26 @@ export default function MyPage() {
 			</section>
 
 			{/* ── SECTION 2 · About ────────────────────────────────── */}
-			<section id="about" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
+			<section id="about" className="min-h-[100svh] md:h-screen relative flex justify-center items-center overflow-hidden bg-white py-16 md:py-0" style={{ scrollSnapAlign: "start" }}>
 
 				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
 					variants={slideRight} custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
 					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
-						<Image src={MeAbout} fill className="object-cover object-center" alt="About" placeholder="blur" />
+						<Image src={MeAbout} fill className="object-cover object-center" alt="About" placeholder="blur" sizes="(max-width: 768px) 0px, 40vw" />
 						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
 
-				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-6 sm:px-8 md:px-14">
 					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
 						variants={slideLeft} custom={0.05} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						About Me
 					</motion.p>
-					<motion.h2 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+					<motion.h2 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
 						variants={slideLeft} custom={0.15} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						Who I Am
 					</motion.h2>
-					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+					<motion.p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-lg mb-7"
 						variants={slideLeft} custom={0.25} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						A passionate developer who turns ideas into production-ready applications — specialising in full-stack
 						web development, AI integration, and cloud-native architectures.
@@ -226,26 +242,26 @@ export default function MyPage() {
 			</section>
 
 			{/* ── SECTION 3 · Projects ─────────────────────────────── */}
-			<section id="projects" className="h-screen relative flex justify-center items-center overflow-hidden bg-white" style={{ scrollSnapAlign: "start" }}>
+			<section id="projects" className="min-h-[100svh] md:h-screen relative flex justify-center items-center overflow-hidden bg-white py-16 md:py-0" style={{ scrollSnapAlign: "start" }}>
 
 				<motion.div className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
 					variants={slideRight} custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
 					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
-						<Image src={ProjectAll} fill className="object-cover object-center" alt="Projects" placeholder="blur" />
+						<Image src={ProjectAll} fill className="object-cover object-center" alt="Projects" placeholder="blur" sizes="(max-width: 768px) 0px, 40vw" />
 						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent" />
 					</div>
 				</motion.div>
 
-				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-8 md:px-14">
+				<div className="z-10 w-full md:w-[55%] md:absolute md:left-[5%] flex flex-col justify-center px-6 sm:px-8 md:px-14">
 					<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3"
 						variants={slideLeft} custom={0.05} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						My Work
 					</motion.p>
-					<motion.h2 className="text-black text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
+					<motion.h2 className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-5"
 						variants={slideLeft} custom={0.15} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						Projects
 					</motion.h2>
-					<motion.p className="text-gray-600 text-base leading-relaxed max-w-lg mb-7"
+					<motion.p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-lg mb-7"
 						variants={slideLeft} custom={0.25} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						A curated collection of things I&apos;ve built — from AI-powered web apps to scalable backend systems.
 						Each project reflects a problem solved and a skill sharpened.
@@ -271,22 +287,22 @@ export default function MyPage() {
 			{/* ── SECTION 4 · Contact ──────────────────────────────── */}
 			<section
 				id="contact"
-				className="h-screen relative flex justify-center items-center overflow-hidden bg-white"
+				className="min-h-[100svh] md:min-h-screen relative flex justify-center items-start md:items-center overflow-hidden bg-white py-16 md:py-12"
 				style={{ scrollSnapAlign: "start" }}>
 
-				{/* Background image (right side) */}
+				{/* Background image (right side, desktop only) */}
 				<motion.div
-					className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[38vw]"
+					className="z-0 hidden lg:block lg:absolute top-0 right-0 h-full w-[34vw]"
 					variants={slideRight} custom={0.2}
 					initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }}>
 					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
-						<Image src={Setup} fill className="object-cover" alt="Setup" placeholder="blur" />
-						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent" />
+						<Image src={Setup} fill className="object-cover" alt="Setup" placeholder="blur" sizes="(max-width: 1024px) 0px, 34vw" />
+						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent" />
 					</div>
 				</motion.div>
 
 				{/* Content */}
-				<div className="z-10 w-full md:w-[58%] md:absolute md:left-[5%] top-[8%] md:top-auto flex flex-col justify-center px-8 md:px-14 py-8 overflow-y-auto max-h-screen">
+				<div className="z-10 w-full lg:w-[64%] lg:absolute lg:left-[5%] flex flex-col justify-center px-6 sm:px-8 md:px-14">
 
 					{/* Heading */}
 					<motion.p
@@ -296,108 +312,114 @@ export default function MyPage() {
 						Let&apos;s Connect
 					</motion.p>
 					<motion.h1
-						className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mb-3"
+						className="text-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3"
 						variants={slideLeft} custom={0.1}
 						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						Get In Touch
 					</motion.h1>
 					<motion.p
-						className="text-gray-600 text-base mt-1 mb-6 tracking-wide leading-relaxed max-w-lg"
+						className="text-gray-600 text-sm sm:text-base mt-1 mb-6 tracking-wide leading-relaxed max-w-lg"
 						variants={slideLeft} custom={0.15}
 						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
 						Feel free to reach out — whether it&apos;s a project, collaboration, or just a hello.
 					</motion.p>
 
-					{/* ── TIER 1: Primary – Email, GitHub, LinkedIn ── */}
-					<motion.div
-						className="mb-5"
-						variants={fadeUp} custom={0.2}
-						initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-						<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Connect</p>
-						<div className="flex flex-wrap gap-3">
-							{sortedSocials.filter(s => ["email","github","linkedin"].includes(s.platform)).map((social, i) => {
-								const cfg = PLATFORM_CONFIG[social.platform];
-								if (!cfg || !social.url) return null;
-								const isEmail = social.url.startsWith("mailto:");
-								return (
-									<motion.a
-										key={social.platform}
-										href={social.url}
-										target={isEmail ? undefined : "_blank"}
-										rel={isEmail ? undefined : "noopener noreferrer"}
-										whileHover={{ y: -3, scale: 1.03 }}
-										whileTap={{ scale: 0.97 }}
-										className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl text-white text-sm font-semibold shadow-md transition-shadow hover:shadow-lg"
-										style={{ backgroundColor: cfg.color }}>
-										<FontAwesomeIcon icon={cfg.icon} className="text-base" />
-										{cfg.label}
-									</motion.a>
-								);
-							})}
+					{/* Contact form + socials side-by-side on lg */}
+					<div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-6 lg:gap-10 items-start">
+
+						<ContactForm />
+
+						<div className="flex flex-col gap-4 max-w-md">
+							{/* ── TIER 1: Primary – Email, GitHub, LinkedIn ── */}
+							<motion.div
+								variants={fadeUp} custom={0.2}
+								initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+								<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Connect</p>
+								<div className="flex flex-wrap gap-2 sm:gap-3">
+									{sortedSocials.filter(s => ["email","github","linkedin"].includes(s.platform)).map((social) => {
+										const cfg = PLATFORM_CONFIG[social.platform];
+										if (!cfg || !social.url) return null;
+										const isEmail = social.url.startsWith("mailto:");
+										return (
+											<motion.a
+												key={social.platform}
+												href={social.url}
+												target={isEmail ? undefined : "_blank"}
+												rel={isEmail ? undefined : "noopener noreferrer"}
+												whileHover={{ y: -3, scale: 1.03 }}
+												whileTap={{ scale: 0.97 }}
+												className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold shadow-md transition-shadow hover:shadow-lg"
+												style={{ backgroundColor: cfg.color }}>
+												<FontAwesomeIcon icon={cfg.icon} className="text-base" />
+												{cfg.label}
+											</motion.a>
+										);
+									})}
+								</div>
+							</motion.div>
+
+							{/* ── TIER 2: Academic & Writing ── */}
+							{sortedSocials.some(s => ["medium","google_scholar","researchgate"].includes(s.platform)) && (
+								<motion.div
+									variants={fadeUp} custom={0.32}
+									initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Research &amp; Writing</p>
+									<div className="flex flex-wrap gap-2">
+										{sortedSocials.filter(s => ["medium","google_scholar","researchgate"].includes(s.platform)).map((social) => {
+											const cfg = PLATFORM_CONFIG[social.platform];
+											if (!cfg || !social.url) return null;
+											return (
+												<motion.a
+													key={social.platform}
+													href={social.url}
+													target="_blank" rel="noopener noreferrer"
+													whileHover={{ y: -2, scale: 1.02 }}
+													className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors hover:text-white"
+													style={{ borderColor: cfg.color, color: cfg.color }}
+													onMouseEnter={e => { e.currentTarget.style.backgroundColor = cfg.color; e.currentTarget.style.color = "#fff"; }}
+													onMouseLeave={e => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.color = cfg.color; }}>
+													<FontAwesomeIcon icon={cfg.icon} className="text-sm" />
+													{cfg.label}
+												</motion.a>
+											);
+										})}
+									</div>
+								</motion.div>
+							)}
+
+							{/* ── TIER 3: Certifications ── */}
+							{sortedSocials.some(s => ["credly","accredible","google_skills"].includes(s.platform)) && (
+								<motion.div
+									variants={fadeUp} custom={0.44}
+									initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
+									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Credentials &amp; Certifications</p>
+									<div className="flex flex-wrap gap-2">
+										{sortedSocials.filter(s => ["credly","accredible","google_skills"].includes(s.platform)).map((social) => {
+											const cfg = PLATFORM_CONFIG[social.platform];
+											if (!cfg || !social.url) return null;
+											return (
+												<motion.a
+													key={social.platform}
+													href={social.url}
+													target="_blank" rel="noopener noreferrer"
+													whileHover={{ scale: 1.05 }}
+													className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white shadow-sm"
+													style={{ backgroundColor: cfg.color }}>
+													<span>{cfg.emoji}</span>
+													{cfg.label}
+												</motion.a>
+											);
+										})}
+									</div>
+								</motion.div>
+							)}
+
+							{/* Fallback email if no socials loaded */}
+							{sortedSocials.length === 0 && (
+								<a href={emailHref} className="text-gray-600 hover:text-gray-900 transition-colors text-base">{emailText}</a>
+							)}
 						</div>
-					</motion.div>
-
-					{/* ── TIER 2: Academic & Writing ── */}
-					{sortedSocials.some(s => ["medium","google_scholar","researchgate"].includes(s.platform)) && (
-						<motion.div
-							className="mb-5"
-							variants={fadeUp} custom={0.32}
-							initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-							<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Research &amp; Writing</p>
-							<div className="flex flex-wrap gap-2">
-								{sortedSocials.filter(s => ["medium","google_scholar","researchgate"].includes(s.platform)).map((social) => {
-									const cfg = PLATFORM_CONFIG[social.platform];
-									if (!cfg || !social.url) return null;
-									return (
-										<motion.a
-											key={social.platform}
-											href={social.url}
-											target="_blank" rel="noopener noreferrer"
-											whileHover={{ y: -2, scale: 1.02 }}
-											className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors hover:text-white"
-											style={{ borderColor: cfg.color, color: cfg.color }}
-											onMouseEnter={e => { e.currentTarget.style.backgroundColor = cfg.color; e.currentTarget.style.color = "#fff"; }}
-											onMouseLeave={e => { e.currentTarget.style.backgroundColor = ""; e.currentTarget.style.color = cfg.color; }}>
-											<FontAwesomeIcon icon={cfg.icon} className="text-sm" />
-											{cfg.label}
-										</motion.a>
-									);
-								})}
-							</div>
-						</motion.div>
-					)}
-
-					{/* ── TIER 3: Certifications ── */}
-					{sortedSocials.some(s => ["credly","accredible","google_skills"].includes(s.platform)) && (
-						<motion.div
-							variants={fadeUp} custom={0.44}
-							initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
-							<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Credentials &amp; Certifications</p>
-							<div className="flex flex-wrap gap-2">
-								{sortedSocials.filter(s => ["credly","accredible","google_skills"].includes(s.platform)).map((social) => {
-									const cfg = PLATFORM_CONFIG[social.platform];
-									if (!cfg || !social.url) return null;
-									return (
-										<motion.a
-											key={social.platform}
-											href={social.url}
-											target="_blank" rel="noopener noreferrer"
-											whileHover={{ scale: 1.05 }}
-											className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white shadow-sm"
-											style={{ backgroundColor: cfg.color }}>
-											<span>{cfg.emoji}</span>
-											{cfg.label}
-										</motion.a>
-									);
-								})}
-							</div>
-						</motion.div>
-					)}
-
-					{/* Fallback email if no socials loaded */}
-					{sortedSocials.length === 0 && (
-						<a href={emailHref} className="text-gray-600 hover:text-gray-900 transition-colors text-lg mt-2">{emailText}</a>
-					)}
+					</div>
 				</div>
 			</section>
 		</div>

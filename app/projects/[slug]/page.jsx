@@ -152,7 +152,7 @@ export default function Page(props) {
 
       {/* ── Hero / Thumbnail ── */}
       <motion.div
-        className="relative w-full h-[55vh] md:h-[65vh] bg-neutral-900 overflow-hidden"
+        className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] bg-neutral-900 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -174,7 +174,7 @@ export default function Page(props) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         {/* Hero text */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14">
+        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-14">
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -185,7 +185,7 @@ export default function Page(props) {
                 {data.year}
               </span>
             )}
-            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white leading-tight">
               {data.title}
             </h1>
             {/* Tech tags in hero */}
@@ -211,7 +211,7 @@ export default function Page(props) {
       </motion.div>
 
       {/* ── Main content ── */}
-      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
 
         {/* Description column (2/3) */}
         <motion.div
@@ -230,7 +230,7 @@ export default function Page(props) {
             <div className="space-y-4">
               {desc.length > 0 ? (
                 desc.map((para, i) => (
-                  <p key={i} className="text-neutral-600 text-lg leading-relaxed">
+                  <p key={i} className="text-neutral-600 text-base sm:text-lg leading-relaxed">
                     {para}
                   </p>
                 ))
@@ -356,7 +356,7 @@ export default function Page(props) {
 
       {/* ── Image Gallery ── */}
       {images.length > 0 && (
-        <section className="max-w-6xl mx-auto px-6 pb-20">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16 md:pb-20">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-1 h-6 bg-neutral-900 rounded-full" />
             <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">

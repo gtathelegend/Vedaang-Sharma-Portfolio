@@ -21,6 +21,13 @@ const poppins = Poppins({
 	variable: "--font-poppins",
 });
 
+export const viewport = {
+	width: "device-width",
+	initialScale: 1,
+	viewportFit: "cover",
+	themeColor: "#ffffff",
+};
+
 export const metadata = {
 	title: {
 		default: "Vedaang Sharma | Portfolio",

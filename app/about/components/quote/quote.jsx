@@ -5,9 +5,9 @@ import { useIntersectionObserver } from "./useIntersectionObserver";
 
 function Wrapper({ children }) {
 	return (
-		<div className="min-h-[80vh] mx-auto container  p-10 grid grid-cols-1 mt-10 ">
+		<div className="min-h-[60vh] md:min-h-[80vh] mx-auto container px-6 sm:px-10 py-10 grid grid-cols-1 mt-6 md:mt-10">
 			<motion.div
-				className="flex justify-center items-center flex-col mb-5 "
+				className="flex justify-center items-center flex-col mb-5"
 				initial={{
 					opacity: 0,
 					scale: 0.9,
@@ -37,8 +37,8 @@ export default function Quote() {
 	return (
 		<Wrapper>
 			<div ref={ref} className="text-center">
-				<h3 className="text-[2rem]">
-					{text1.map((word, index) => (
+				<h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[2rem] leading-snug">
+	{text1.map((word, index) => (
 						<motion.span
 							key={index}
 							initial={{
@@ -61,7 +61,7 @@ export default function Quote() {
 						</motion.span>
 					))}
 				</h3>
-				<h3 className="text-xl">
+				<h3 className="text-base sm:text-lg md:text-xl">
 					{text2.map((word, index) => (
 						<motion.span
 							key={index + text1.length}

@@ -60,11 +60,11 @@ export default function Education() {
 	const imageList = education?.images || [];
 
 	return (
-		<section className="py-16" aria-labelledby="education-heading">
-			<div className="mx-auto container px-8 md:px-16">
+		<section className="py-12 md:py-16" aria-labelledby="education-heading">
+			<div className="mx-auto container px-6 sm:px-8 md:px-16">
 				<SectionHeader label="Background" heading="Education" id="education-heading" />
 			</div>
-			<div className="mx-auto container gap-10 px-8 md:px-16">
+			<div className="mx-auto container gap-10 px-6 sm:px-8 md:px-16">
 				<motion.div
 					className="flex justify-center items-start flex-col"
 					initial={{ opacity: 0, y: 50 }}
@@ -85,10 +85,10 @@ export default function Education() {
 											<h2 className="font-semibold text-xl text-gray-900">{education.institute}</h2>
 											<h3 className="text-md font-normal mb-3 text-gray-600">{education.degree}</h3>
 											{imageList.length > 0 && (
-												<div className="gap-4 mb-4 flex items-stretch md:h-[300px] xl:h-[400px]">
+												<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 md:flex md:items-stretch md:h-[300px] xl:h-[400px]">
 													{imageList.slice(0, 3).map((image, index) => (
-														<div key={`${image}-${index}`} className="flex-[1] transition-all duration-300 ease-in-out hover:flex-[3] group">
-															<Image src={image} width={400} height={225} alt="Education" className="rounded-lg w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 ease-in-out" />
+														<div key={`${image}-${index}`} className="aspect-video sm:aspect-square md:aspect-auto md:flex-[1] md:transition-all md:duration-300 md:ease-in-out md:hover:flex-[3] group">
+															<Image src={image} width={400} height={225} alt="Education" className="rounded-lg w-full h-full object-cover grayscale md:group-hover:grayscale-0 transition-all duration-300 ease-in-out" />
 														</div>
 													))}
 												</div>

@@ -35,7 +35,7 @@ export default function Page() {
 			<FixedButton href="/projects">
 				<FontAwesomeIcon icon={faChevronLeft} className="text-black pr-10" />
 			</FixedButton>
-			<div className="pt-24 pb-16 px-8 md:px-16 max-w-6xl mx-auto">
+			<div className="pt-24 pb-16 px-4 sm:px-8 md:px-16 max-w-6xl mx-auto">
 				<SectionHeader label="Complete List" heading="Archive" />
 				<div className="mt-8 overflow-x-auto">
 					<table className="w-full">

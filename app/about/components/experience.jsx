@@ -92,11 +92,11 @@ export default function Experience() {
 	}, []);
 
 	return (
-		<section className="py-16" aria-labelledby="professional-experience">
-			<div className="mx-auto container px-8 md:px-16">
+		<section className="py-12 md:py-16" aria-labelledby="professional-experience">
+			<div className="mx-auto container px-6 sm:px-8 md:px-16">
 				<SectionHeader label="Career" heading="Professional Experience" id="professional-experience" />
 			</div>
-			<div className="mx-auto container px-6 py-10">
+			<div className="mx-auto container px-4 sm:px-6 py-8 md:py-10">
 				<div className="flex justify-center items-center flex-col">
 					<div className="relative w-full max-w-6xl mx-auto">
 						<div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-gray-900 via-gray-400 to-transparent h-full"></div>

@@ -6,7 +6,7 @@ export default function Footer() {
 	return (
 		<footer className="bg-white border-t border-gray-100">
 			{/* CTA strip */}
-			<div className="flex justify-center items-center py-16">
+			<div className="flex justify-center items-center py-12 md:py-16 px-6">
 				<motion.div
 					className="text-center"
 					initial={{ opacity: 0, y: 30 }}
@@ -16,7 +16,7 @@ export default function Footer() {
 					<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3">
 						Interested?
 					</p>
-					<h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+					<h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-4">
 						Let&apos;s Work Together
 					</h2>
 					<Link
