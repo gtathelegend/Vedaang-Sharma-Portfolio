@@ -18,7 +18,7 @@ import {
 	faPaperPlane,
 	faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import BootConsole from "@/components/BootConsole";
+import TerminalIntro from "@/components/TerminalIntro";
 import GithubActivity from "@/components/GithubActivity";
 
 const fadeUp = {
@@ -146,16 +146,6 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 							/>
 						</div>
 					</div>
-
-					{/* Boot console intro */}
-					<motion.div
-						initial={{ opacity: 0, y: 16 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5 }}
-						className="max-w-md mb-8"
-					>
-						<BootConsole />
-					</motion.div>
 
 					<motion.div
 						variants={slideLeft}
@@ -730,6 +720,7 @@ export default function MyPage() {
 
 	return (
 		<main className="bg-white dark:bg-gray-950">
+			<TerminalIntro />
 			<HeroSection
 				fullName={fullName}
 				tagline={tagline}

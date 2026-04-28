@@ -21,19 +21,71 @@ import {
 	faChevronLeft,
 	faMapPin,
 	faClock,
+	faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 const PLATFORM_CONFIG = {
-	linkedin: { label: "LinkedIn", icon: faLinkedin, color: "#0A66C2", emoji: "💼", tier: 1 },
-	github: { label: "GitHub", icon: faGithub, color: "#24292e", emoji: "🖥", tier: 1 },
-	email: { label: "Email", icon: faEnvelope, color: "#EA4335", emoji: "✉️", tier: 1 },
-	medium: { label: "Medium", icon: faMedium, color: "#000000", emoji: "✏️", tier: 2 },
-	google_scholar: { label: "Google Scholar", icon: faGraduationCap, color: "#4285F4", emoji: "🎓", tier: 2 },
-	researchgate: { label: "ResearchGate", icon: faResearchgate, color: "#00CCBB", emoji: "🔬", tier: 2 },
-	google_skills: { label: "Google Dev Profile", icon: faGoogle, color: "#34A853", emoji: "📷", tier: 3 },
-	credly: { label: "Credly", icon: faAward, color: "#FF6B2B", emoji: "🏅", tier: 3 },
-	accredible: { label: "Accredible", icon: faCertificate, color: "#6C3FC5", emoji: "📜", tier: 3 },
+	linkedin:       { label: "LinkedIn",          icon: faLinkedin,      color: "#0A66C2" },
+	github:         { label: "GitHub",             icon: faGithub,        color: "#6e40c9" },
+	email:          { label: "Email",              icon: faEnvelope,      color: "#EA4335" },
+	medium:         { label: "Medium",             icon: faMedium,        color: "#000000" },
+	google_scholar: { label: "Google Scholar",     icon: faGraduationCap, color: "#4285F4" },
+	researchgate:   { label: "ResearchGate",       icon: faResearchgate,  color: "#00CCBB" },
+	google_skills:  { label: "Google Dev Profile", icon: faGoogle,        color: "#34A853" },
+	credly:         { label: "Credly",             icon: faAward,         color: "#FF6B2B" },
+	accredible:     { label: "Accredible",         icon: faCertificate,   color: "#6C3FC5" },
 };
+
+function SocialRow({ social }) {
+	const cfg = PLATFORM_CONFIG[social.platform];
+	if (!cfg || !social.url) return null;
+	const isEmail = social.url.startsWith("mailto:");
+	return (
+		<a
+			href={social.url}
+			target={isEmail ? undefined : "_blank"}
+			rel={isEmail ? undefined : "noopener noreferrer"}
+			className="flex items-center gap-3.5 px-3 py-3 -mx-3 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 group transition-all"
+		>
+			<div
+				className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+				style={{ backgroundColor: cfg.color + "22" }}
+			>
+				<FontAwesomeIcon icon={cfg.icon} style={{ color: cfg.color }} className="text-base" />
+			</div>
+			<span className="flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">
+				{cfg.label}
+			</span>
+			<div
+				className="w-6 h-6 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+				style={{ backgroundColor: cfg.color + "18" }}
+			>
+				<FontAwesomeIcon
+					icon={faArrowUpRightFromSquare}
+					style={{ color: cfg.color }}
+					className="text-[9px]"
+				/>
+			</div>
+		</a>
+	);
+}
+
+function CredentialChip({ social }) {
+	const cfg = PLATFORM_CONFIG[social.platform];
+	if (!cfg || !social.url) return null;
+	return (
+		<a
+			href={social.url}
+			target="_blank"
+			rel="noopener noreferrer"
+			className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-white transition hover:opacity-85 hover:scale-[1.03] shadow-sm"
+			style={{ backgroundColor: cfg.color }}
+		>
+			<FontAwesomeIcon icon={cfg.icon} className="text-[10px]" />
+			{cfg.label}
+		</a>
+	);
+}
 
 export default function ContactPage() {
 	const [socials, setSocials] = useState([]);
@@ -49,227 +101,163 @@ export default function ContactPage() {
 			setSocials(s.data || []);
 			setSettings(set.data || {});
 		});
-		return () => {
-			mounted = false;
-		};
+		return () => { mounted = false; };
 	}, []);
 
-	const sortedSocials = socials
-		.slice()
-		.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+	const sorted      = socials.slice().sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+	const primary     = sorted.filter((s) => ["linkedin", "github", "email"].includes(s.platform));
+	const research    = sorted.filter((s) => ["medium", "google_scholar", "researchgate"].includes(s.platform));
+	const credentials = sorted.filter((s) => ["credly", "accredible", "google_skills"].includes(s.platform));
 
-	const tier1 = sortedSocials.filter((s) =>
-		["email", "github", "linkedin"].includes(s.platform),
-	);
-	const tier2 = sortedSocials.filter((s) =>
-		["medium", "google_scholar", "researchgate"].includes(s.platform),
-	);
-	const tier3 = sortedSocials.filter((s) =>
-		["credly", "accredible", "google_skills"].includes(s.platform),
-	);
-
-	const emailSocial = tier1.find((s) => s.platform === "email");
+	const emailSocial = sorted.find((s) => s.platform === "email");
 	const emailHref =
 		emailSocial?.url ||
 		(settings?.email
-			? settings.email.startsWith("mailto:")
-				? settings.email
-				: `mailto:${settings.email}`
+			? settings.email.startsWith("mailto:") ? settings.email : `mailto:${settings.email}`
 			: "mailto:vedaangsharma2006@gmail.com");
 	const emailText = emailHref.replace(/^mailto:/, "").split("?")[0];
 
+	const hasRightCol = research.length > 0 || credentials.length > 0;
+
 	return (
 		<main className="min-h-screen bg-white dark:bg-gray-950">
-			{/* Hero */}
-			<section className="relative pt-28 md:pt-36 pb-12 md:pb-16 overflow-hidden">
-				<div className="pointer-events-none absolute inset-0 -z-10">
-					<div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-blue-50 blur-3xl opacity-60" />
-					<div className="absolute -top-12 left-1/4 h-64 w-64 rounded-full bg-purple-50 blur-3xl opacity-60" />
-				</div>
 
+			{/* Hero */}
+			<section className="relative pt-28 md:pt-36 pb-10 overflow-hidden">
+				<div className="pointer-events-none absolute inset-0 -z-10">
+					<div className="absolute top-0 right-1/4 h-80 w-80 rounded-full bg-violet-100 dark:bg-violet-500/10 blur-3xl opacity-60" />
+					<div className="absolute top-16 left-0 h-64 w-64 rounded-full bg-indigo-100 dark:bg-indigo-500/10 blur-3xl opacity-50" />
+				</div>
 				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 					<Link
 						href="/"
-						className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition mb-8"
+						className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 dark:hover:text-white transition mb-10"
 					>
-						<FontAwesomeIcon icon={faChevronLeft} className="text-xs" /> Back home
+						<FontAwesomeIcon icon={faChevronLeft} className="text-[10px]" />
+						Back home
 					</Link>
-
-					<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3">
+					<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-violet-500 dark:text-violet-400 mb-3">
 						Let&apos;s connect
 					</p>
-					<h1 className="text-gray-900 text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight max-w-3xl mb-5">
+					<h1 className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-4">
 						Get in touch.
 					</h1>
-					<p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl">
-						Drop a message about a project, a collaboration, or just to say hi — I&apos;ll
+					<p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl">
+						Drop a message about a project, collaboration, or just to say hi — I&apos;ll
 						usually reply within a day or two.
 					</p>
 				</div>
 			</section>
 
-			{/* Body */}
 			<section className="pb-24 md:pb-32">
-				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-					<div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8 lg:gap-12 items-start">
-						{/* Form card */}
-						<motion.div
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							transition={{ type: "spring", stiffness: 90, damping: 18 }}
-							viewport={{ once: true, amount: 0.2 }}
-							className="rounded-3xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/60 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] p-6 sm:p-8 md:p-10"
-						>
-							<h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
-								Send a message
-							</h2>
-							<p className="text-sm text-gray-500 mb-6">
-								Your message lands directly in my inbox.
-							</p>
-							<ContactForm />
-						</motion.div>
+				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 space-y-6">
 
-						{/* Sidebar */}
-						<motion.aside
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							transition={{ type: "spring", stiffness: 90, damping: 18, delay: 0.1 }}
-							viewport={{ once: true, amount: 0.2 }}
-							className="space-y-6"
-						>
-							{/* Quick info */}
-							<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-								<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">
-									Quick info
-								</p>
-								<ul className="space-y-4">
-									<li className="flex gap-3">
-										<div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-											<FontAwesomeIcon icon={faEnvelope} className="text-gray-600 text-sm" />
+					{/* ── Links panel ── */}
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ type: "spring", stiffness: 90, damping: 18 }}
+						className="rounded-3xl overflow-hidden shadow-[0_4px_40px_-8px_rgba(99,102,241,0.18)] border border-indigo-100 dark:border-indigo-500/20"
+					>
+						{/* Gradient header strip */}
+						<div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 relative overflow-hidden">
+							<div className="pointer-events-none absolute inset-0">
+								<div className="absolute -top-8 right-0 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+								<div className="absolute bottom-0 left-1/3 h-28 w-28 rounded-full bg-blue-400/20 blur-2xl" />
+							</div>
+							<div className="relative grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/15">
+								{[
+									{ icon: faEnvelope, label: "Email",      value: emailText, href: emailHref },
+									{ icon: faMapPin,   label: "Location",   value: "Jaipur, India" },
+									{ icon: faClock,    label: "Reply time", value: "Within 1–2 days" },
+								].map(({ icon, label, value, href }) => (
+									<div key={label} className="flex items-center gap-3.5 px-7 py-6">
+										<div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+											<FontAwesomeIcon icon={icon} className="text-white text-sm" />
 										</div>
 										<div className="min-w-0">
-											<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
-												Email
+											<p className="text-[10px] font-bold uppercase tracking-widest text-white/60 mb-0.5">
+												{label}
 											</p>
-											<a
-												href={emailHref}
-												className="text-sm text-gray-800 hover:text-gray-900 break-all"
-											>
-												{emailText}
-											</a>
+											{href ? (
+												<a href={href} className="text-sm font-semibold text-white hover:text-white/80 break-all transition">
+													{value}
+												</a>
+											) : (
+												<p className="text-sm font-semibold text-white">{value}</p>
+											)}
 										</div>
-									</li>
-									<li className="flex gap-3">
-										<div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-											<FontAwesomeIcon icon={faMapPin} className="text-gray-600 text-sm" />
-										</div>
-										<div>
-											<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
-												Location
-											</p>
-											<p className="text-sm text-gray-800">Jaipur, India</p>
-										</div>
-									</li>
-									<li className="flex gap-3">
-										<div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-											<FontAwesomeIcon icon={faClock} className="text-gray-600 text-sm" />
-										</div>
-										<div>
-											<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
-												Reply time
-											</p>
-											<p className="text-sm text-gray-800">Within 1–2 days</p>
-										</div>
-									</li>
-								</ul>
+									</div>
+								))}
 							</div>
+						</div>
 
-							{/* Socials – tier 1 */}
-							{tier1.length > 0 && (
-								<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+						{/* Social links body */}
+						<div className={`bg-white dark:bg-gray-900 grid grid-cols-1 ${hasRightCol ? "md:grid-cols-2" : ""} divide-y md:divide-y-0 md:divide-x divide-gray-100 dark:divide-white/10`}>
+
+							{primary.length > 0 && (
+								<div className="p-7">
+									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
 										Connect
 									</p>
-									<div className="flex flex-wrap gap-2">
-										{tier1.map((social) => {
-											const cfg = PLATFORM_CONFIG[social.platform];
-											if (!cfg || !social.url) return null;
-											const isEmail = social.url.startsWith("mailto:");
-											return (
-												<a
-													key={social.platform}
-													href={social.url}
-													target={isEmail ? undefined : "_blank"}
-													rel={isEmail ? undefined : "noopener noreferrer"}
-													className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-white text-xs font-semibold shadow-sm hover:opacity-90 transition"
-													style={{ backgroundColor: cfg.color }}
-												>
-													<FontAwesomeIcon icon={cfg.icon} />
-													{cfg.label}
-												</a>
-											);
-										})}
+									<div className="space-y-1">
+										{primary.map((s) => <SocialRow key={s.platform} social={s} />)}
 									</div>
 								</div>
 							)}
 
-							{/* Socials – tier 2 */}
-							{tier2.length > 0 && (
-								<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
-										Research &amp; writing
-									</p>
-									<div className="flex flex-wrap gap-2">
-										{tier2.map((social) => {
-											const cfg = PLATFORM_CONFIG[social.platform];
-											if (!cfg || !social.url) return null;
-											return (
-												<a
-													key={social.platform}
-													href={social.url}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium hover:opacity-80 transition"
-													style={{ borderColor: cfg.color, color: cfg.color }}
-												>
-													<FontAwesomeIcon icon={cfg.icon} />
-													{cfg.label}
-												</a>
-											);
-										})}
-									</div>
+							{hasRightCol && (
+								<div className="p-7 space-y-7">
+									{research.length > 0 && (
+										<div>
+											<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
+												Writing &amp; research
+											</p>
+											<div className="space-y-1">
+												{research.map((s) => <SocialRow key={s.platform} social={s} />)}
+											</div>
+										</div>
+									)}
+									{credentials.length > 0 && (
+										<div>
+											<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">
+												Credentials
+											</p>
+											<div className="flex flex-wrap gap-2">
+												{credentials.map((s) => <CredentialChip key={s.platform} social={s} />)}
+											</div>
+										</div>
+									)}
 								</div>
 							)}
+						</div>
+					</motion.div>
 
-							{/* Socials – tier 3 */}
-							{tier3.length > 0 && (
-								<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-									<p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
-										Credentials
-									</p>
-									<div className="flex flex-wrap gap-2">
-										{tier3.map((social) => {
-											const cfg = PLATFORM_CONFIG[social.platform];
-											if (!cfg || !social.url) return null;
-											return (
-												<a
-													key={social.platform}
-													href={social.url}
-													target="_blank"
-													rel="noopener noreferrer"
-													className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white shadow-sm"
-													style={{ backgroundColor: cfg.color }}
-												>
-													<span>{cfg.emoji}</span>
-													{cfg.label}
-												</a>
-											);
-										})}
-									</div>
-								</div>
-							)}
-						</motion.aside>
-					</div>
+					{/* ── Contact form ── */}
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ type: "spring", stiffness: 90, damping: 18, delay: 0.08 }}
+						className="relative rounded-3xl bg-gray-900 overflow-hidden shadow-[0_4px_40px_-8px_rgba(139,92,246,0.25)]"
+					>
+						{/* Decorative orbs */}
+						<div className="pointer-events-none absolute inset-0">
+							<div className="absolute -top-28 -right-16 h-80 w-80 rounded-full bg-violet-500/25 blur-3xl" />
+							<div className="absolute top-1/2 -left-24 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl" />
+							<div className="absolute -bottom-20 right-1/3 h-56 w-56 rounded-full bg-pink-500/15 blur-3xl" />
+						</div>
+
+						<div className="relative p-8 sm:p-10">
+							<h2 className="text-lg font-bold text-white mb-1">Send a message</h2>
+							<p className="text-sm text-gray-400 mb-8">
+								Your message lands directly in my inbox.
+							</p>
+							<div className="max-w-2xl">
+								<ContactForm />
+							</div>
+						</div>
+					</motion.div>
+
 				</div>
 			</section>
 		</main>

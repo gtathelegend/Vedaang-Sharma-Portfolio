@@ -7,10 +7,7 @@ const VALID = ["light", "dark", "mono"];
 export const THEME_INIT_SCRIPT = `
 try {
 	var stored = localStorage.getItem('theme');
-	if (!['light','dark','mono'].includes(stored)) {
-		var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-		stored = prefersDark ? 'dark' : 'light';
-	}
+	if (!['light','dark','mono'].includes(stored)) stored = 'light';
 	document.documentElement.setAttribute('data-theme', stored);
 } catch (_) {
 	document.documentElement.setAttribute('data-theme', 'light');
@@ -32,11 +29,7 @@ export default function ThemeProvider() {
 			}
 		})();
 		if (!stored) {
-			const prefersDark =
-				typeof window !== "undefined" &&
-				window.matchMedia &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches;
-			apply(prefersDark ? "dark" : "light");
+			apply("light");
 		} else {
 			apply(stored);
 		}

@@ -21,6 +21,10 @@ export default function BootConsole({ onDone, className = "" }) {
 	onDoneRef.current = onDone;
 
 	useEffect(() => {
+		cancelled.current = false;
+		setLines([]);
+		setDone(false);
+
 		const sleep = (ms) =>
 			new Promise((resolve) => {
 				const id = setTimeout(resolve, ms);
