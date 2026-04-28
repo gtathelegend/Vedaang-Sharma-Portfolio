@@ -5,7 +5,6 @@ import { fetchJson } from "@/lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import FixedButton from "@/components/FixedButton";
 import Link from "next/link";
 import SectionHeader from "@/components/SectionHeader";
 
@@ -32,11 +31,14 @@ export default function Page() {
 
 	return (
 		<main className="overflow-hidden bg-white min-h-screen">
-			<FixedButton href="/projects">
-				<FontAwesomeIcon icon={faChevronLeft} className="text-black pr-10" />
-			</FixedButton>
-			<div className="pt-24 pb-16 px-4 sm:px-8 md:px-16 max-w-6xl mx-auto">
+			<div className="pt-28 md:pt-36 pb-16 md:pb-24 px-4 sm:px-8 md:px-16 max-w-6xl mx-auto">
+				<Link href="/projects" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition mb-8">
+					<FontAwesomeIcon icon={faChevronLeft} className="text-xs" /> Back to projects
+				</Link>
 				<SectionHeader label="Complete List" heading="Archive" />
+				<p className="text-gray-600 text-sm sm:text-base max-w-2xl mt-4 mb-2">
+					Every project I&apos;ve worked on — including older experiments and side projects.
+				</p>
 				<div className="mt-8 overflow-x-auto">
 					<table className="w-full">
 						<thead>
