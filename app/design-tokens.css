@@ -2,7 +2,9 @@
    Design Tokens — Single Source of Truth
    ═══════════════════════════════════════════════════════════════ */
 
-:root {
+:root,
+[data-theme="light"],
+[data-theme="mono"] {
 	/* ── Brand ── */
 	--color-accent: #1e40af;
 	--color-accent-hover: #1e3a8a;
@@ -25,6 +27,36 @@
 	--color-border: #e5e7eb;
 	--color-border-light: #f3f4f6;
 
+	color-scheme: light;
+}
+
+[data-theme="dark"] {
+	/* ── Brand ── */
+	--color-accent: #60a5fa;
+	--color-accent-hover: #93c5fd;
+	--color-accent-light: #1e3a8a;
+	--color-accent-muted: #1e40af;
+
+	/* ── Surfaces ── */
+	--color-bg: #0a0a0c;
+	--color-bg-alt: #111114;
+	--color-surface: #15151a;
+	--color-surface-hover: #1d1d24;
+
+	/* ── Text ── */
+	--color-text: #f5f5f5;
+	--color-text-secondary: #d4d4d8;
+	--color-text-muted: #a1a1aa;
+	--color-text-faint: #71717a;
+
+	/* ── Borders ── */
+	--color-border: #27272a;
+	--color-border-light: #1f1f24;
+
+	color-scheme: dark;
+}
+
+:root {
 	/* ── Radius ── */
 	--radius-sm: 0.5rem;
 	--radius-md: 0.75rem;

@@ -79,7 +79,7 @@ export default function ContactPage() {
 	const emailText = emailHref.replace(/^mailto:/, "").split("?")[0];
 
 	return (
-		<main className="min-h-screen bg-white">
+		<main className="min-h-screen bg-white dark:bg-gray-950">
 			{/* Hero */}
 			<section className="relative pt-28 md:pt-36 pb-12 md:pb-16 overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">

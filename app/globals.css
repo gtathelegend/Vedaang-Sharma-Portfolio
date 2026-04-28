@@ -3,6 +3,9 @@
 
 @import "tailwindcss";
 
+/* Enable Tailwind's `dark:` variant when [data-theme="dark"] is set on <html>. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ── Base reset — accessible font sizing ── */
 html {
 	font-size: 16px;
@@ -17,6 +20,9 @@ html {
 body {
 	color: var(--color-text);
 	background-color: var(--color-bg);
+	transition:
+		background-color 0.25s ease,
+		color 0.25s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -78,4 +84,11 @@ a[title]:hover:after {
 ::selection {
 	background: var(--color-accent);
 	color: #fff;
+}
+
+/* Monochrome theme — same as light, but de-saturate all imagery so the site
+   feels stripped-down and editorial. Images use blend + filter for a uniform
+   look across the gallery. */
+[data-theme="mono"] img {
+	filter: grayscale(1) saturate(0.4) contrast(1.02);
 }

@@ -102,7 +102,7 @@ export default function SkillsPage() {
 	const skills = (selected && skillsByCategory?.[selected]) || [];
 
 	return (
-		<main className="min-h-screen bg-white">
+		<main className="min-h-screen bg-white dark:bg-gray-950">
 			{/* Hero */}
 			<section className="relative pt-28 md:pt-36 pb-16 md:pb-20 overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">

@@ -2,20 +2,22 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import Chat from "@/components/Chat";
+import CommandPalette from "@/components/CommandPalette";
+import ThemeProvider from "@/components/ThemeProvider";
 
 export default function ShellChrome() {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
 
   if (isAdminRoute) {
-    return null;
+    return <ThemeProvider />;
   }
 
   return (
     <>
+      <ThemeProvider />
       <Navbar />
-      <Chat />
+      <CommandPalette />
     </>
   );
 }

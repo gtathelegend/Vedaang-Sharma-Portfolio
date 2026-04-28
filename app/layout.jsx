@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import ClientTopProgressBar from "@/components/ClientTopProgressBar";
 import ShellChrome from "@/components/ShellChrome";
+import { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 
 const jost = Jost({
 	subsets: ["latin"],
@@ -63,8 +64,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en" className={`${jost.variable} ${poppins.variable}`}>
-			<body className="font-poppins bg-white text-gray-900 selection:bg-blue-600 selection:text-white">
+		<html lang="en" className={`${jost.variable} ${poppins.variable}`} suppressHydrationWarning>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+			</head>
+			<body className="font-poppins bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 selection:bg-blue-600 selection:text-white">
 				<ClientTopProgressBar />
 				<ShellChrome />
 				{children}

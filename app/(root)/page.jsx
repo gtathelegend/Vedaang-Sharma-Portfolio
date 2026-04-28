@@ -18,6 +18,8 @@ import {
 	faPaperPlane,
 	faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
+import BootConsole from "@/components/BootConsole";
+import GithubActivity from "@/components/GithubActivity";
 
 const fadeUp = {
 	hidden: { y: 30, opacity: 0 },
@@ -52,7 +54,7 @@ const slideRight = {
 
 function SectionLabel({ children, className = "" }) {
 	return (
-		<p className={`text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3 ${className}`}>
+		<p className={`text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 dark:text-gray-500 mb-3 ${className}`}>
 			{children}
 		</p>
 	);
@@ -67,7 +69,7 @@ function PrimaryLink({ href, children, external = false }) {
 		<Tag
 			href={href}
 			{...props}
-			className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm"
+			className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
 		>
 			{children}
 		</Tag>
@@ -83,7 +85,7 @@ function SecondaryLink({ href, children, external = false }) {
 		<Tag
 			href={href}
 			{...props}
-			className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition"
+			className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition"
 		>
 			{children}
 		</Tag>
@@ -98,12 +100,12 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 	return (
 		<section
 			id="home"
-			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-white pt-24 md:pt-0"
+			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-white dark:bg-gray-950 pt-24 md:pt-0"
 		>
 			{/* Subtle background gradient orbs */}
 			<div className="pointer-events-none absolute inset-0 -z-10">
-				<div className="absolute top-1/4 -left-24 h-72 w-72 rounded-full bg-gray-100 blur-3xl opacity-70" />
-				<div className="absolute bottom-1/4 -right-24 h-80 w-80 rounded-full bg-blue-50 blur-3xl opacity-60" />
+				<div className="absolute top-1/4 -left-24 h-72 w-72 rounded-full bg-gray-100 dark:bg-white/5 blur-3xl opacity-70" />
+				<div className="absolute bottom-1/4 -right-24 h-80 w-80 rounded-full bg-blue-50 dark:bg-blue-500/10 blur-3xl opacity-60" />
 			</div>
 
 			{/* Right portrait (desktop) */}
@@ -124,7 +126,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						priority
 						sizes="(max-width: 768px) 0px, 42vw"
 					/>
-					<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent" />
+					<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent dark:from-gray-950 dark:via-gray-950/60" />
 				</div>
 			</motion.div>
 
@@ -133,7 +135,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 				<div className="md:max-w-[58%] lg:max-w-[52%]">
 					{/* Mobile portrait pill */}
 					<div className="flex md:hidden justify-center mb-8">
-						<div className="w-32 h-32 rounded-full overflow-hidden grayscale ring-4 ring-white shadow-xl">
+						<div className="w-32 h-32 rounded-full overflow-hidden grayscale ring-4 ring-white dark:ring-gray-900 shadow-xl">
 							<Image
 								src={Me}
 								width={128}
@@ -145,6 +147,16 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						</div>
 					</div>
 
+					{/* Boot console intro */}
+					<motion.div
+						initial={{ opacity: 0, y: 16 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5 }}
+						className="max-w-md mb-8"
+					>
+						<BootConsole />
+					</motion.div>
+
 					<motion.div
 						variants={slideLeft}
 						custom={0.05}
@@ -155,7 +167,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 					</motion.div>
 
 					<motion.h1
-						className="text-gray-900 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
+						className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
 						variants={slideLeft}
 						custom={0.15}
 						initial="hidden"
@@ -165,7 +177,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 					</motion.h1>
 
 					<motion.p
-						className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-xl mb-10"
+						className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed max-w-xl mb-10"
 						variants={slideLeft}
 						custom={0.28}
 						initial="hidden"
@@ -189,10 +201,10 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						].map((s) => (
 							<div
 								key={s.l}
-								className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm px-3 py-3 text-center shadow-sm"
+								className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-sm px-3 py-3 text-center shadow-sm"
 							>
-								<div className="text-xl sm:text-2xl font-bold text-gray-900">{s.v}</div>
-								<div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mt-1">
+								<div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{s.v}</div>
+								<div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mt-1">
 									{s.l}
 								</div>
 							</div>
@@ -238,9 +250,9 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 
 function SectionCard({ id, label, heading, lead, children }) {
 	return (
-		<section id={id} className="py-20 md:py-28 bg-white">
+		<section id={id} className="py-20 md:py-28 bg-white dark:bg-gray-950">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<div className="rounded-3xl border border-gray-100 bg-gradient-to-b from-white to-gray-50/50 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] overflow-hidden">
+				<div className="rounded-3xl border border-gray-100 dark:border-white/10 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-900/40 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
 					<div className="p-8 sm:p-10 md:p-14">
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
@@ -250,11 +262,11 @@ function SectionCard({ id, label, heading, lead, children }) {
 							className="mb-10 max-w-2xl"
 						>
 							<SectionLabel>{label}</SectionLabel>
-							<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
+							<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
 								{heading}
 							</h2>
 							{lead && (
-								<p className="text-gray-600 text-base sm:text-lg leading-relaxed">{lead}</p>
+								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">{lead}</p>
 							)}
 						</motion.div>
 						{children}
@@ -324,25 +336,26 @@ function SkillsPreview() {
 									whileInView={{ opacity: 1, y: 0 }}
 									transition={{ delay: i * 0.06, type: "spring", stiffness: 90, damping: 18 }}
 									viewport={{ once: true, amount: 0.2 }}
-									className="rounded-2xl border border-gray-100 bg-white p-5 hover:border-gray-300 hover:shadow-md transition"
+									className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md transition"
 								>
 									<div className="flex items-center gap-3 mb-3">
-										<div className="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-base">
+										<div className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center text-base">
 											{meta.emoji}
 										</div>
-										<h3 className="text-base font-semibold text-gray-900">{meta.label}</h3>
+										<h3 className="text-base font-semibold text-gray-900 dark:text-white">{meta.label}</h3>
 									</div>
 									<div className="flex flex-wrap gap-1.5">
 										{top.map((s) => (
 											<span
 												key={s.name}
-												className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 text-gray-700"
+												className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300"
 											>
 												{s.name}
 											</span>
 										))}
 										{list.length > top.length && (
-											<span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-50 text-gray-500">
+											<span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400"
+											>
 												+{list.length - top.length}
 											</span>
 										)}
@@ -415,10 +428,10 @@ function FeaturedProjectsPreview() {
 									whileInView={{ opacity: 1, y: 0 }}
 									transition={{ delay: i * 0.08, type: "spring", stiffness: 90, damping: 18 }}
 									viewport={{ once: true, amount: 0.2 }}
-									className="group rounded-2xl border border-gray-100 bg-white overflow-hidden hover:shadow-lg transition"
+									className="group rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] overflow-hidden hover:shadow-lg transition"
 								>
 									<Link href={`/projects/${project.slug}`} className="block">
-										<div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+										<div className="relative aspect-[4/3] bg-gray-100 dark:bg-white/5 overflow-hidden">
 											<Image
 												src={thumb || BlurImage}
 												alt={project.title || "Project"}
@@ -430,24 +443,24 @@ function FeaturedProjectsPreview() {
 											/>
 										</div>
 										<div className="p-5">
-											<h3 className="text-base font-semibold text-gray-900 mb-1.5 group-hover:text-gray-700">
+											<h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1.5 group-hover:text-gray-700 dark:group-hover:text-gray-200">
 												{project.title}
 											</h3>
 											{desc[0] && (
-												<p className="text-sm text-gray-600 line-clamp-2 mb-3">{desc[0]}</p>
+												<p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">{desc[0]}</p>
 											)}
 											{tech.length > 0 && (
 												<div className="flex flex-wrap gap-1.5">
 													{tech.slice(0, 3).map((t) => (
 														<span
 															key={t}
-															className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 text-gray-600"
+															className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400"
 														>
 															{t}
 														</span>
 													))}
 													{tech.length > 3 && (
-														<span className="text-[11px] font-medium px-2 py-0.5 rounded-md text-gray-400">
+														<span className="text-[11px] font-medium px-2 py-0.5 rounded-md text-gray-400 dark:text-gray-500">
 															+{tech.length - 3}
 														</span>
 													)}
@@ -477,12 +490,12 @@ function FeaturedProjectsPreview() {
 
 function AboutPreview() {
 	return (
-		<section id="about" className="py-20 md:py-28 bg-white">
+		<section id="about" className="py-20 md:py-28 bg-white dark:bg-gray-950">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<div className="rounded-3xl border border-gray-100 bg-white shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] overflow-hidden">
+				<div className="rounded-3xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
 					<div className="grid grid-cols-1 md:grid-cols-2">
 						<motion.div
-							className="relative min-h-[320px] md:min-h-[480px] bg-gray-50"
+							className="relative min-h-[320px] md:min-h-[480px] bg-gray-50 dark:bg-white/5"
 							initial={{ opacity: 0, scale: 0.96 }}
 							whileInView={{ opacity: 1, scale: 1 }}
 							transition={{ type: "spring", stiffness: 80, damping: 20 }}
@@ -506,15 +519,15 @@ function AboutPreview() {
 								viewport={{ once: true, amount: 0.2 }}
 							>
 								<SectionLabel>About me</SectionLabel>
-								<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
+								<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
 									Building thoughtful, modern software.
 								</h2>
-								<p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-5">
+								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5">
 									I&apos;m a full‑stack developer based in Jaipur, India — currently studying Computer
 									Science at Vivekananda Global University. I love turning ideas into clean,
 									production‑ready apps that bridge web and AI.
 								</p>
-								<p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-8">
+								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
 									When I&apos;m not coding, I&apos;m probably exploring new tools, writing about what I
 									learn, or hunting for the perfect espresso.
 								</p>
@@ -527,10 +540,10 @@ function AboutPreview() {
 									].map((s) => (
 										<div
 											key={s.l}
-											className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-3 text-center"
+											className="rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 px-3 py-3 text-center"
 										>
-											<p className="text-lg font-bold text-gray-900">{s.v}</p>
-											<p className="text-[10px] uppercase tracking-widest text-gray-400 mt-0.5">
+											<p className="text-lg font-bold text-gray-900 dark:text-white">{s.v}</p>
+											<p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500 mt-0.5">
 												{s.l}
 											</p>
 										</div>
@@ -550,12 +563,97 @@ function AboutPreview() {
 }
 
 /* ─────────────────────────────────────────────
+   Live section (GitHub activity + /now teaser)
+   ───────────────────────────────────────────── */
+
+function NowTeaser() {
+	const [now, setNow] = useState(null);
+
+	useEffect(() => {
+		let mounted = true;
+		fetchJson("/api/now")
+			.then((res) => mounted && setNow(res.data || {}))
+			.catch(() => mounted && setNow({}));
+		return () => {
+			mounted = false;
+		};
+	}, []);
+
+	const items = [
+		{ label: "Focus", value: now?.focus, fallback: "Building polished portfolio + side projects." },
+		{ label: "Learning", value: now?.learning, fallback: "Generative AI tooling & system design." },
+		{ label: "Reading", value: now?.reading, fallback: "Designing Data‑Intensive Applications." },
+	].map((x) => ({ ...x, value: x.value || x.fallback }));
+
+	return (
+		<div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] p-6 sm:p-8 shadow-sm h-full">
+			<div className="flex items-center justify-between gap-3 mb-5">
+				<div>
+					<h3 className="text-sm font-semibold text-gray-900 dark:text-white">What I&apos;m up to now</h3>
+					<p className="text-[11px] text-gray-500 dark:text-gray-400">A snapshot, refreshed whenever life shifts.</p>
+				</div>
+				<span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/30 px-2 py-1 rounded-full">
+					<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> live
+				</span>
+			</div>
+
+			<dl className="space-y-4">
+				{items.map((it) => (
+					<div key={it.label}>
+						<dt className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-1">
+							{it.label}
+						</dt>
+						<dd className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">{it.value}</dd>
+					</div>
+				))}
+			</dl>
+
+			<Link
+				href="/now"
+				className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300"
+			>
+				Read the full /now page <FontAwesomeIcon icon={faArrowRight} />
+			</Link>
+		</div>
+	);
+}
+
+function LiveSection() {
+	return (
+		<section id="live" className="py-20 md:py-28 bg-white dark:bg-gray-950">
+			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					transition={{ type: "spring", stiffness: 90, damping: 18 }}
+					viewport={{ once: true, amount: 0.2 }}
+					className="mb-10 max-w-2xl"
+				>
+					<SectionLabel>Live signals</SectionLabel>
+					<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
+						What&apos;s happening, right now.
+					</h2>
+					<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
+						The static parts of a portfolio age fast. These two panels stay current — pulled
+						from GitHub and a hand‑written /now page.
+					</p>
+				</motion.div>
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<GithubActivity />
+					<NowTeaser />
+				</div>
+			</div>
+		</section>
+	);
+}
+
+/* ─────────────────────────────────────────────
    Contact CTA
    ───────────────────────────────────────────── */
 
 function ContactCTA() {
 	return (
-		<section id="contact-cta" className="py-20 md:py-28 bg-white">
+		<section id="contact-cta" className="py-20 md:py-28 bg-white dark:bg-gray-950">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
 					className="relative rounded-3xl bg-gray-900 text-white overflow-hidden p-10 sm:p-14 md:p-20"
@@ -631,7 +729,7 @@ export default function MyPage() {
 	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
 
 	return (
-		<main className="bg-white">
+		<main className="bg-white dark:bg-gray-950">
 			<HeroSection
 				fullName={fullName}
 				tagline={tagline}
@@ -640,6 +738,7 @@ export default function MyPage() {
 			/>
 			<SkillsPreview />
 			<FeaturedProjectsPreview />
+			<LiveSection />
 			<AboutPreview />
 			<ContactCTA />
 		</main>

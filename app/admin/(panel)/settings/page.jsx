@@ -23,18 +23,34 @@ const emptyForm = {
   spotify_enabled: true,
 };
 
+const emptyNow = {
+  focus: "",
+  learning: "",
+  reading: "",
+  listening: "",
+  location: "",
+};
+
 export default function AdminSettingsPage() {
   const [form, setForm] = useState(emptyForm);
+  const [now, setNow] = useState(emptyNow);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savingNow, setSavingNow] = useState(false);
   const { toast, showToast } = useAdminToast();
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const res = await adminFetch("/api/settings");
-        if (res.data && Object.keys(res.data).length > 0) {
-          setForm({ ...emptyForm, ...res.data });
+        const [settingsRes, nowRes] = await Promise.all([
+          adminFetch("/api/settings"),
+          adminFetch("/api/now").catch(() => ({ data: {} })),
+        ]);
+        if (settingsRes.data && Object.keys(settingsRes.data).length > 0) {
+          setForm({ ...emptyForm, ...settingsRes.data });
+        }
+        if (nowRes?.data) {
+          setNow({ ...emptyNow, ...nowRes.data });
         }
       } catch {
         showToast("Failed to load settings", "error");
@@ -44,6 +60,27 @@ export default function AdminSettingsPage() {
     };
     loadSettings();
   }, []);
+
+  const handleNowChange = (e) => {
+    const { name, value } = e.target;
+    setNow((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleNowSave = async (e) => {
+    e.preventDefault();
+    setSavingNow(true);
+    try {
+      await adminFetch("/api/now", {
+        method: "PUT",
+        body: JSON.stringify(now),
+      });
+      showToast("/now updated");
+    } catch {
+      showToast("Could not save /now (does site_settings have a 'now' jsonb column?)", "error");
+    } finally {
+      setSavingNow(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -143,6 +180,63 @@ export default function AdminSettingsPage() {
             className="px-6 py-2 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save Settings"}
+          </button>
+        </div>
+      </form>
+
+      {/* /now editor (separate save — writes to a `now` jsonb column on site_settings) */}
+      <form onSubmit={handleNowSave} className="space-y-4">
+        <section className="bg-white rounded-xl shadow p-6 space-y-4">
+          <div className="flex items-baseline justify-between border-b pb-2">
+            <h3 className="text-base font-semibold text-slate-700">/now page</h3>
+            <span className="text-xs text-slate-400">Public at /now</span>
+          </div>
+          <p className="text-xs text-slate-500 -mt-2">
+            Schema note: requires a <code>now jsonb</code> column on <code>site_settings</code>. Empty
+            fields fall back to defaults on the public page.
+          </p>
+          <AdminFormTextarea
+            label="Focus — what you're working on"
+            name="focus"
+            value={now.focus}
+            onChange={handleNowChange}
+            rows={2}
+          />
+          <AdminFormTextarea
+            label="Learning"
+            name="learning"
+            value={now.learning}
+            onChange={handleNowChange}
+            rows={2}
+          />
+          <AdminFormTextarea
+            label="Reading"
+            name="reading"
+            value={now.reading}
+            onChange={handleNowChange}
+            rows={2}
+          />
+          <AdminFormTextarea
+            label="Listening"
+            name="listening"
+            value={now.listening}
+            onChange={handleNowChange}
+            rows={2}
+          />
+          <AdminFormInput
+            label="Based in"
+            name="location"
+            value={now.location}
+            onChange={handleNowChange}
+          />
+        </section>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={savingNow}
+            className="px-6 py-2 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition disabled:opacity-50"
+          >
+            {savingNow ? "Saving..." : "Save /now"}
           </button>
         </div>
       </form>

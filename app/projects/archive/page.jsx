@@ -30,7 +30,7 @@ export default function Page() {
 	}, []);
 
 	return (
-		<main className="overflow-hidden bg-white min-h-screen">
+		<main className="overflow-hidden bg-white dark:bg-gray-950 min-h-screen">
 			<div className="pt-28 md:pt-36 pb-16 md:pb-24 px-4 sm:px-8 md:px-16 max-w-6xl mx-auto">
 				<Link href="/projects" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition mb-8">
 					<FontAwesomeIcon icon={faChevronLeft} className="text-xs" /> Back to projects

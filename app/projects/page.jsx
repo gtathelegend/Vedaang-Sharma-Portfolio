@@ -90,7 +90,7 @@ export default function Page() {
 	}, []);
 
 	return (
-		<main className="overflow-hidden bg-white">
+		<main className="overflow-hidden bg-white dark:bg-gray-950">
 			{/* Hero */}
 			<section className="relative min-h-[100svh] md:h-screen flex justify-center items-center overflow-hidden pt-24 md:pt-0 pb-12 md:pb-0">
 				<div className="pointer-events-none absolute inset-0 -z-10">
