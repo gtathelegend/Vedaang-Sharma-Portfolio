@@ -97,7 +97,7 @@ export default function Skills() {
   const selectedSkills = (selectedCategory && skillsByCategory?.[selectedCategory]) || [];
 
   return (
-    <div className="relative bg-white py-12 md:py-16">
+    <div className="relative bg-transparent py-12 md:py-16">
       <div className="mx-auto container px-6 sm:px-8 md:px-16">
         <SectionHeader label="Expertise" heading="Skills" />
         <motion.p className="text-gray-600 max-w-2xl mb-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>

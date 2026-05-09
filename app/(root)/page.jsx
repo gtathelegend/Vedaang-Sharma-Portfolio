@@ -10,6 +10,7 @@ import MeAbout from "@/public/image/me2.jpg";
 import BlurImage from "@/public/image/placeholder/blur.jpg";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
 	faArrowRight,
 	faCode,
@@ -20,6 +21,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TerminalIntro from "@/components/TerminalIntro";
 import GithubActivity from "@/components/GithubActivity";
+import {
+	ActivityIcon,
+	CodepenIcon,
+	WebhookIcon,
+	MobileIcon,
+	DatabaseIcon,
+	CloudIcon,
+	ToolsIcon,
+} from "@/app/about/components/skills/icons";
 
 const fadeUp = {
 	hidden: { y: 30, opacity: 0 },
@@ -54,9 +64,9 @@ const slideRight = {
 
 function SectionLabel({ children, className = "" }) {
 	return (
-		<p className={`text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 dark:text-gray-500 mb-3 ${className}`}>
+		<span className={`inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 dark:text-amber-400 bg-amber-100/80 dark:bg-amber-500/10 border border-amber-200/60 dark:border-amber-500/20 px-3 py-1.5 rounded-full mb-5 ${className}`}>
 			{children}
-		</p>
+		</span>
 	);
 }
 
@@ -100,23 +110,17 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 	return (
 		<section
 			id="home"
-			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-white dark:bg-gray-950 pt-24 md:pt-0"
+			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-transparent pt-32 md:pt-0"
 		>
-			{/* Subtle background gradient orbs */}
-			<div className="pointer-events-none absolute inset-0 -z-10">
-				<div className="absolute top-1/4 -left-24 h-72 w-72 rounded-full bg-gray-100 dark:bg-white/5 blur-3xl opacity-70" />
-				<div className="absolute bottom-1/4 -right-24 h-80 w-80 rounded-full bg-blue-50 dark:bg-blue-500/10 blur-3xl opacity-60" />
-			</div>
-
 			{/* Right portrait (desktop) */}
 			<motion.div
-				className="hidden md:block absolute top-0 right-0 h-full w-[42vw] -z-0"
+				className="hidden md:block absolute top-0 right-0 h-full w-[46vw] lg:w-[44vw] -z-0"
 				variants={slideRight}
 				custom={0.1}
 				initial="hidden"
 				animate="visible"
 			>
-				<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+				<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-[900ms]">
 					<Image
 						src={Me}
 						fill
@@ -124,17 +128,19 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						alt={fullName}
 						placeholder="blur"
 						priority
-						sizes="(max-width: 768px) 0px, 42vw"
+						sizes="(max-width: 768px) 0px, 46vw"
 					/>
-					<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent dark:from-gray-950 dark:via-gray-950/60" />
+					{/* Soft fade — lets aurora blend through the edge */}
+					<div className="absolute inset-0 bg-gradient-to-r from-[#F5F3FF]/85 via-[#F5F3FF]/20 to-transparent dark:from-gray-950/95 dark:via-gray-950/30" />
 				</div>
 			</motion.div>
 
 			{/* Content */}
-			<div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 py-12 md:py-0">
-				<div className="md:max-w-[58%] lg:max-w-[52%]">
-					{/* Mobile portrait pill */}
-					<div className="flex md:hidden justify-center mb-8">
+			<div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-20 py-24 md:py-32">
+				<div className="md:max-w-[52%] lg:max-w-[46%]">
+
+					{/* Mobile portrait */}
+					<div className="flex md:hidden justify-center mb-16">
 						<div className="w-32 h-32 rounded-full overflow-hidden grayscale ring-4 ring-white dark:ring-gray-900 shadow-xl">
 							<Image
 								src={Me}
@@ -147,64 +153,44 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						</div>
 					</div>
 
-					<motion.div
+					{/* Name eyebrow */}
+					<motion.p
+						className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-gray-400 dark:text-gray-500 mb-8"
 						variants={slideLeft}
-						custom={0.05}
+						custom={0.12}
 						initial="hidden"
 						animate="visible"
 					>
-						<SectionLabel>{fullName}</SectionLabel>
-					</motion.div>
+						{fullName}
+					</motion.p>
 
+					{/* Heading */}
 					<motion.h1
-						className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
+						className="text-gray-900 dark:text-white text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-12"
 						variants={slideLeft}
-						custom={0.15}
+						custom={0.22}
 						initial="hidden"
 						animate="visible"
 					>
 						{tagline}
 					</motion.h1>
 
+					{/* Subtitle */}
 					<motion.p
-						className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed max-w-xl mb-10"
+						className="text-gray-600 dark:text-gray-400 text-lg sm:text-xl leading-[1.7] max-w-xl mb-16"
 						variants={slideLeft}
-						custom={0.28}
+						custom={0.32}
 						initial="hidden"
 						animate="visible"
 					>
 						{heroSubtitle}
 					</motion.p>
 
-					{/* Quick stats */}
+					{/* CTAs */}
 					<motion.div
-						className="grid grid-cols-3 gap-3 sm:gap-4 max-w-md mb-10"
+						className="flex flex-wrap items-center gap-4"
 						variants={fadeUp}
-						custom={0.38}
-						initial="hidden"
-						animate="visible"
-					>
-						{[
-							{ v: "10+", l: "Projects" },
-							{ v: "5+", l: "Certifications" },
-							{ v: "3+", l: "Years coding" },
-						].map((s) => (
-							<div
-								key={s.l}
-								className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-sm px-3 py-3 text-center shadow-sm"
-							>
-								<div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{s.v}</div>
-								<div className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mt-1">
-									{s.l}
-								</div>
-							</div>
-						))}
-					</motion.div>
-
-					<motion.div
-						className="flex flex-wrap gap-3"
-						variants={fadeUp}
-						custom={0.48}
+						custom={0.42}
 						initial="hidden"
 						animate="visible"
 					>
@@ -213,21 +199,55 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						</PrimaryLink>
 						<SecondaryLink href="/contact">Get in touch</SecondaryLink>
 					</motion.div>
+
+					{/* Quiet social row */}
+					<motion.div
+						className="mt-20 pt-8 border-t border-gray-100 dark:border-white/10 flex flex-wrap items-center gap-x-8 gap-y-3"
+						variants={fadeUp}
+						custom={0.55}
+						initial="hidden"
+						animate="visible"
+					>
+						<a
+							href="https://github.com/vedaangsharma"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+						>
+							<FontAwesomeIcon icon={faGithub} className="text-base" />
+							GitHub
+						</a>
+						<a
+							href="https://www.linkedin.com/in/vedaang-sharma"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+						>
+							LinkedIn
+						</a>
+						<Link
+							href="/contact"
+							className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+						>
+							Email
+						</Link>
+					</motion.div>
+
 				</div>
 			</div>
 
 			{/* Scroll cue */}
 			<motion.div
-				className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
+				className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ delay: 1.2 }}
+				transition={{ delay: 1.4 }}
 			>
-				<span className="text-[10px] uppercase tracking-widest text-gray-400">scroll</span>
+				<span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 dark:text-gray-600">scroll</span>
 				<motion.div
-					className="w-px h-8 bg-gray-300 origin-top"
-					animate={{ scaleY: [0.3, 1, 0.3] }}
-					transition={{ repeat: Infinity, duration: 1.6 }}
+					className="w-px h-10 bg-gradient-to-b from-gray-300 to-transparent dark:from-gray-600 origin-top"
+					animate={{ scaleY: [0.2, 1, 0.2] }}
+					transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
 				/>
 			</motion.div>
 		</section>
@@ -240,9 +260,9 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 
 function SectionCard({ id, label, heading, lead, children }) {
 	return (
-		<section id={id} className="py-20 md:py-28 bg-white dark:bg-gray-950">
+		<section id={id} className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<div className="rounded-3xl border border-gray-100 dark:border-white/10 bg-gradient-to-b from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-900/40 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
+				<div className="rounded-3xl border border-amber-200/40 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB]/95 to-[#FAFAF9]/90 dark:from-gray-900 dark:to-gray-900/40 shadow-[0_8px_40px_-16px_rgba(245,158,11,0.18)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
 					<div className="p-8 sm:p-10 md:p-14">
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
@@ -272,13 +292,27 @@ function SectionCard({ id, label, heading, lead, children }) {
    ───────────────────────────────────────────── */
 
 const SKILL_CATEGORY_META = {
-	frontend: { label: "Frontend", emoji: "🎨" },
-	backend: { label: "Backend", emoji: "⚙️" },
-	ai: { label: "AI / ML", emoji: "🧠" },
-	mobile: { label: "Mobile", emoji: "📱" },
-	devops: { label: "DevOps", emoji: "☁️" },
-	database: { label: "Databases", emoji: "🗄️" },
-	other: { label: "Other", emoji: "🛠️" },
+	frontend: { title: "Frontend",      icon: CodepenIcon,  description: "Modern, responsive web interfaces" },
+	backend:  { title: "Backend / API", icon: WebhookIcon,  description: "Robust, scalable server-side services" },
+	ai:       { title: "AI & ML",       icon: ActivityIcon, description: "Intelligent solutions with ML and LLMs" },
+	mobile:   { title: "Mobile",        icon: MobileIcon,   description: "Cross-platform mobile experiences" },
+	devops:   { title: "DevOps",        icon: CloudIcon,    description: "CI/CD, containers, cloud infrastructure" },
+	database: { title: "Databases",     icon: DatabaseIcon, description: "Relational and NoSQL data stores" },
+	other:    { title: "Other",         icon: ToolsIcon,    description: "Tools, platforms, and extras" },
+};
+
+// Home preview bento — same order/spans as skills page, capped at 6 categories
+const HOME_BENTO_ORDER = ['frontend', 'ai', 'mobile', 'backend', 'devops', 'database'];
+const HOME_BENTO_SPAN_MAP = { frontend: 2, backend: 2, database: 2 };
+
+const SKILL_CATEGORY_THEMES = {
+	frontend: { grad: "from-blue-500 to-cyan-500",     soft: "from-blue-50 to-cyan-50",     softDark: "dark:from-blue-500/10 dark:to-cyan-500/10" },
+	backend:  { grad: "from-violet-500 to-purple-600", soft: "from-violet-50 to-purple-50", softDark: "dark:from-violet-500/10 dark:to-purple-500/10" },
+	ai:       { grad: "from-pink-500 to-rose-500",     soft: "from-pink-50 to-rose-50",     softDark: "dark:from-pink-500/10 dark:to-rose-500/10" },
+	mobile:   { grad: "from-emerald-500 to-teal-500",  soft: "from-emerald-50 to-teal-50",  softDark: "dark:from-emerald-500/10 dark:to-teal-500/10" },
+	devops:   { grad: "from-orange-500 to-amber-500",  soft: "from-orange-50 to-amber-50",  softDark: "dark:from-orange-500/10 dark:to-amber-500/10" },
+	database: { grad: "from-indigo-500 to-blue-600",   soft: "from-indigo-50 to-blue-50",   softDark: "dark:from-indigo-500/10 dark:to-blue-500/10" },
+	other:    { grad: "from-slate-500 to-gray-600",    soft: "from-slate-50 to-gray-100",   softDark: "dark:from-slate-500/10 dark:to-gray-500/10" },
 };
 
 function SkillsPreview() {
@@ -289,9 +323,7 @@ function SkillsPreview() {
 		fetchJson("/api/skills")
 			.then((res) => mounted && setSkillsByCategory(res.data || {}))
 			.catch(() => mounted && setSkillsByCategory({}));
-		return () => {
-			mounted = false;
-		};
+		return () => { mounted = false; };
 	}, []);
 
 	const categories = skillsByCategory
@@ -306,51 +338,86 @@ function SkillsPreview() {
 			lead="A snapshot of the stacks I work with day‑to‑day — from modern web frameworks to AI tooling and cloud infrastructure."
 		>
 			{categories === null ? (
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-pulse">
-					{Array.from({ length: 6 }).map((_, i) => (
-						<div key={i} className="h-28 rounded-2xl bg-gray-100" />
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-pulse">
+					{/* Mirrors HOME_BENTO_ORDER+SPAN_MAP: frontend(2),ai(1),mobile(1),backend(2),devops(1),database(2) */}
+					{[2, 1, 1, 2, 1, 2].map((span, i) => (
+						<div key={i} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
+							<div className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
+								<div className="h-16 bg-gray-200 dark:bg-white/10" />
+								<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 ${span === 2 ? "grid-cols-3" : "grid-cols-2"}`}>
+									{Array.from({ length: span === 2 ? 6 : 4 }).map((_, j) => (
+										<div key={j} className="h-9 rounded-xl bg-gray-200 dark:bg-white/10" />
+									))}
+								</div>
+							</div>
+						</div>
 					))}
 				</div>
 			) : categories.length === 0 ? (
 				<p className="text-gray-500 italic">Skills coming soon.</p>
 			) : (
 				<>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-						{categories.slice(0, 6).map(([key, list], i) => {
-							const meta = SKILL_CATEGORY_META[key] || { label: key, emoji: "✨" };
-							const top = list.slice(0, 4);
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+						{[
+							...HOME_BENTO_ORDER.filter(k => skillsByCategory?.[k]?.length > 0),
+							...Object.keys(skillsByCategory || {}).filter(k => !HOME_BENTO_ORDER.includes(k) && skillsByCategory[k]?.length > 0),
+						].slice(0, 6).map((key, i) => {
+							const list  = skillsByCategory?.[key] || [];
+							const span  = HOME_BENTO_SPAN_MAP[key] ?? 1;
+							const meta  = SKILL_CATEGORY_META[key]   || { title: key, description: "", icon: ActivityIcon };
+							const theme = SKILL_CATEGORY_THEMES[key] || SKILL_CATEGORY_THEMES.other;
+							const Icon      = meta.icon;
+							const top       = list.slice(0, span === 2 ? 6 : 4);
+							const chipsGrid = span === 2 ? "grid-cols-3" : "grid-cols-2";
 							return (
-								<motion.div
-									key={key}
-									initial={{ opacity: 0, y: 20 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									transition={{ delay: i * 0.06, type: "spring", stiffness: 90, damping: 18 }}
-									viewport={{ once: true, amount: 0.2 }}
-									className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] p-5 hover:border-gray-300 dark:hover:border-white/20 hover:shadow-md transition"
-								>
-									<div className="flex items-center gap-3 mb-3">
-										<div className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center text-base">
-											{meta.emoji}
+								<div key={key} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
+									<motion.div
+										initial={{ opacity: 0, y: 20 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										transition={{ delay: i * 0.06, type: "spring", stiffness: 90, damping: 18 }}
+										viewport={{ once: true, amount: 0.2 }}
+										className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-[0_2px_20px_-8px_rgba(0,0,0,0.08)] hover:shadow-md transition h-full"
+									>
+										{/* Gradient header — identical to skills page */}
+										<div className={`bg-gradient-to-br ${theme.grad} relative overflow-hidden`}>
+											<div className="pointer-events-none absolute inset-0">
+												<div className="absolute -top-8 -right-8 h-28 w-28 rounded-full bg-white/10 blur-xl" />
+											</div>
+											<div className="relative flex items-center gap-3 px-5 py-4">
+												<div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0">
+													<Icon className="w-5 h-5" />
+												</div>
+												<div className="flex-1 min-w-0">
+													<h3 className="text-base font-bold text-white leading-tight">{meta.title}</h3>
+													<p className="text-xs text-white/75 mt-0.5 leading-tight">{meta.description}</p>
+												</div>
+												<span className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 text-[11px] font-bold text-white">
+													<span className="w-1 h-1 rounded-full bg-white animate-pulse" />
+													{list.length}
+												</span>
+											</div>
 										</div>
-										<h3 className="text-base font-semibold text-gray-900 dark:text-white">{meta.label}</h3>
-									</div>
-									<div className="flex flex-wrap gap-1.5">
-										{top.map((s) => (
-											<span
-												key={s.name}
-												className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300"
-											>
-												{s.name}
-											</span>
-										))}
-										{list.length > top.length && (
-											<span className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400"
-											>
-												+{list.length - top.length}
-											</span>
-										)}
-									</div>
-								</motion.div>
+
+										{/* Skill chips */}
+										<div className={`bg-gradient-to-br ${theme.soft} ${theme.softDark} p-4`}>
+											<div className={`grid ${chipsGrid} gap-2`}>
+												{top.map((s) => (
+													<div
+														key={s.name}
+														className="flex items-center px-3 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-white/80 dark:border-white/10 shadow-sm"
+													>
+														<span className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{s.name}</span>
+													</div>
+												))}
+											</div>
+											{list.length > top.length && (
+												<p className="text-xs text-gray-400 dark:text-gray-500 font-medium mt-3 px-1">
+													+{list.length - top.length} more on skills page
+												</p>
+											)}
+										</div>
+									</motion.div>
+								</div>
 							);
 						})}
 					</div>
@@ -418,7 +485,7 @@ function FeaturedProjectsPreview() {
 									whileInView={{ opacity: 1, y: 0 }}
 									transition={{ delay: i * 0.08, type: "spring", stiffness: 90, damping: 18 }}
 									viewport={{ once: true, amount: 0.2 }}
-									className="group rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] overflow-hidden hover:shadow-lg transition"
+									className="group rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] overflow-hidden hover:shadow-lg hover:border-amber-200 transition"
 								>
 									<Link href={`/projects/${project.slug}`} className="block">
 										<div className="relative aspect-[4/3] bg-gray-100 dark:bg-white/5 overflow-hidden">
@@ -480,9 +547,9 @@ function FeaturedProjectsPreview() {
 
 function AboutPreview() {
 	return (
-		<section id="about" className="py-20 md:py-28 bg-white dark:bg-gray-950">
+		<section id="about" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<div className="rounded-3xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.08)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
+				<div className="rounded-3xl border border-amber-200/40 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB]/95 to-[#FAFAF9]/90 dark:bg-white/[0.03] shadow-[0_8px_40px_-16px_rgba(245,158,11,0.18)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
 					<div className="grid grid-cols-1 md:grid-cols-2">
 						<motion.div
 							className="relative min-h-[320px] md:min-h-[480px] bg-gray-50 dark:bg-white/5"
@@ -513,20 +580,21 @@ function AboutPreview() {
 									Building thoughtful, modern software.
 								</h2>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5">
-									I&apos;m a full‑stack developer based in Jaipur, India — currently studying Computer
-									Science at Vivekananda Global University. I love turning ideas into clean,
-									production‑ready apps that bridge web and AI.
+									I&apos;m a full‑stack developer and AI systems builder based in Jaipur — studying CS
+									at Vivekananda Global University. My work spans intelligent web applications,
+									computer vision systems, and multi‑agent AI architectures.
 								</p>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
-									When I&apos;m not coding, I&apos;m probably exploring new tools, writing about what I
-									learn, or hunting for the perfect espresso.
+									What genuinely excites me: building AI that feels invisible — privacy‑first,
+									on‑device, purposeful. I&apos;ve published research on real‑time posture detection
+									and keep pushing into the space where systems engineering meets human experience.
 								</p>
 
 								<div className="grid grid-cols-3 gap-3 mb-8 max-w-sm">
 									{[
-										{ v: "3+", l: "Years coding" },
 										{ v: "10+", l: "Projects" },
-										{ v: "5+", l: "Stacks" },
+										{ v: "1", l: "Publication" },
+										{ v: "2", l: "Internships" },
 									].map((s) => (
 										<div
 											key={s.l}
@@ -547,6 +615,138 @@ function AboutPreview() {
 						</div>
 					</div>
 				</div>
+			</div>
+		</section>
+	);
+}
+
+/* ─────────────────────────────────────────────
+   Research teaser
+   ───────────────────────────────────────────── */
+
+const PAPER_AREAS = ["Computer Vision", "MediaPipe", "Pose Estimation", "Real-time Systems", "Human-Centered AI"];
+
+function ResearchTeaser() {
+	return (
+		<SectionCard
+			id="research-teaser"
+			label="Research"
+			heading="Published Work"
+			lead="Peer-reviewed research at the intersection of computer vision and human health."
+		>
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				transition={{ type: "spring", stiffness: 90, damping: 18 }}
+				viewport={{ once: true, amount: 0.2 }}
+				className="rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-6 sm:p-8"
+			>
+				<div className="flex flex-wrap items-center gap-3 mb-5">
+					<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 px-3 py-1.5 rounded-full">
+						Published · 2024
+					</span>
+					<span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-full">
+						Peer-Reviewed
+					</span>
+				</div>
+				<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
+					PostureSense: Real-Time Posture Detection and Correction Using MediaPipe and Computer Vision
+				</h3>
+				<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed mb-5">
+					A real-time posture monitoring system using MediaPipe pose landmarks and computer vision — providing corrective feedback via webcam with no wearables required.
+				</p>
+				<div className="flex flex-wrap gap-2 mb-6">
+					{PAPER_AREAS.map((area) => (
+						<span key={area} className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300">
+							{area}
+						</span>
+					))}
+				</div>
+				<div className="flex flex-wrap gap-3">
+					<PrimaryLink href="/research">
+						View research <FontAwesomeIcon icon={faArrowRight} />
+					</PrimaryLink>
+					<SecondaryLink href="/projects/posturesense">
+						See project
+					</SecondaryLink>
+				</div>
+			</motion.div>
+		</SectionCard>
+	);
+}
+
+/* ─────────────────────────────────────────────
+   Currently Building section
+   ───────────────────────────────────────────── */
+
+const EXPLORATIONS = [
+	{ label: "Privacy-first AI Companion", desc: "On-device LLM for personal use — no cloud dependency, no data exposure." },
+	{ label: "Multi-agent Orchestration", desc: "Autonomous agent pipelines with tool use, memory, and emergent reasoning." },
+	{ label: "Human-centered AI Interfaces", desc: "Interfaces that feel like a collaborator — not a tool." },
+	{ label: "Real-time Vision Systems", desc: "Low-latency computer vision for health, accessibility, and everyday use." },
+];
+
+function CurrentlyBuildingSection() {
+	return (
+		<section id="building" className="py-20 md:py-28 bg-transparent">
+			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
+				<motion.div
+					className="relative rounded-3xl overflow-hidden p-10 sm:p-14 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.20)]"
+					initial={{ opacity: 0, y: 30 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					transition={{ type: "spring", stiffness: 80, damping: 20 }}
+					viewport={{ once: true, amount: 0.2 }}
+				>
+					<div className="pointer-events-none absolute inset-0">
+						<div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-amber-200/40 blur-3xl" />
+						<div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-stone-200/50 blur-3xl" />
+					</div>
+
+					<div className="relative">
+						<div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+							<div>
+								<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-4">In progress</span>
+								<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight">
+									Currently Building.
+								</h2>
+							</div>
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3 py-1.5 rounded-full">
+								<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active
+							</span>
+						</div>
+						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl">
+							Not everything ships at once. These are the directions I&apos;m actively exploring — some are side projects, some are experiments, all are intentional.
+						</p>
+
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							{EXPLORATIONS.map((item, i) => (
+								<motion.div
+									key={item.label}
+									initial={{ opacity: 0, y: 20 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									transition={{ delay: i * 0.07, type: "spring", stiffness: 90, damping: 18 }}
+									viewport={{ once: true, amount: 0.2 }}
+									className="rounded-2xl border border-amber-100 bg-white/70 backdrop-blur-sm p-5 hover:bg-white/90 hover:border-amber-200 transition"
+								>
+									<div className="flex items-center gap-2 mb-2">
+										<span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
+										<h3 className="text-sm font-semibold text-gray-900">{item.label}</h3>
+									</div>
+									<p className="text-gray-500 text-sm leading-relaxed pl-4">{item.desc}</p>
+								</motion.div>
+							))}
+						</div>
+
+						<div className="mt-10">
+							<Link
+								href="/now"
+								className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition"
+							>
+								See the full /now page <FontAwesomeIcon icon={faArrowRight} />
+							</Link>
+						</div>
+					</div>
+				</motion.div>
 			</div>
 		</section>
 	);
@@ -576,7 +776,7 @@ function NowTeaser() {
 	].map((x) => ({ ...x, value: x.value || x.fallback }));
 
 	return (
-		<div className="rounded-2xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/[0.03] p-6 sm:p-8 shadow-sm h-full">
+		<div className="rounded-2xl border border-white/70 dark:border-white/10 bg-white/55 dark:bg-white/[0.03] backdrop-blur-xl p-6 sm:p-8 shadow-[0_4px_24px_-8px_rgba(245,158,11,0.10)] dark:shadow-sm h-full">
 			<div className="flex items-center justify-between gap-3 mb-5">
 				<div>
 					<h3 className="text-sm font-semibold text-gray-900 dark:text-white">What I&apos;m up to now</h3>
@@ -610,7 +810,7 @@ function NowTeaser() {
 
 function LiveSection() {
 	return (
-		<section id="live" className="py-20 md:py-28 bg-white dark:bg-gray-950">
+		<section id="live" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
@@ -643,35 +843,35 @@ function LiveSection() {
 
 function ContactCTA() {
 	return (
-		<section id="contact-cta" className="py-20 md:py-28 bg-white dark:bg-gray-950">
+		<section id="contact-cta" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
-					className="relative rounded-3xl bg-gray-900 text-white overflow-hidden p-10 sm:p-14 md:p-20"
+					className="relative rounded-3xl overflow-hidden p-10 sm:p-14 md:p-20 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] via-[#FFF8E7] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.22)]"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ type: "spring", stiffness: 80, damping: 20 }}
 					viewport={{ once: true, amount: 0.2 }}
 				>
 					<div className="pointer-events-none absolute inset-0">
-						<div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-blue-500/20 blur-3xl" />
-						<div className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-purple-500/15 blur-3xl" />
+						<div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-amber-200/50 blur-3xl" />
+						<div className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-stone-200/60 blur-3xl" />
 					</div>
 
 					<div className="relative max-w-3xl">
-						<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3">
+						<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-5">
 							Let&apos;s connect
-						</p>
-						<h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
+						</span>
+						<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
 							Have a project in mind, or just want to say hi?
 						</h2>
-						<p className="text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
+						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8">
 							I&apos;m always open to interesting collaborations, freelance opportunities, and
 							thoughtful conversations about the web, AI, and great software.
 						</p>
 						<div className="flex flex-wrap gap-3">
 							<Link
 								href="/contact"
-								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-gray-900 text-sm font-semibold hover:bg-gray-100 transition shadow-sm"
+								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm"
 							>
 								<FontAwesomeIcon icon={faPaperPlane} /> Send a message
 							</Link>
@@ -679,7 +879,7 @@ function ContactCTA() {
 								href="https://github.com/vedaangsharma"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-white/20 text-white text-sm font-semibold hover:bg-white/10 transition"
+								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-amber-200 text-gray-700 text-sm font-semibold hover:bg-amber-50 transition"
 							>
 								<FontAwesomeIcon icon={faArrowUpRightFromSquare} /> GitHub
 							</a>
@@ -712,14 +912,14 @@ export default function MyPage() {
 	}, []);
 
 	const fullName = settings?.full_name || "Vedaang Sharma";
-	const tagline = settings?.tagline || "Full Stack Developer";
+	const tagline = settings?.tagline || "Full Stack & AI Systems Developer";
 	const heroSubtitle =
 		settings?.hero_subtitle ||
-		"Hi! I’m Vedaang Sharma, a full-stack developer specialising in modern web development with React, Node.js, and Next.js — and a growing focus on Artificial Intelligence.";
+		"Building intelligent applications — AI agents, distributed systems, computer vision, and cloud-native architectures. CS student, published researcher, full-stack engineer.";
 	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
 
 	return (
-		<main className="bg-white dark:bg-gray-950">
+		<main className="bg-transparent overflow-hidden">
 			<TerminalIntro />
 			<HeroSection
 				fullName={fullName}
@@ -729,9 +929,12 @@ export default function MyPage() {
 			/>
 			<SkillsPreview />
 			<FeaturedProjectsPreview />
+			<ResearchTeaser />
+			<CurrentlyBuildingSection />
 			<LiveSection />
 			<AboutPreview />
 			<ContactCTA />
 		</main>
 	);
 }
+

@@ -20,6 +20,8 @@ import {
 	faCircleHalfStroke,
 	faDownload,
 	faArrowUpRightFromSquare,
+	faBookOpen,
+	faPenNib,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
@@ -29,6 +31,8 @@ const PAGES = [
 	{ icon: faCode, label: "Skills", hint: "/skills", href: "/skills", group: "Pages" },
 	{ icon: faFolderOpen, label: "Projects", hint: "/projects", href: "/projects", group: "Pages" },
 	{ icon: faFolderOpen, label: "Project archive", hint: "/projects/archive", href: "/projects/archive", group: "Pages" },
+	{ icon: faBookOpen, label: "Research", hint: "/research", href: "/research", group: "Pages" },
+	{ icon: faPenNib, label: "Blog", hint: "/blog", href: "/blog", group: "Pages" },
 	{ icon: faClock, label: "/now", hint: "/now", href: "/now", group: "Pages" },
 	{ icon: faPaperPlane, label: "Contact", hint: "/contact", href: "/contact", group: "Pages" },
 ];

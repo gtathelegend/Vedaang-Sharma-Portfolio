@@ -33,9 +33,15 @@ export async function PUT(request, { params }) {
   };
 
   // Only add optional columns if they have values
-  if (body.status)    record.status    = body.status;
-  if (body.seo_title) record.seo_title = body.seo_title;
-  if (body.seo_desc)  record.seo_desc  = body.seo_desc;
+  if (body.status)               record.status                = body.status;
+  if (body.seo_title)            record.seo_title             = body.seo_title;
+  if (body.seo_desc)             record.seo_desc              = body.seo_desc;
+  if (body.problemStatement     !== undefined) record.problem_statement     = body.problemStatement     || null;
+  if (body.architectureNotes    !== undefined) record.architecture_notes    = body.architectureNotes    || null;
+  if (body.engineeringDecisions !== undefined) record.engineering_decisions = body.engineeringDecisions || null;
+  if (body.challenges           !== undefined) record.challenges            = body.challenges           || null;
+  if (body.lessonsLearned       !== undefined) record.lessons_learned       = body.lessonsLearned       || null;
+  if (body.architectureDiagram  !== undefined) record.architecture_diagram  = body.architectureDiagram  || null;
 
   const { data, error } = await admin
     .from("projects")

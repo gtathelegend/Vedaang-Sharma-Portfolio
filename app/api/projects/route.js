@@ -42,9 +42,15 @@ export async function POST(request) {
   };
 
   // Only add optional columns if they have values (guards against missing columns)
-  if (body.status)    record.status   = body.status;
-  if (body.seo_title) record.seo_title = body.seo_title;
-  if (body.seo_desc)  record.seo_desc  = body.seo_desc;
+  if (body.status)               record.status                = body.status;
+  if (body.seo_title)            record.seo_title             = body.seo_title;
+  if (body.seo_desc)             record.seo_desc              = body.seo_desc;
+  if (body.problemStatement)     record.problem_statement     = body.problemStatement;
+  if (body.architectureNotes)    record.architecture_notes    = body.architectureNotes;
+  if (body.engineeringDecisions) record.engineering_decisions = body.engineeringDecisions;
+  if (body.challenges)           record.challenges            = body.challenges;
+  if (body.lessonsLearned)       record.lessons_learned       = body.lessonsLearned;
+  if (body.architectureDiagram)  record.architecture_diagram  = body.architectureDiagram;
 
   const { data, error } = await admin.from("projects").insert(record).select().single();
 

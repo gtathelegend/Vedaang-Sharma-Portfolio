@@ -21,6 +21,8 @@ const emptyForm = {
   meta_description: "",
   og_image: "",
   spotify_enabled: true,
+  about_bio: "",
+  quote_text: "",
 };
 
 const emptyNow = {
@@ -119,6 +121,28 @@ export default function AdminSettingsPage() {
             <AdminFormInput label="Email" name="email" value={form.email} onChange={handleChange} type="email" />
           </div>
           <AdminFormTextarea label="Hero Subtitle / Bio" name="hero_subtitle" value={form.hero_subtitle} onChange={handleChange} />
+        </section>
+
+        {/* About Bio */}
+        <section className="bg-white rounded-xl shadow p-6 space-y-4">
+          <h3 className="text-base font-semibold text-slate-700 border-b pb-2">About Bio</h3>
+          <p className="text-xs text-slate-500">
+            Write your bio as plain text. Separate paragraphs with a blank line (two newlines). Shown on the About page.
+          </p>
+          <AdminFormTextarea
+            label="Bio Text"
+            name="about_bio"
+            value={form.about_bio}
+            onChange={handleChange}
+            rows={8}
+          />
+          <AdminFormTextarea
+            label="Quote (shown at the bottom of the About page)"
+            name="quote_text"
+            value={form.quote_text}
+            onChange={handleChange}
+            rows={2}
+          />
         </section>
 
         {/* Images */}

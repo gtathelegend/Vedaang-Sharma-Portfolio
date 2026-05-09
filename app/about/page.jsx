@@ -8,6 +8,7 @@ import { faChevronLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import About from "./components/about/about.jsx";
 import Experience from "./components/experience.jsx";
 import Education from "./components/education.jsx";
+import Certifications from "./components/certifications/certifications.jsx";
 import Quote from "./components/quote/quote.jsx";
 import Hero from "@/public/image/me1.jpg";
 
@@ -15,7 +16,7 @@ export default function Page() {
 	useEffect(() => { window.scrollTo(0, 0); }, []);
 
 	return (
-		<main className="overflow-hidden bg-white dark:bg-gray-950">
+		<main className="overflow-hidden bg-transparent">
 			{/* Hero */}
 			<section className="relative min-h-[100svh] md:h-screen flex justify-center items-center overflow-hidden pt-24 md:pt-0 pb-12 md:pb-0">
 				<div className="pointer-events-none absolute inset-0 -z-10">
@@ -66,6 +67,7 @@ export default function Page() {
 			<div id="about-section"><About /></div>
 			<Experience />
 			<Education />
+			<Certifications />
 			<Quote />
 		</main>
 	);

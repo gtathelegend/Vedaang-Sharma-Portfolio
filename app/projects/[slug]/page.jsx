@@ -139,8 +139,17 @@ export default function Page(props) {
   const thumbnail = data.thumbnail || data.imageUrl || null;
   const images = data.images || [];
 
+  const caseStudyRows = [
+    { label: "The Problem",          content: data.problemStatement },
+    { label: "Architecture",         content: data.architectureNotes },
+    { label: "Engineering Decisions",content: data.engineeringDecisions },
+    { label: "Key Challenges",       content: data.challenges },
+    { label: "Lessons Learned",      content: data.lessonsLearned },
+  ].filter((row) => row.content);
+  const hasCaseStudy = caseStudyRows.length > 0;
+
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-transparent min-h-screen">
       {/* ── Back button ── */}
       <Link
         href="/projects"
@@ -280,6 +289,57 @@ export default function Page(props) {
               </a>
             )}
           </div>
+
+          {/* ── Case Study ── */}
+          {hasCaseStudy && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mt-4"
+            >
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-1 h-6 bg-neutral-900 rounded-full" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                  Case Study
+                </h2>
+              </div>
+              <div className="rounded-2xl border border-neutral-200 overflow-hidden">
+                {caseStudyRows.map((row, idx) => (
+                  <div
+                    key={row.label}
+                    className={`grid grid-cols-1 sm:grid-cols-[200px_1fr] ${idx !== caseStudyRows.length - 1 ? "border-b border-neutral-100" : ""}`}
+                  >
+                    <div className="px-5 py-4 bg-neutral-50 sm:border-r border-neutral-100">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                        {row.label}
+                      </p>
+                    </div>
+                    <div className="px-5 py-4">
+                      <p className="text-neutral-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                        {row.content}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {data.architectureDiagram && (
+                <div className="mt-4 rounded-2xl border border-neutral-200 overflow-hidden">
+                  <div className="px-5 py-3 bg-neutral-50 border-b border-neutral-100">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">Architecture Diagram</p>
+                  </div>
+                  <div className="p-4">
+                    <img
+                      src={data.architectureDiagram}
+                      alt="Architecture diagram"
+                      className="w-full rounded-lg"
+                    />
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Sidebar (1/3) */}

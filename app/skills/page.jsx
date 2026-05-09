@@ -31,46 +31,34 @@ const CATEGORY_META = {
 };
 
 const CATEGORY_THEMES = {
-	frontend: { grad: "from-blue-500 to-cyan-500",     soft: "from-blue-50 to-cyan-50",       softDark: "dark:from-blue-500/10 dark:to-cyan-500/10",     pill: "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300",   hex: "#3b82f6" },
-	backend:  { grad: "from-violet-500 to-purple-600", soft: "from-violet-50 to-purple-50",   softDark: "dark:from-violet-500/10 dark:to-purple-500/10", pill: "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300", hex: "#8b5cf6" },
-	ai:       { grad: "from-pink-500 to-rose-500",     soft: "from-pink-50 to-rose-50",       softDark: "dark:from-pink-500/10 dark:to-rose-500/10",     pill: "bg-pink-100 text-pink-700 dark:bg-pink-500/20 dark:text-pink-300",   hex: "#ec4899" },
-	mobile:   { grad: "from-emerald-500 to-teal-500",  soft: "from-emerald-50 to-teal-50",   softDark: "dark:from-emerald-500/10 dark:to-teal-500/10", pill: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300", hex: "#10b981" },
-	devops:   { grad: "from-orange-500 to-amber-500",  soft: "from-orange-50 to-amber-50",   softDark: "dark:from-orange-500/10 dark:to-amber-500/10",  pill: "bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300", hex: "#f97316" },
-	database: { grad: "from-indigo-500 to-blue-600",   soft: "from-indigo-50 to-blue-50",    softDark: "dark:from-indigo-500/10 dark:to-blue-500/10",   pill: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300", hex: "#6366f1" },
-	other:    { grad: "from-slate-500 to-gray-600",    soft: "from-slate-50 to-gray-100",    softDark: "dark:from-slate-500/10 dark:to-gray-500/10",    pill: "bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300",   hex: "#64748b" },
+	frontend: { grad: "from-blue-500 to-cyan-500",     soft: "from-blue-50 to-cyan-50",     softDark: "dark:from-blue-500/10 dark:to-cyan-500/10",     pill: "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300" },
+	backend:  { grad: "from-violet-500 to-purple-600", soft: "from-violet-50 to-purple-50", softDark: "dark:from-violet-500/10 dark:to-purple-500/10", pill: "bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-300" },
+	ai:       { grad: "from-pink-500 to-rose-500",     soft: "from-pink-50 to-rose-50",     softDark: "dark:from-pink-500/10 dark:to-rose-500/10",     pill: "bg-pink-100 text-pink-700 dark:bg-pink-500/20 dark:text-pink-300" },
+	mobile:   { grad: "from-emerald-500 to-teal-500",  soft: "from-emerald-50 to-teal-50",  softDark: "dark:from-emerald-500/10 dark:to-teal-500/10",  pill: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300" },
+	devops:   { grad: "from-orange-500 to-amber-500",  soft: "from-orange-50 to-amber-50",  softDark: "dark:from-orange-500/10 dark:to-amber-500/10",  pill: "bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300" },
+	database: { grad: "from-indigo-500 to-blue-600",   soft: "from-indigo-50 to-blue-50",   softDark: "dark:from-indigo-500/10 dark:to-blue-500/10",   pill: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300" },
+	other:    { grad: "from-slate-500 to-gray-600",    soft: "from-slate-50 to-gray-100",   softDark: "dark:from-slate-500/10 dark:to-gray-500/10",    pill: "bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-300" },
 };
 
-const LEVEL_DOTS = { expert: 4, advanced: 3, intermediate: 2, beginner: 1 };
 
 const themeFor = (k) => CATEGORY_THEMES[k] || CATEGORY_THEMES.other;
 const metaFor  = (k) => CATEGORY_META[k]   || { title: k, description: "", icon: ActivityIcon };
+
+// Render order guarantees every row sums to 3 columns
+const BENTO_ORDER = ['frontend', 'ai', 'mobile', 'backend', 'devops', 'database', 'other'];
+// Which categories get the wide (col-span-2) card
+const BENTO_SPAN_MAP = { frontend: 2, backend: 2, database: 2 };
 
 /* ─────────────────────────────────────────────
    Skill chip — compact, shows level dots
    ───────────────────────────────────────────── */
 
-function SkillChip({ skill, hex }) {
-	const dots = LEVEL_DOTS[skill.level] || 0;
+function SkillChip({ skill }) {
 	return (
-		<div className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-white/80 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group">
+		<div className="flex items-center px-3 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-white/80 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
 			<span className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
 				{skill.name}
 			</span>
-			{dots > 0 && (
-				<div className="flex items-center gap-0.5 shrink-0">
-					{[1, 2, 3, 4].map((n) => (
-						<span
-							key={n}
-							className="block w-1.5 h-1.5 rounded-full transition-colors"
-							style={
-								n <= dots
-									? { backgroundColor: hex }
-									: { backgroundColor: "transparent", border: "1.5px solid #d1d5db" }
-							}
-						/>
-					))}
-				</div>
-			)}
 		</div>
 	);
 }
@@ -79,10 +67,13 @@ function SkillChip({ skill, hex }) {
    Category section card — fully self-contained
    ───────────────────────────────────────────── */
 
-function CategorySection({ k, skills, index }) {
+function CategorySection({ k, skills, index, span = 1 }) {
 	const meta  = metaFor(k);
 	const theme = themeFor(k);
 	const Icon  = meta.icon;
+	const chipsGrid = span === 2
+		? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5"
+		: "grid-cols-2 sm:grid-cols-3";
 
 	return (
 		<motion.div
@@ -91,7 +82,7 @@ function CategorySection({ k, skills, index }) {
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.08 }}
 			transition={{ delay: index * 0.04, type: "spring", stiffness: 80, damping: 18 }}
-			className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-[0_2px_20px_-8px_rgb(0_0_0_/_0.08)] dark:shadow-none"
+			className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-[0_2px_20px_-8px_rgb(0_0_0_/_0.08)] dark:shadow-none scroll-mt-[130px] h-full"
 		>
 			{/* Gradient header */}
 			<div className={`bg-gradient-to-br ${theme.grad} relative overflow-hidden`}>
@@ -113,37 +104,12 @@ function CategorySection({ k, skills, index }) {
 				</div>
 			</div>
 
-			{/* Skills grid — always visible, no click needed */}
+			{/* Skills grid */}
 			<div className={`bg-gradient-to-br ${theme.soft} ${theme.softDark} p-4`}>
-				<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+				<div className={`grid ${chipsGrid} gap-2`}>
 					{skills.map((skill) => (
-						<SkillChip key={skill.name} skill={skill} hex={theme.hex} />
+						<SkillChip key={skill.name} skill={skill} />
 					))}
-				</div>
-
-				{/* Level legend - compact, bottom of card */}
-				<div className="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex flex-wrap gap-x-4 gap-y-1">
-					{["beginner", "intermediate", "advanced", "expert"].map((lvl) => {
-						const n = LEVEL_DOTS[lvl];
-						return (
-							<span key={lvl} className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-								<span className="flex gap-0.5">
-									{[1, 2, 3, 4].map((i) => (
-										<span
-											key={i}
-											className="block w-1.5 h-1.5 rounded-full"
-											style={
-												i <= n
-													? { backgroundColor: theme.hex }
-													: { backgroundColor: "transparent", border: "1.5px solid #d1d5db" }
-											}
-										/>
-									))}
-								</span>
-								{lvl}
-							</span>
-						);
-					})}
 				</div>
 			</div>
 		</motion.div>
@@ -155,15 +121,19 @@ function CategorySection({ k, skills, index }) {
    ───────────────────────────────────────────── */
 
 function Skeleton() {
+	// Mirrors BENTO_ORDER + BENTO_SPAN_MAP: frontend(2),ai(1),mobile(1),backend(2),devops(1),database(2),other(1)
+	const skeletonSpans = [2, 1, 1, 2, 1, 2, 1];
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-5 animate-pulse">
-			{Array.from({ length: 4 }).map((_, i) => (
-				<div key={i} className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
-					<div className="h-16 bg-gray-200 dark:bg-white/10" />
-					<div className="p-4 bg-gray-50 dark:bg-white/5 grid grid-cols-3 gap-2">
-						{Array.from({ length: 6 }).map((_, j) => (
-							<div key={j} className="h-9 rounded-xl bg-gray-200 dark:bg-white/10" />
-						))}
+		<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-pulse">
+			{skeletonSpans.map((span, i) => (
+				<div key={i} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
+					<div className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
+						<div className="h-16 bg-gray-200 dark:bg-white/10" />
+						<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 ${span === 2 ? "grid-cols-4" : "grid-cols-3"}`}>
+							{Array.from({ length: span === 2 ? 8 : 4 }).map((_, j) => (
+								<div key={j} className="h-9 rounded-xl bg-gray-200 dark:bg-white/10" />
+							))}
+						</div>
 					</div>
 				</div>
 			))}
@@ -199,7 +169,7 @@ export default function SkillsPage() {
 	);
 
 	return (
-		<main className="min-h-screen bg-white dark:bg-gray-950">
+		<main className="min-h-screen bg-transparent">
 
 			{/* ── Compact hero ── */}
 			<section className="relative pt-28 md:pt-32 pb-8 overflow-hidden">
@@ -254,33 +224,7 @@ export default function SkillsPage() {
 				</div>
 			</section>
 
-			{/* ── Sticky category jump nav ── */}
-			{categories.length > 0 && (
-				<div className="sticky top-[60px] z-20 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-white/10">
-					<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-						<div className="flex items-center gap-2 overflow-x-auto py-3 scrollbar-none">
-							<span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 shrink-0 mr-1">
-								Jump to:
-							</span>
-							{categories.map((k) => {
-								const meta  = metaFor(k);
-								const theme = themeFor(k);
-								return (
-									<a
-										key={k}
-										href={`#cat-${k}`}
-										className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition hover:opacity-80 ${theme.pill}`}
-									>
-										{meta.title}
-									</a>
-								);
-							})}
-						</div>
-					</div>
-				</div>
-			)}
-
-			{/* ── All categories — 2-column grid, always visible ── */}
+{/* ── All categories — 2-column grid, always visible ── */}
 			<section className="py-10 pb-24 md:pb-32">
 				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 					{error && <p className="text-red-500 mb-6">{error}</p>}
@@ -291,15 +235,23 @@ export default function SkillsPage() {
 						<p className="text-gray-500 italic">No skills added yet.</p>
 					) : (
 						<>
-							<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-								{categories.map((k, i) => (
-									<CategorySection
-										key={k}
-										k={k}
-										skills={skillsByCategory[k] || []}
-										index={i}
-									/>
-								))}
+							<div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+								{[
+									...BENTO_ORDER.filter(k => (skillsByCategory[k] || []).length > 0),
+									...categories.filter(k => !BENTO_ORDER.includes(k)),
+								].map((k, i) => {
+									const span = BENTO_SPAN_MAP[k] ?? 1;
+									return (
+										<div key={k} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
+											<CategorySection
+												k={k}
+												skills={skillsByCategory[k] || []}
+												index={i}
+												span={span}
+											/>
+										</div>
+									);
+								})}
 							</div>
 
 							{/* CTA */}

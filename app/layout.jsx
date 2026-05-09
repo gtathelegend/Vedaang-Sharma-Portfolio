@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import ClientTopProgressBar from "@/components/ClientTopProgressBar";
 import ShellChrome from "@/components/ShellChrome";
+import AuroraBackground from "@/components/AuroraBackground";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 
 const jost = Jost({
@@ -68,10 +69,13 @@ export default function RootLayout({ children }) {
 			<head>
 				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 			</head>
-			<body className="font-poppins bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100 selection:bg-blue-600 selection:text-white">
+			<body className="font-poppins text-gray-900 dark:text-gray-100 selection:bg-blue-600 selection:text-white">
 				<ClientTopProgressBar />
 				<ShellChrome />
-				{children}
+				<div className="relative isolate min-h-screen bg-white dark:bg-gray-950">
+					<AuroraBackground />
+					{children}
+				</div>
 				<Analytics />
 				<SpeedInsights />
 			</body>

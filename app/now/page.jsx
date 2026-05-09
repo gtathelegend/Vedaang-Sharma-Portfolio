@@ -62,7 +62,7 @@ export default function NowPage() {
 	const updated = formatUpdatedAt(now?.updated_at);
 
 	return (
-		<main className="min-h-screen bg-white dark:bg-gray-950">
+		<main className="min-h-screen bg-transparent">
 			{/* Hero */}
 			<section className="relative pt-28 md:pt-36 pb-12 md:pb-16 overflow-hidden">
 				<div className="pointer-events-none absolute inset-0 -z-10">

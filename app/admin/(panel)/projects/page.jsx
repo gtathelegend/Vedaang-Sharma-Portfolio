@@ -30,6 +30,8 @@ const emptyForm = {
   githubLink: "", liveLink: "", imageUrl: "", images: [],
   category: [], featured: false, show: true, status: "published",
   seo_title: "", seo_desc: "",
+  problemStatement: "", architectureNotes: "", engineeringDecisions: "",
+  challenges: "", lessonsLearned: "", architectureDiagram: "",
 };
 
 export default function AdminProjectsPage() {
@@ -82,6 +84,12 @@ export default function AdminProjectsPage() {
       status: project.status || "published",
       seo_title: project.seo_title || "",
       seo_desc: project.seo_desc || "",
+      problemStatement: project.problemStatement || "",
+      architectureNotes: project.architectureNotes || "",
+      engineeringDecisions: project.engineeringDecisions || "",
+      challenges: project.challenges || "",
+      lessonsLearned: project.lessonsLearned || "",
+      architectureDiagram: project.architectureDiagram || "",
     });
     setErrors({});
     setModalOpen(true);
@@ -334,6 +342,53 @@ export default function AdminProjectsPage() {
             {form.imageUrl && (
               <img src={form.imageUrl} alt="Thumbnail preview" className="h-20 rounded object-cover mt-1" />
             )}
+          </div>
+
+          {/* Case Study */}
+          <div className="space-y-3 border border-slate-200 rounded-lg p-4">
+            <p className="text-sm font-semibold text-slate-700">Case Study (optional)</p>
+            <AdminFormTextarea
+              label="The Problem"
+              name="problemStatement"
+              value={form.problemStatement}
+              onChange={handleChange}
+              placeholder="What issue were you solving? Why did it matter?"
+            />
+            <AdminFormTextarea
+              label="Architecture Notes"
+              name="architectureNotes"
+              value={form.architectureNotes}
+              onChange={handleChange}
+              placeholder="Describe the system design and architecture decisions."
+            />
+            <AdminFormTextarea
+              label="Engineering Decisions"
+              name="engineeringDecisions"
+              value={form.engineeringDecisions}
+              onChange={handleChange}
+              placeholder="Why did you choose this tech/approach over alternatives?"
+            />
+            <AdminFormTextarea
+              label="Key Challenges"
+              name="challenges"
+              value={form.challenges}
+              onChange={handleChange}
+              placeholder="What was difficult? How did you solve it?"
+            />
+            <AdminFormTextarea
+              label="Lessons Learned"
+              name="lessonsLearned"
+              value={form.lessonsLearned}
+              onChange={handleChange}
+              placeholder="What would you do differently? What surprised you?"
+            />
+            <AdminFormInput
+              label="Architecture Diagram URL (optional)"
+              name="architectureDiagram"
+              value={form.architectureDiagram}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
           </div>
 
           {/* SEO */}

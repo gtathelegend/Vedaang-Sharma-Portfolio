@@ -7,13 +7,16 @@ const navGroups = [
   {
     label: "Content",
     items: [
-      { href: "/admin/dashboard",   label: "Dashboard" },
-      { href: "/admin/projects",    label: "Projects" },
-      { href: "/admin/skills",      label: "Skills" },
-      { href: "/admin/experience",  label: "Experience" },
-      { href: "/admin/education",   label: "Education" },
-      { href: "/admin/socials",     label: "Social Links" },
-      { href: "/admin/categories",  label: "Categories" },
+      { href: "/admin/dashboard",       label: "Dashboard" },
+      { href: "/admin/projects",        label: "Projects" },
+      { href: "/admin/skills",          label: "Skills" },
+      { href: "/admin/experience",      label: "Experience" },
+      { href: "/admin/education",       label: "Education" },
+      { href: "/admin/certifications",  label: "Certifications" },
+      { href: "/admin/research",        label: "Research" },
+      { href: "/admin/blog",            label: "Blog Topics" },
+      { href: "/admin/socials",         label: "Social Links" },
+      { href: "/admin/categories",      label: "Categories" },
     ],
   },
   {
