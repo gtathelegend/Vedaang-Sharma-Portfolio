@@ -6,9 +6,9 @@ import Me1 from "@/public/image/me1.jpg";
 import { fetchJson } from "@/lib/api";
 
 const DEFAULT_BIO = [
-  "I build intelligent systems at the intersection of full-stack engineering and AI. Based in Jaipur, India, I’m studying Computer Science at Vivekananda Global University — and I’ve already published peer-reviewed research on real-time computer vision systems.",
-  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and architectures that are both elegant and production-ready. I don’t just build features — I think about the systems behind them.",
-  "Long-term, I want to build AI that augments people rather than replaces them — deployed at scale, respecting privacy, and grounded in real human needs. That’s the kind of engineer I’m working to become.",
+  "I build intelligent systems at the intersection of full-stack engineering and AI. Based in Jaipur, India, I’m studying Computer Science at Vivekananda Global University - and I’ve already published peer-reviewed research on real-time computer vision systems.",
+  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and architectures that are both elegant and production-ready. I don’t just build features - I think about the systems behind them.",
+  "Long-term, I want to build AI that augments people rather than replaces them - deployed at scale, respecting privacy, and grounded in real human needs. That’s the kind of engineer I’m working to become.",
 ];
 
 export default function About() {

@@ -56,12 +56,9 @@ export default function ProjectCard({ project, activeCategory }) {
 				)}
 				{tech.length > 0 && (
 					<div className="flex flex-wrap gap-1.5 mb-4">
-						{tech.slice(0, 5).map((t, i) => (
-							<span key={i} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-md border border-gray-200">{t}</span>
+						{tech.map((t) => (
+							<span key={t} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-md border border-gray-200">{t}</span>
 						))}
-						{tech.length > 5 && (
-							<span className="text-xs px-2 py-1 text-gray-400">+{tech.length - 5}</span>
-						)}
 					</div>
 				)}
 				{/* Action links */}

@@ -128,10 +128,18 @@ export default function AdminProjectsPage() {
     try {
       const payload = { ...form, category: form.category.map(Number) };
       if (editing) {
-        await adminFetch(`/api/projects/${editing._id}`, { method: "PUT", body: JSON.stringify(payload) });
+        const res = await adminFetch(`/api/projects/${editing._id}`, { method: "PUT", body: JSON.stringify(payload) });
+        const saved = res?.data;
+        if (saved?._id) {
+          setProjects((prev) => prev.map((p) => (p._id === saved._id ? saved : p)));
+        }
         showToast("Project updated");
       } else {
-        await adminFetch("/api/projects", { method: "POST", body: JSON.stringify(payload) });
+        const res = await adminFetch("/api/projects", { method: "POST", body: JSON.stringify(payload) });
+        const saved = res?.data;
+        if (saved?._id) {
+          setProjects((prev) => [...prev, saved]);
+        }
         showToast("Project created");
       }
       setModalOpen(false);
@@ -206,8 +214,8 @@ export default function AdminProjectsPage() {
                   <td className="px-4 py-3 font-medium">{project.title}</td>
                   <td className="px-4 py-3">{project.year}</td>
                   <td className="px-4 py-3"><AdminStatusBadge status={project.status} /></td>
-                  <td className="px-4 py-3">{project.featured ? "✓" : "—"}</td>
-                  <td className="px-4 py-3">{project.show ? "✓" : "—"}</td>
+                  <td className="px-4 py-3">{project.featured ? "✓" : "-"}</td>
+                  <td className="px-4 py-3">{project.show ? "✓" : "-"}</td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button onClick={() => openEdit(project)} className="text-slate-700 hover:underline">Edit</button>
                     <button onClick={() => setConfirmId(project._id)} className="text-red-600 hover:underline">Delete</button>
@@ -278,7 +286,7 @@ export default function AdminProjectsPage() {
                 );
               })}
               {categories.length === 0 && (
-                <p className="text-xs text-slate-400">No categories yet — add some in the Categories page.</p>
+                <p className="text-xs text-slate-400">No categories yet - add some in the Categories page.</p>
               )}
             </div>
           </div>

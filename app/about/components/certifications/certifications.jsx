@@ -43,7 +43,7 @@ export default function Certifications() {
             Certifications
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed max-w-xl">
-            Curated credentials in AI, cloud, and engineering — the ones that reflect where I focus.
+            Curated credentials in AI, cloud, and engineering - the ones that reflect where I focus.
           </p>
         </motion.div>
 

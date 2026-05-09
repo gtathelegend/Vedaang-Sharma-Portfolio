@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const SEQUENCE = [
-	{ cmd: "whoami", out: "vedaang.sharma — full stack developer, jaipur" },
+	{ cmd: "whoami", out: "vedaang.sharma - full stack developer, jaipur" },
 	{ cmd: "stack --list", out: "react · next.js · node · python · ai/ml" },
 	{ cmd: "open --portfolio", out: "[OK] welcome." },
 ];
@@ -106,7 +106,7 @@ export default function BootConsole({ onDone, className = "" }) {
 						</div>
 					);
 				})}
-				{done && <div className="text-gray-600 text-[11px] mt-1">— ready.</div>}
+				{done && <div className="text-gray-600 text-[11px] mt-1">- ready.</div>}
 			</div>
 		</div>
 	);

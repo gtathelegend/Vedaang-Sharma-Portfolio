@@ -143,7 +143,7 @@ export default function ContactPage() {
 						Get in touch.
 					</h1>
 					<p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl">
-						Drop a message about a project, collaboration, or just to say hi — I&apos;ll
+						Drop a message about a project, collaboration, or just to say hi - I&apos;ll
 						usually reply within a day or two.
 					</p>
 				</div>

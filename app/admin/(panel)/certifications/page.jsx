@@ -117,10 +117,10 @@ export default function AdminCertificationsPage() {
               ) : filtered.map((item) => (
                 <tr key={item.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium">{item.name}</td>
-                  <td className="px-4 py-3 text-slate-600">{item.issuer || "—"}</td>
-                  <td className="px-4 py-3 text-slate-600">{item.year || "—"}</td>
+                  <td className="px-4 py-3 text-slate-600">{item.issuer || "-"}</td>
+                  <td className="px-4 py-3 text-slate-600">{item.year || "-"}</td>
                   <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">{item.category || "—"}</span>
+                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs">{item.category || "-"}</span>
                   </td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button onClick={() => openEdit(item)} className="px-3 py-1 text-xs rounded bg-slate-100 hover:bg-slate-200">Edit</button>

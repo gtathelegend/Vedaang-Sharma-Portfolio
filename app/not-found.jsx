@@ -190,7 +190,7 @@ function SnakeGame() {
 					animate={{ opacity: 1 }}
 					className="mt-3 text-center text-sm text-red-300"
 				>
-					Game over — press space to play again.
+					Game over - press space to play again.
 				</motion.p>
 			)}
 		</div>

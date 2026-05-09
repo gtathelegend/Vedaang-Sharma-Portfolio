@@ -8,7 +8,7 @@ export default function AuroraBackground() {
 
 	return (
 		<>
-			{/* Soft gradient base — light mode only */}
+			{/* Soft gradient base - light mode only */}
 			<div
 				className="pointer-events-none absolute inset-0 -z-20 dark:hidden"
 				style={{

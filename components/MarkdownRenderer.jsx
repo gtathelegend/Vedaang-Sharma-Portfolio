@@ -108,7 +108,7 @@ function parseMarkdown(md) {
       continue;
     }
 
-    // Paragraph — collect until blank line
+    // Paragraph - collect until blank line
     const paraLines = [];
     while (i < lines.length && lines[i].trim() !== "" && !lines[i].startsWith("#") && !lines[i].startsWith(">") && !lines[i].startsWith("```") && !/^[-*+]\s/.test(lines[i]) && !/^\d+\.\s/.test(lines[i])) {
       paraLines.push(lines[i]);

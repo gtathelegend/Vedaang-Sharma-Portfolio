@@ -1,6 +1,6 @@
 # Admin Panel Analysis & Professional Feature Plan
 
-## Part 1 — Current Admin Panel: What Exists
+## Part 1 - Current Admin Panel: What Exists
 
 ### Architecture
 - **Route group**: `app/admin/(panel)/*` for protected pages, `app/admin/login` for entry
@@ -30,19 +30,19 @@ Delete → window.confirm() → DELETE /api/{resource}/{id} → refetch
 
 ---
 
-## Part 2 — Critical Bugs & Gaps in Current Admin
+## Part 2 - Critical Bugs & Gaps in Current Admin
 
 ### Showstoppers (must fix for it to work)
 
 | # | Issue | Impact | Fix |
 |---|---|---|---|
-| 1 | `AdminImageUpload` calls `/api/upload` — **route doesn't exist** | Image uploads are broken everywhere | Create `app/api/upload/route.js` → Supabase Storage |
-| 2 | Image fields are URL strings — no upload UI wired into Project/Education forms | Admin can't actually upload images, only paste URLs | Wire `AdminImageUpload` into all image fields |
+| 1 | `AdminImageUpload` calls `/api/upload` - **route doesn't exist** | Image uploads are broken everywhere | Create `app/api/upload/route.js` → Supabase Storage |
+| 2 | Image fields are URL strings - no upload UI wired into Project/Education forms | Admin can't actually upload images, only paste URLs | Wire `AdminImageUpload` into all image fields |
 | 3 | Categories hardcoded as integers `{1, 2, 9}` in `app/projects/page.jsx` | Adding a new category requires code change | Make categories a real DB table (already in plan) |
-| 4 | Hero text "Full Stack Developer", bio, name — all hardcoded in `app/(root)/page.jsx` | Admin can't update homepage content | Add **Site Settings** table |
-| 5 | Skills section on `/about` is hardcoded (web/api/ai/mobile arrays) — DB skills are NOT shown | Skills CRUD has no effect on the public site | Refactor `Skills` component to use DB |
+| 4 | Hero text "Full Stack Developer", bio, name - all hardcoded in `app/(root)/page.jsx` | Admin can't update homepage content | Add **Site Settings** table |
+| 5 | Skills section on `/about` is hardcoded (web/api/ai/mobile arrays) - DB skills are NOT shown | Skills CRUD has no effect on the public site | Refactor `Skills` component to use DB |
 | 6 | CV download is hardcoded `/docs/cv.pdf` | Can't update CV without deploy | Add CV upload to Site Settings |
-| 7 | No `/api/upload` means no real file persistence | Currently just URL fields — no real uploads | Supabase Storage integration |
+| 7 | No `/api/upload` means no real file persistence | Currently just URL fields - no real uploads | Supabase Storage integration |
 | 8 | `views`, `githubClicks`, `liveClicks` exist in MongoDB model but never tracked or shown | No analytics | Add tracking + display |
 
 ### Quality issues
@@ -58,15 +58,15 @@ Delete → window.confirm() → DELETE /api/{resource}/{id} → refetch
 | 15 | No bulk operations (delete many, publish many) | |
 | 16 | No "duplicate this project" button | Common need for similar projects |
 | 17 | No undo on destructive actions | `window.confirm()` is the only safety net |
-| 18 | Image fields accept any URL — no validation | Broken images on public site |
+| 18 | Image fields accept any URL - no validation | Broken images on public site |
 | 19 | Slug not auto-generated from title | Manual entry, easy to typo |
-| 20 | Year field is text — no date picker | |
+| 20 | Year field is text - no date picker | |
 | 21 | Description is line-separated text, no markdown editor | No bold, links, code blocks |
-| 22 | Achievements icon name is freeform text — no picker | Easy to typo `faAward` → `faward` |
-| 23 | Achievements color is freeform Tailwind classes — no picker | Same problem |
+| 22 | Achievements icon name is freeform text - no picker | Easy to typo `faAward` → `faward` |
+| 23 | Achievements color is freeform Tailwind classes - no picker | Same problem |
 | 24 | No mobile responsive admin (sidebar always 256px wide) | Can't manage on phone |
 | 25 | No dark mode toggle | |
-| 26 | Topbar shows generic "Admin Dashboard" title — no per-page heading | |
+| 26 | Topbar shows generic "Admin Dashboard" title - no per-page heading | |
 | 27 | No breadcrumbs | |
 | 28 | No keyboard shortcuts (Cmd+K search, etc.) | |
 | 29 | No password reset flow | |
@@ -87,13 +87,13 @@ Delete → window.confirm() → DELETE /api/{resource}/{id} → refetch
 
 ---
 
-## Part 3 — Professional Feature Roadmap
+## Part 3 - Professional Feature Roadmap
 
 Three tiers, prioritized: **Must-have** (essential reliability), **Should-have** (professional polish), **Nice-to-have** (premium feel).
 
 ---
 
-### TIER 1 — MUST HAVE (Reliability & Essentials)
+### TIER 1 - MUST HAVE (Reliability & Essentials)
 
 #### 1.1 File Upload via Supabase Storage
 
@@ -101,7 +101,7 @@ Three tiers, prioritized: **Must-have** (essential reliability), **Should-have**
 
 **What to build**:
 - Supabase Storage bucket: `portfolio-assets` (public)
-- `app/api/upload/route.js` — POST handler, requires auth, uploads to bucket, returns public URL
+- `app/api/upload/route.js` - POST handler, requires auth, uploads to bucket, returns public URL
 - Wire `AdminImageUpload` into:
   - Project thumbnail
   - Project images array (multi-upload)
@@ -113,7 +113,7 @@ Three tiers, prioritized: **Must-have** (essential reliability), **Should-have**
 
 #### 1.2 Site Settings (Singleton)
 
-**Why**: Hero text, bio, name, CV link — currently hardcoded.
+**Why**: Hero text, bio, name, CV link - currently hardcoded.
 
 **Schema** (single-row table):
 ```sql
@@ -136,7 +136,7 @@ CREATE TABLE site_settings (
 );
 ```
 
-**Admin page**: `/admin/settings` — single form, no list view.
+**Admin page**: `/admin/settings` - single form, no list view.
 
 #### 1.3 Categories CRUD (replace hardcoded ints)
 
@@ -150,7 +150,7 @@ CREATE TABLE categories (
 );
 ```
 
-**Admin page**: `/admin/categories` — CRUD.
+**Admin page**: `/admin/categories` - CRUD.
 **Public page update**: `app/projects/page.jsx` should fetch categories from API instead of hardcoded `{1,2,9}`.
 
 #### 1.4 Auto-generated Slugs
@@ -220,17 +220,17 @@ CREATE TABLE messages (
 ```
 
 **Public**: Contact form on `/contact` (or replacing the email-only block on homepage).
-**Admin page**: `/admin/messages` — inbox view, mark read, archive, reply via mailto.
+**Admin page**: `/admin/messages` - inbox view, mark read, archive, reply via mailto.
 **Anti-spam**: hCaptcha or Cloudflare Turnstile + rate limit.
 **Email notifications**: Resend or Supabase email when new message arrives.
 
 ---
 
-### TIER 2 — SHOULD HAVE (Professional Polish)
+### TIER 2 - SHOULD HAVE (Professional Polish)
 
 #### 2.1 Drag-and-drop Reordering
 
-For projects, skills, experience, socials — let admin drag rows to reorder. Use `@dnd-kit/sortable` (already in the deleted `admin-dashboard` package).
+For projects, skills, experience, socials - let admin drag rows to reorder. Use `@dnd-kit/sortable` (already in the deleted `admin-dashboard` package).
 
 Persist via PATCH `/api/{resource}/reorder` with new `sort_order` values.
 
@@ -363,20 +363,20 @@ CREATE TABLE posts (
 
 #### 2.9 Skills Refactor (use DB instead of hardcoded)
 
-Update `app/about/components/skills/skills.jsx` — fetch skills from API, group by `category`, render dynamically.
+Update `app/about/components/skills/skills.jsx` - fetch skills from API, group by `category`, render dynamically.
 
 #### 2.10 Sitemap Auto-regeneration
 
 `generate-sitemap.js` is a static script. Convert to:
-- Dynamic `app/sitemap.js` (Next.js built-in) — auto-generates from DB on every build
+- Dynamic `app/sitemap.js` (Next.js built-in) - auto-generates from DB on every build
 - Or webhook on Supabase row change → revalidate
 
 #### 2.11 Keyboard Shortcuts in Admin
 
-- `Cmd/Ctrl + K` — global search
-- `N` — new item (on list pages)
-- `Esc` — close modals
-- `?` — show shortcut help
+- `Cmd/Ctrl + K` - global search
+- `N` - new item (on list pages)
+- `Esc` - close modals
+- `?` - show shortcut help
 
 Library: `cmdk` or roll-your-own `useKeyboardShortcut` hook.
 
@@ -397,15 +397,15 @@ Use Supabase Storage `list()` API.
 
 ---
 
-### TIER 3 — NICE TO HAVE (Premium feel)
+### TIER 3 - NICE TO HAVE (Premium feel)
 
 #### 3.1 Two-Factor Authentication (TOTP)
 
-Supabase Auth supports MFA — enable with one toggle.
+Supabase Auth supports MFA - enable with one toggle.
 
 #### 3.2 Magic Link Login
 
-Alternative to password — Supabase Auth supports it natively.
+Alternative to password - Supabase Auth supports it natively.
 
 #### 3.3 Multi-Admin / Roles
 
@@ -436,7 +436,7 @@ CREATE TABLE content_versions (
 
 #### 3.5 Public Preview Links (Drafts)
 
-For draft projects, generate a one-time token URL: `/projects/{slug}?preview=token` — bypasses the `published` filter for that view.
+For draft projects, generate a one-time token URL: `/projects/{slug}?preview=token` - bypasses the `published` filter for that view.
 
 #### 3.6 Scheduled Publishing
 
@@ -458,7 +458,7 @@ CREATE TABLE subscribers (
 
 #### 3.8 AI-Assisted Content (Optional, fun)
 
-- "Improve this description" button — calls Claude/OpenAI to refine
+- "Improve this description" button - calls Claude/OpenAI to refine
 - Auto-generate SEO meta from content
 - Auto-tag projects with categories
 
@@ -468,11 +468,11 @@ Toggle in topbar. Persist in localStorage.
 
 #### 3.10 Realtime Collaboration
 
-Supabase Realtime — show "User X is editing this project" if multi-admin.
+Supabase Realtime - show "User X is editing this project" if multi-admin.
 
 #### 3.11 Export / Backup
 
-`/admin/export` — download all content as JSON. Useful for backups, migrations, AI prompt context.
+`/admin/export` - download all content as JSON. Useful for backups, migrations, AI prompt context.
 
 #### 3.12 Webhooks
 
@@ -488,11 +488,11 @@ A thin progress bar at top showing how far through the project description.
 
 ---
 
-## Part 4 — Reliability & Production-Grade Concerns
+## Part 4 - Reliability & Production-Grade Concerns
 
 ### 4.1 Rate Limiting
 
-All `/api/*` routes need rate limits — especially the contact form and login.
+All `/api/*` routes need rate limits - especially the contact form and login.
 
 Use **Upstash Redis** (free tier, native Vercel integration):
 ```js
@@ -520,7 +520,7 @@ Add **Sentry** for both frontend (admin + public) and API routes. Free tier cove
 
 ### 4.3 Uptime Monitoring
 
-- **Better Stack** or **UptimeRobot** — ping `/api/health` every minute
+- **Better Stack** or **UptimeRobot** - ping `/api/health` every minute
 - Slack/email alert if down
 
 Add `app/api/health/route.js`:
@@ -551,9 +551,9 @@ export async function GET() {
 ### 4.6 Security
 
 - **CSRF protection**: Double-submit cookie pattern on mutation routes (Supabase Auth handles JWT, but custom routes need CSRF tokens)
-- **CSP headers** in `next.config.js` (already has some security headers — extend with Content-Security-Policy)
+- **CSP headers** in `next.config.js` (already has some security headers - extend with Content-Security-Policy)
 - **Input sanitization** on all admin text fields → DOMPurify before render
-- **Service role key** must NEVER be exposed to browser — verify via Vercel env var visibility settings
+- **Service role key** must NEVER be exposed to browser - verify via Vercel env var visibility settings
 - **Slug collisions**: catch unique constraint violation, return 409 with friendly message
 - **Audit log read-only**: no UI to edit/delete audit log entries
 
@@ -563,7 +563,7 @@ export async function GET() {
 - `app/sitemap.js` (dynamic from DB)
 - `generateMetadata()` on every public page
 - Open Graph image generation: `app/projects/[slug]/opengraph-image.js` (Next.js auto-generates per-project OG images)
-- Structured data (JSON-LD) for `Person`, `CreativeWork` — improves Google snippets
+- Structured data (JSON-LD) for `Person`, `CreativeWork` - improves Google snippets
 
 ### 4.8 Accessibility
 
@@ -581,9 +581,9 @@ export async function GET() {
 
 ---
 
-## Part 5 — Recommended Implementation Phases
+## Part 5 - Recommended Implementation Phases
 
-### Phase A — Get current admin working (week 1)
+### Phase A - Get current admin working (week 1)
 1. File upload route + Supabase Storage bucket
 2. Wire AdminImageUpload into all image fields
 3. Site Settings page (replace hardcoded hero text)
@@ -595,7 +595,7 @@ export async function GET() {
 9. Confirm modal (replace `window.confirm`)
 10. Search + pagination on tables
 
-### Phase B — Add core professional features (week 2)
+### Phase B - Add core professional features (week 2)
 1. Contact form + Messages inbox
 2. SEO management per project
 3. Markdown editor for descriptions
@@ -604,7 +604,7 @@ export async function GET() {
 6. Activity log
 7. Sitemap from DB
 
-### Phase C — Polish & content expansion (week 3)
+### Phase C - Polish & content expansion (week 3)
 1. Testimonials CRUD + display
 2. Certifications CRUD + display
 3. Bulk operations
@@ -613,7 +613,7 @@ export async function GET() {
 6. Mobile-responsive admin
 7. Dark mode
 
-### Phase D — Reliability hardening (week 4)
+### Phase D - Reliability hardening (week 4)
 1. Rate limiting (Upstash)
 2. Sentry error logging
 3. Uptime monitoring + health endpoint
@@ -621,7 +621,7 @@ export async function GET() {
 5. CSP + security headers
 6. Smoke tests on Vercel preview
 
-### Phase E — Premium (later)
+### Phase E - Premium (later)
 1. Blog
 2. 2FA
 3. Multi-admin
@@ -632,7 +632,7 @@ export async function GET() {
 
 ---
 
-## Part 6 — Final Schema (Full Picture)
+## Part 6 - Final Schema (Full Picture)
 
 After all phases, your Supabase database has:
 
@@ -647,20 +647,20 @@ auth.users               (Supabase managed)
 ├── site_settings        (singleton)
 ├── testimonials         (CRUD)
 ├── certifications       (CRUD)
-├── posts                (CRUD — blog)
+├── posts                (CRUD - blog)
 ├── messages             (read-only inbox)
 ├── subscribers          (newsletter)
-├── page_views           (analytics — append-only)
+├── page_views           (analytics - append-only)
 ├── audit_log            (read-only history)
 └── content_versions     (read-only snapshots)
 
 Supabase Storage buckets:
-└── portfolio-assets     (public — images, CV)
+└── portfolio-assets     (public - images, CV)
 ```
 
 ---
 
-## Part 7 — Tech Stack Additions
+## Part 7 - Tech Stack Additions
 
 | Need | Recommendation | Why |
 |---|---|---|
@@ -681,16 +681,16 @@ Supabase Storage buckets:
 
 ---
 
-## Summary — What Makes This "Professional"
+## Summary - What Makes This "Professional"
 
 A professional dynamic portfolio CMS isn't measured by feature count, but by **trust**:
 
-1. **It works on every action** — uploads succeed, edits persist, drafts don't leak.
-2. **It's fast** — no jarring loading states; ISR + Server Components.
-3. **It's safe** — RLS, rate limits, input validation, audit trail.
-4. **It's recoverable** — backups, undo, version history.
-5. **It scales with you** — content grows, admin remains usable.
-6. **It tells a story** — testimonials, analytics, blog show momentum.
-7. **It looks polished** — markdown, OG images, smooth UX.
+1. **It works on every action** - uploads succeed, edits persist, drafts don't leak.
+2. **It's fast** - no jarring loading states; ISR + Server Components.
+3. **It's safe** - RLS, rate limits, input validation, audit trail.
+4. **It's recoverable** - backups, undo, version history.
+5. **It scales with you** - content grows, admin remains usable.
+6. **It tells a story** - testimonials, analytics, blog show momentum.
+7. **It looks polished** - markdown, OG images, smooth UX.
 
 Build Phase A first. Most of the "professional" feel comes from those 10 items. The rest is polish you add as the portfolio earns it.

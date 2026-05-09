@@ -104,7 +104,7 @@ export default function ResearchPage() {
             transition={{ type: "spring", delay: 0.25 }}
           >
             Peer-reviewed work at the intersection of computer vision, AI systems, and human health.
-            I believe research should have real-world impact — not just academic citations.
+            I believe research should have real-world impact - not just academic citations.
           </motion.p>
         </div>
       </section>
@@ -268,7 +268,7 @@ export default function ResearchPage() {
                 Directions I&apos;m exploring.
               </h2>
               <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
-                These are the areas where I want to contribute meaningfully — where engineering depth
+                These are the areas where I want to contribute meaningfully - where engineering depth
                 meets unsolved human problems.
               </p>
             </motion.div>
@@ -326,7 +326,7 @@ export default function ResearchPage() {
               <p className="text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
                 I&apos;m always interested in connecting with researchers, engineers, and builders
                 working on privacy-first AI, edge inference, and human-centered intelligent systems.
-                If you&apos;re working on something interesting — reach out.
+                If you&apos;re working on something interesting - reach out.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link

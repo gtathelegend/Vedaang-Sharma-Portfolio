@@ -1,8 +1,9 @@
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Vedaang | Research",
-  description: "Published research and academic work by Vedaang Sharma - computer vision, AI systems, and human-centered intelligent interfaces.",
+  title: "Vedaang | Certifications",
+  description:
+    "Verified credentials and certifications in AI, Cloud, DevOps, and engineering earned by Vedaang Sharma.",
 };
 
 export default function Layout({ children }) {

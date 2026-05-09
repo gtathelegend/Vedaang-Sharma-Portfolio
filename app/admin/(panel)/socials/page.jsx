@@ -5,7 +5,7 @@ import { adminFetch } from "@/lib/adminApi";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
-// Platform definitions — icon is a FontAwesome class name string for display,
+// Platform definitions - icon is a FontAwesome class name string for display,
 // color is used for the card accent strip.
 const PLATFORMS = [
   {
@@ -140,7 +140,7 @@ export default function AdminSocialsPage() {
     try {
       const existing = saved[platform.key];
       if (url === "") {
-        // If empty and exists — delete it
+        // If empty and exists - delete it
         if (existing) {
           await adminFetch(`/api/socials/${existing._id}`, { method: "DELETE" });
           showToast(`${platform.label} removed`);

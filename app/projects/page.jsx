@@ -114,7 +114,7 @@ export default function Page() {
 							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.15 }}>My Projects</motion.h1>
 						<motion.p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-xl mb-8"
 							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.25 }}>
-							A collection of things I&apos;ve built and shipped — from full‑stack web apps to AI experiments.
+							A collection of things I&apos;ve built and shipped - from full‑stack web apps to AI experiments.
 						</motion.p>
 						<motion.div className="flex flex-wrap gap-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", delay: 0.35 }}>
 							<a href="#project-grid" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm">

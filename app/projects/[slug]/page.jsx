@@ -200,7 +200,7 @@ export default function Page(props) {
             {/* Tech tags in hero */}
             {tech.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-4">
-                {tech.slice(0, 6).map((t) => (
+                {tech.map((t) => (
                   <span
                     key={t}
                     className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-white/80 backdrop-blur border border-white/10"
@@ -208,11 +208,6 @@ export default function Page(props) {
                     {t}
                   </span>
                 ))}
-                {tech.length > 6 && (
-                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-white/80">
-                    +{tech.length - 6} more
-                  </span>
-                )}
               </div>
             )}
           </motion.div>

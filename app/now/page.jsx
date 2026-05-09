@@ -18,7 +18,7 @@ import {
 const DEFAULTS = {
 	focus: "Polishing my portfolio + a couple of side projects in full‑stack and AI.",
 	learning: "Generative AI tooling, system design, and a touch of Rust.",
-	reading: "Designing Data‑Intensive Applications — Martin Kleppmann.",
+	reading: "Designing Data‑Intensive Applications - Martin Kleppmann.",
 	listening: "Lo‑fi during deep work, indie rock the rest of the time.",
 	location: "Jaipur, India.",
 };
@@ -100,7 +100,7 @@ export default function NowPage() {
 						>
 							Derek Sivers&apos; /now movement
 						</a>
-						. A short, honest snapshot — refreshed whenever something meaningful changes.
+						. A short, honest snapshot - refreshed whenever something meaningful changes.
 					</p>
 					{updated && (
 						<p className="text-xs text-gray-400 mt-4">

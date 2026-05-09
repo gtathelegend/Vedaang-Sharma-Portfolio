@@ -50,7 +50,7 @@ const BENTO_ORDER = ['frontend', 'ai', 'mobile', 'backend', 'devops', 'database'
 const BENTO_SPAN_MAP = { frontend: 2, backend: 2, database: 2 };
 
 /* ─────────────────────────────────────────────
-   Skill chip — compact, shows level dots
+   Skill chip - compact, shows level dots
    ───────────────────────────────────────────── */
 
 function SkillChip({ skill }) {
@@ -64,7 +64,7 @@ function SkillChip({ skill }) {
 }
 
 /* ─────────────────────────────────────────────
-   Category section card — fully self-contained
+   Category section card - fully self-contained
    ───────────────────────────────────────────── */
 
 function CategorySection({ k, skills, index, span = 1 }) {
@@ -197,7 +197,7 @@ export default function SkillsPage() {
 								Skills &amp; technologies.
 							</h1>
 							<p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed mt-3 max-w-xl">
-								Everything I&apos;ve actually shipped with — organised by area, with proficiency shown inline.
+								Everything I&apos;ve actually shipped with - organised by area, with proficiency shown inline.
 							</p>
 						</div>
 
@@ -224,7 +224,7 @@ export default function SkillsPage() {
 				</div>
 			</section>
 
-{/* ── All categories — 2-column grid, always visible ── */}
+{/* ── All categories - 2-column grid, always visible ── */}
 			<section className="py-10 pb-24 md:pb-32">
 				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 					{error && <p className="text-red-500 mb-6">{error}</p>}
@@ -271,7 +271,7 @@ export default function SkillsPage() {
 										See these in action.
 									</h3>
 									<p className="text-sm text-white/70 mb-6">
-										Skills only mean something when applied — browse the projects where I&apos;ve put them to work.
+										Skills only mean something when applied - browse the projects where I&apos;ve put them to work.
 									</p>
 									<div className="flex flex-wrap gap-3">
 										<Link

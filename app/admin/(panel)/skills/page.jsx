@@ -29,7 +29,7 @@ export default function AdminSkillsPage() {
     setLoading(true);
     try {
       const res = await adminFetch("/api/skills");
-      // GET now returns { frontend:[...], backend:[...] } — flatten to a flat array for the table
+      // GET now returns { frontend:[...], backend:[...] } - flatten to a flat array for the table
       const data = res.data;
       const flat = Array.isArray(data)
         ? data

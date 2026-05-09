@@ -37,7 +37,7 @@ export default function Page() {
 				</Link>
 				<SectionHeader label="Complete List" heading="Archive" />
 				<p className="text-gray-600 text-sm sm:text-base max-w-2xl mt-4 mb-2">
-					Every project I&apos;ve worked on — including older experiments and side projects.
+					Every project I&apos;ve worked on - including older experiments and side projects.
 				</p>
 				<div className="mt-8 overflow-x-auto">
 					<table className="w-full">

@@ -1,18 +1,18 @@
-# Vedaang Sharma — Portfolio
+# Vedaang Sharma - Portfolio
 
 Personal portfolio and content-managed showcase for [vedaangsharma.dev](https://vedaangsharma.dev). Built with Next.js 15 (App Router) and React 19, backed by Supabase for auth, data and image storage, with a self-serve admin panel for managing every section of the site.
 
-> **Version 2.0** — full-stack rewrite with a Supabase admin CMS.
+> **Version 2.0** - full-stack rewrite with a Supabase admin CMS.
 
 ## Highlights
 
-- **Animated marketing site** — home, about, projects and contact, with scroll-snap sections, Framer Motion transitions and a grayscale-to-color hover treatment throughout.
-- **Built-in CMS** — `/admin` panel for managing projects, categories, education, experience, skills, socials and global settings without redeploying.
-- **Supabase backend** — Postgres for content, Auth (email/password) for the admin, and Storage for uploaded thumbnails/screenshots.
+- **Animated marketing site** - home, about, projects and contact, with scroll-snap sections, Framer Motion transitions and a grayscale-to-color hover treatment throughout.
+- **Built-in CMS** - `/admin` panel for managing projects, categories, education, experience, skills, socials and global settings without redeploying.
+- **Supabase backend** - Postgres for content, Auth (email/password) for the admin, and Storage for uploaded thumbnails/screenshots.
 - **Spotify "Now Playing"** widget on the About page (server-side token refresh).
-- **Dynamic OG images** generated at the edge via `next/og` — every share card is rendered on demand from query params.
-- **SEO-ready** — metadata templates, Twitter / OpenGraph cards, and a gzipped sitemap generator.
-- **Performance-tuned** — Turbopack dev, AVIF/WebP image pipeline, `sharp`, Vercel Analytics, Speed Insights, bundle analyzer, and security headers (`X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`).
+- **Dynamic OG images** generated at the edge via `next/og` - every share card is rendered on demand from query params.
+- **SEO-ready** - metadata templates, Twitter / OpenGraph cards, and a gzipped sitemap generator.
+- **Performance-tuned** - Turbopack dev, AVIF/WebP image pipeline, `sharp`, Vercel Analytics, Speed Insights, bundle analyzer, and security headers (`X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`).
 
 ## Tech stack
 
@@ -31,7 +31,7 @@ Personal portfolio and content-managed showcase for [vedaangsharma.dev](https://
 ```
 app/
   (root)/                Home page (hero, about preview, projects preview, contact)
-  about/                 About page — bio, skills, experience, education, Spotify widget
+  about/                 About page - bio, skills, experience, education, Spotify widget
   projects/              Project list, featured highlight, [slug] detail, archive
   admin/                 Login + dashboard + per-resource management screens
   api/                   REST handlers (projects, categories, education, experience,
@@ -75,7 +75,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key>   # server-only, never expose
 
-# Spotify (optional — Now Playing widget)
+# Spotify (optional - Now Playing widget)
 NEXT_PUBLIC_SPOTIFY_CLIENT_ID=<client-id>
 NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=<client-secret>
 NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN=<refresh-token>
@@ -98,17 +98,17 @@ The first time you visit `/admin`, you'll be redirected to `/admin/login`. Creat
 
 ## Admin panel
 
-`/admin` is gated by [`middleware.js`](middleware.js) — unauthenticated requests are redirected to `/admin/login`, and an authenticated session on the login page is bounced to `/admin/dashboard`.
+`/admin` is gated by [`middleware.js`](middleware.js) - unauthenticated requests are redirected to `/admin/login`, and an authenticated session on the login page is bounced to `/admin/dashboard`.
 
 Resources you can manage:
 
-- **Projects** — title, slug, year, description, tech stack, categories, thumbnail, screenshots, GitHub/live links, featured/visible toggles, sort order.
-- **Categories** — taxonomy used to filter the project listing.
-- **Education** & **Experience** — timeline entries shown on the About page.
-- **Skills** — grouped technical skills with icons.
-- **Socials** — links shown in the contact section, organised into tiers (primary / research & writing / credentials).
-- **Settings** — global content (full name, tagline, hero subtitle, email, CV URL).
-- **Image upload** — `/api/upload` proxies multipart uploads into Supabase Storage and returns a public URL.
+- **Projects** - title, slug, year, description, tech stack, categories, thumbnail, screenshots, GitHub/live links, featured/visible toggles, sort order.
+- **Categories** - taxonomy used to filter the project listing.
+- **Education** & **Experience** - timeline entries shown on the About page.
+- **Skills** - grouped technical skills with icons.
+- **Socials** - links shown in the contact section, organised into tiers (primary / research & writing / credentials).
+- **Settings** - global content (full name, tagline, hero subtitle, email, CV URL).
+- **Image upload** - `/api/upload` proxies multipart uploads into Supabase Storage and returns a public URL.
 
 ## Deployment
 

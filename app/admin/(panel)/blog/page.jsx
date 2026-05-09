@@ -119,7 +119,7 @@ export default function AdminBlogPage() {
   );
 
   const fmtDate = (iso) =>
-    iso ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "—";
+    iso ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-";
 
   return (
     <div className="space-y-6">

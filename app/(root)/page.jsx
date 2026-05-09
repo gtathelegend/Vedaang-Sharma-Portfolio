@@ -114,24 +114,36 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 		>
 			{/* Right portrait (desktop) */}
 			<motion.div
-				className="hidden md:block absolute top-0 right-0 h-full w-[46vw] lg:w-[44vw] -z-0"
+				className="hidden md:block absolute top-0 right-0 h-full w-[42vw] lg:w-[40vw] -z-0"
 				variants={slideRight}
 				custom={0.1}
 				initial="hidden"
 				animate="visible"
 			>
-				<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-[900ms]">
+				<div
+					className="relative h-full w-full"
+					style={{
+						WebkitMaskImage: [
+							"linear-gradient(to right, transparent 0%, black 30%)",
+							"linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)",
+						].join(", "),
+						WebkitMaskComposite: "source-in",
+						maskImage: [
+							"linear-gradient(to right, transparent 0%, black 30%)",
+							"linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)",
+						].join(", "),
+						maskComposite: "intersect",
+					}}
+				>
 					<Image
 						src={Me}
 						fill
-						className="object-cover object-top"
+						className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-[900ms]"
 						alt={fullName}
 						placeholder="blur"
 						priority
-						sizes="(max-width: 768px) 0px, 46vw"
+						sizes="(max-width: 768px) 0px, 42vw"
 					/>
-					{/* Soft fade — lets aurora blend through the edge */}
-					<div className="absolute inset-0 bg-gradient-to-r from-[#F5F3FF]/85 via-[#F5F3FF]/20 to-transparent dark:from-gray-950/95 dark:via-gray-950/30" />
 				</div>
 			</motion.div>
 
@@ -255,7 +267,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 }
 
 /* ─────────────────────────────────────────────
-   Section card wrapper — every section after hero
+   Section card wrapper - every section after hero
    ───────────────────────────────────────────── */
 
 function SectionCard({ id, label, heading, lead, children }) {
@@ -301,7 +313,7 @@ const SKILL_CATEGORY_META = {
 	other:    { title: "Other",         icon: ToolsIcon,    description: "Tools, platforms, and extras" },
 };
 
-// Home preview bento — same order/spans as skills page, capped at 6 categories
+// Home preview bento - same order/spans as skills page, capped at 6 categories
 const HOME_BENTO_ORDER = ['frontend', 'ai', 'mobile', 'backend', 'devops', 'database'];
 const HOME_BENTO_SPAN_MAP = { frontend: 2, backend: 2, database: 2 };
 
@@ -335,7 +347,7 @@ function SkillsPreview() {
 			id="skills"
 			label="What I do"
 			heading="Skills & Technologies"
-			lead="A snapshot of the stacks I work with day‑to‑day — from modern web frameworks to AI tooling and cloud infrastructure."
+			lead="A snapshot of the stacks I work with day‑to‑day - from modern web frameworks to AI tooling and cloud infrastructure."
 		>
 			{categories === null ? (
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-pulse">
@@ -378,7 +390,7 @@ function SkillsPreview() {
 										viewport={{ once: true, amount: 0.2 }}
 										className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-[0_2px_20px_-8px_rgba(0,0,0,0.08)] hover:shadow-md transition h-full"
 									>
-										{/* Gradient header — identical to skills page */}
+										{/* Gradient header - identical to skills page */}
 										<div className={`bg-gradient-to-br ${theme.grad} relative overflow-hidden`}>
 											<div className="pointer-events-none absolute inset-0">
 												<div className="absolute -top-8 -right-8 h-28 w-28 rounded-full bg-white/10 blur-xl" />
@@ -461,7 +473,7 @@ function FeaturedProjectsPreview() {
 			id="projects-preview"
 			label="My work"
 			heading="Featured Projects"
-			lead="A few hand‑picked projects that show the kind of problems I enjoy solving — full‑stack, AI, and everything in between."
+			lead="A few hand‑picked projects that show the kind of problems I enjoy solving - full‑stack, AI, and everything in between."
 		>
 			{projects === null ? (
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-5 animate-pulse">
@@ -508,7 +520,7 @@ function FeaturedProjectsPreview() {
 											)}
 											{tech.length > 0 && (
 												<div className="flex flex-wrap gap-1.5">
-													{tech.slice(0, 3).map((t) => (
+													{tech.map((t) => (
 														<span
 															key={t}
 															className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400"
@@ -516,11 +528,6 @@ function FeaturedProjectsPreview() {
 															{t}
 														</span>
 													))}
-													{tech.length > 3 && (
-														<span className="text-[11px] font-medium px-2 py-0.5 rounded-md text-gray-400 dark:text-gray-500">
-															+{tech.length - 3}
-														</span>
-													)}
 												</div>
 											)}
 										</div>
@@ -580,12 +587,12 @@ function AboutPreview() {
 									Building thoughtful, modern software.
 								</h2>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5">
-									I&apos;m a full‑stack developer and AI systems builder based in Jaipur — studying CS
+									I&apos;m a full‑stack developer and AI systems builder based in Jaipur - studying CS
 									at Vivekananda Global University. My work spans intelligent web applications,
 									computer vision systems, and multi‑agent AI architectures.
 								</p>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
-									What genuinely excites me: building AI that feels invisible — privacy‑first,
+									What genuinely excites me: building AI that feels invisible - privacy‑first,
 									on‑device, purposeful. I&apos;ve published research on real‑time posture detection
 									and keep pushing into the space where systems engineering meets human experience.
 								</p>
@@ -653,7 +660,7 @@ function ResearchTeaser() {
 					PostureSense: Real-Time Posture Detection and Correction Using MediaPipe and Computer Vision
 				</h3>
 				<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed mb-5">
-					A real-time posture monitoring system using MediaPipe pose landmarks and computer vision — providing corrective feedback via webcam with no wearables required.
+					A real-time posture monitoring system using MediaPipe pose landmarks and computer vision - providing corrective feedback via webcam with no wearables required.
 				</p>
 				<div className="flex flex-wrap gap-2 mb-6">
 					{PAPER_AREAS.map((area) => (
@@ -680,9 +687,9 @@ function ResearchTeaser() {
    ───────────────────────────────────────────── */
 
 const EXPLORATIONS = [
-	{ label: "Privacy-first AI Companion", desc: "On-device LLM for personal use — no cloud dependency, no data exposure." },
+	{ label: "Privacy-first AI Companion", desc: "On-device LLM for personal use - no cloud dependency, no data exposure." },
 	{ label: "Multi-agent Orchestration", desc: "Autonomous agent pipelines with tool use, memory, and emergent reasoning." },
-	{ label: "Human-centered AI Interfaces", desc: "Interfaces that feel like a collaborator — not a tool." },
+	{ label: "Human-centered AI Interfaces", desc: "Interfaces that feel like a collaborator - not a tool." },
 	{ label: "Real-time Vision Systems", desc: "Low-latency computer vision for health, accessibility, and everyday use." },
 ];
 
@@ -715,7 +722,7 @@ function CurrentlyBuildingSection() {
 							</span>
 						</div>
 						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl">
-							Not everything ships at once. These are the directions I&apos;m actively exploring — some are side projects, some are experiments, all are intentional.
+							Not everything ships at once. These are the directions I&apos;m actively exploring - some are side projects, some are experiments, all are intentional.
 						</p>
 
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -824,7 +831,7 @@ function LiveSection() {
 						What&apos;s happening, right now.
 					</h2>
 					<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
-						The static parts of a portfolio age fast. These two panels stay current — pulled
+						The static parts of a portfolio age fast. These two panels stay current - pulled
 						from GitHub and a hand‑written /now page.
 					</p>
 				</motion.div>
@@ -915,7 +922,7 @@ export default function MyPage() {
 	const tagline = settings?.tagline || "Full Stack & AI Systems Developer";
 	const heroSubtitle =
 		settings?.hero_subtitle ||
-		"Building intelligent applications — AI agents, distributed systems, computer vision, and cloud-native architectures. CS student, published researcher, full-stack engineer.";
+		"Building intelligent applications - AI agents, distributed systems, computer vision, and cloud-native architectures. CS student, published researcher, full-stack engineer.";
 	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
 
 	return (
@@ -937,4 +944,3 @@ export default function MyPage() {
 		</main>
 	);
 }
-

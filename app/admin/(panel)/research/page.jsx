@@ -192,8 +192,8 @@ export default function AdminResearchPage() {
               ) : filteredPapers.map((p) => (
                 <tr key={p.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium max-w-xs truncate">{p.title}</td>
-                  <td className="px-4 py-3 text-slate-600">{p.venue || "—"}</td>
-                  <td className="px-4 py-3 text-slate-600">{p.year || "—"}</td>
+                  <td className="px-4 py-3 text-slate-600">{p.venue || "-"}</td>
+                  <td className="px-4 py-3 text-slate-600">{p.year || "-"}</td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button onClick={() => openEditPaper(p)} className="px-3 py-1 text-xs rounded bg-slate-100 hover:bg-slate-200">Edit</button>
                     <button onClick={() => { setConfirmId(p._id); setConfirmType("paper"); }} className="px-3 py-1 text-xs rounded bg-red-50 text-red-600 hover:bg-red-100">Delete</button>
@@ -220,8 +220,8 @@ export default function AdminResearchPage() {
               ) : filteredInterests.map((i) => (
                 <tr key={i.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3 font-medium">{i.title}</td>
-                  <td className="px-4 py-3 text-slate-500 text-xs font-mono">{i.iconName || "—"}</td>
-                  <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{i.description || "—"}</td>
+                  <td className="px-4 py-3 text-slate-500 text-xs font-mono">{i.iconName || "-"}</td>
+                  <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{i.description || "-"}</td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button onClick={() => openEditInterest(i)} className="px-3 py-1 text-xs rounded bg-slate-100 hover:bg-slate-200">Edit</button>
                     <button onClick={() => { setConfirmId(i._id); setConfirmType("interest"); }} className="px-3 py-1 text-xs rounded bg-red-50 text-red-600 hover:bg-red-100">Delete</button>

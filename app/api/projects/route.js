@@ -42,9 +42,9 @@ export async function POST(request) {
   };
 
   // Only add optional columns if they have values (guards against missing columns)
-  if (body.status)               record.status                = body.status;
-  if (body.seo_title)            record.seo_title             = body.seo_title;
-  if (body.seo_desc)             record.seo_desc              = body.seo_desc;
+  if (body.status !== undefined)    record.status             = body.status || null;
+  if (body.seo_title !== undefined) record.seo_title          = body.seo_title || null;
+  if (body.seo_desc !== undefined)  record.seo_desc           = body.seo_desc || null;
   if (body.problemStatement)     record.problem_statement     = body.problemStatement;
   if (body.architectureNotes)    record.architecture_notes    = body.architectureNotes;
   if (body.engineeringDecisions) record.engineering_decisions = body.engineeringDecisions;

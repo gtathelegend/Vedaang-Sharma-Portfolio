@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 
 /**
- * Canonical section header — micro-label + large bold heading.
+ * Canonical section header - micro-label + large bold heading.
  * Matches the home-page design language.
  */
 export default function SectionHeader({ label, heading, className = "", id }) {

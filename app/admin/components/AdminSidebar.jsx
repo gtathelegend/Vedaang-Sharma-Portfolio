@@ -14,7 +14,7 @@ const navGroups = [
       { href: "/admin/education",       label: "Education" },
       { href: "/admin/certifications",  label: "Certifications" },
       { href: "/admin/research",        label: "Research" },
-      { href: "/admin/blog",            label: "Blog Topics" },
+      { href: "/admin/blog",            label: "Blog" },
       { href: "/admin/socials",         label: "Social Links" },
       { href: "/admin/categories",      label: "Categories" },
     ],

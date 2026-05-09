@@ -19,7 +19,7 @@ Migrating from a pnpm monorepo (Next.js + Express + MongoDB + Vite admin) to a s
 
 ---
 
-## Phase 1 — Config & Dependencies
+## Phase 1 - Config & Dependencies
 
 ### 1.1 `vercel.json`
 
@@ -35,7 +35,7 @@ Replace the broken `experimentalServices` config with a standard Next.js deploym
 
 ### 1.2 `pnpm-workspace.yaml`
 
-Remove the `backend` and `admin-dashboard` packages — only the root Next.js app remains:
+Remove the `backend` and `admin-dashboard` packages - only the root Next.js app remains:
 
 ```yaml
 packages:
@@ -46,7 +46,7 @@ onlyBuiltDependencies:
   - sharp
 ```
 
-### 1.3 `package.json` — Add Supabase deps
+### 1.3 `package.json` - Add Supabase deps
 
 ```bash
 pnpm add @supabase/supabase-js @supabase/ssr
@@ -60,12 +60,12 @@ Final additions to `dependencies`:
 
 ### 1.4 Directories to delete (after all code changes are done)
 
-- `backend/` — entire Express.js package
-- `admin-dashboard/` — orphaned Vite admin app
+- `backend/` - entire Express.js package
+- `admin-dashboard/` - orphaned Vite admin app
 
 ---
 
-## Phase 2 — Supabase Database Schema
+## Phase 2 - Supabase Database Schema
 
 Run this SQL in the **Supabase SQL Editor** after creating a new project.
 
@@ -159,19 +159,19 @@ CREATE POLICY "public_read_education"    ON education    FOR SELECT USING (true)
 CREATE POLICY "public_read_experience"   ON experience   FOR SELECT USING (true);
 CREATE POLICY "public_read_social_links" ON social_links FOR SELECT USING (true);
 
--- Admin INSERT/UPDATE/DELETE via service role key (bypasses RLS — no extra policy needed)
+-- Admin INSERT/UPDATE/DELETE via service role key (bypasses RLS - no extra policy needed)
 -- The API routes use SUPABASE_SERVICE_ROLE_KEY for all mutations
 ```
 
 ### Admin user setup
 
-In the Supabase dashboard → **Authentication → Users → Invite user**, create your admin account with your email. No `users` table is needed — Supabase Auth manages this.
+In the Supabase dashboard → **Authentication → Users → Invite user**, create your admin account with your email. No `users` table is needed - Supabase Auth manages this.
 
 ---
 
-## Phase 3 — Supabase Client Files
+## Phase 3 - Supabase Client Files
 
-### `lib/supabase/client.js` (browser — used in Client Components)
+### `lib/supabase/client.js` (browser - used in Client Components)
 
 ```js
 import { createBrowserClient } from "@supabase/ssr";
@@ -184,7 +184,7 @@ export function createClient() {
 }
 ```
 
-### `lib/supabase/server.js` (server — used in Server Components & API routes)
+### `lib/supabase/server.js` (server - used in Server Components & API routes)
 
 ```js
 import { createServerClient } from "@supabase/ssr";
@@ -213,7 +213,7 @@ export async function createClient() {
 }
 ```
 
-### `lib/supabase/admin.js` (service role — used only in mutation API routes)
+### `lib/supabase/admin.js` (service role - used only in mutation API routes)
 
 ```js
 import { createClient } from "@supabase/supabase-js";
@@ -228,7 +228,7 @@ export function createAdminClient() {
 
 ---
 
-## Phase 4 — Middleware
+## Phase 4 - Middleware
 
 ### `middleware.js` (root of project)
 
@@ -289,9 +289,9 @@ export const config = {
 
 ---
 
-## Phase 5 — Update API Helper Libraries
+## Phase 5 - Update API Helper Libraries
 
-### `lib/api.js` (public data fetching — remove Express base URL)
+### `lib/api.js` (public data fetching - remove Express base URL)
 
 ```js
 export const fetchJson = async (path, options = {}) => {
@@ -311,7 +311,7 @@ export const fetchJson = async (path, options = {}) => {
 };
 ```
 
-### `lib/adminApi.js` (admin mutations — remove JWT, cookies sent automatically)
+### `lib/adminApi.js` (admin mutations - remove JWT, cookies sent automatically)
 
 ```js
 const parseJsonSafely = async (response) => {
@@ -349,17 +349,17 @@ export const adminFetch = async (path, options = {}) => {
 };
 ```
 
-### `lib/adminAuth.js` — DELETE THIS FILE
+### `lib/adminAuth.js` - DELETE THIS FILE
 
 This entire file is replaced by Supabase Auth cookies. Remove all imports of `isAdminAuthenticated`, `setAdminToken`, `getAdminToken`, `clearAdminToken` across the codebase.
 
 ---
 
-## Phase 6 — Next.js API Routes
+## Phase 6 - Next.js API Routes
 
 All routes follow the same pattern:
-- **GET** — public, uses anon Supabase client, returns `{ data: [...] }`
-- **POST/PUT/DELETE** — checks session via `createClient()`, mutates via `createAdminClient()` (service role)
+- **GET** - public, uses anon Supabase client, returns `{ data: [...] }`
+- **POST/PUT/DELETE** - checks session via `createClient()`, mutates via `createAdminClient()` (service role)
 
 ### Response field mapping (DB → API response)
 
@@ -379,7 +379,7 @@ Supabase uses snake_case columns; the existing UI expects camelCase. Each GET ro
 | `end_date` | `endDate` |
 | `sort_order` | `sortOrder` |
 | `icon_name` | `iconName` |
-| `id` | `id`, `_id` (alias — admin pages use `._id` for PUT/DELETE) |
+| `id` | `id`, `_id` (alias - admin pages use `._id` for PUT/DELETE) |
 | `role` | `role`, `position` (alias for Experience component) |
 
 ### Helper function for row mapping (put in each route or a shared util)
@@ -875,7 +875,7 @@ export async function POST() {
 
 ---
 
-## Phase 7 — Admin Login Page
+## Phase 7 - Admin Login Page
 
 Replace JWT flow with Supabase Auth in `app/admin/login/page.jsx`:
 
@@ -960,9 +960,9 @@ export default function AdminLoginPage() {
 
 ---
 
-## Phase 8 — Admin Panel Layout
+## Phase 8 - Admin Panel Layout
 
-Replace the JWT `isAdminAuthenticated()` check in `app/admin/(panel)/layout.jsx`. The middleware now handles server-side protection — the layout only needs to render the shell:
+Replace the JWT `isAdminAuthenticated()` check in `app/admin/(panel)/layout.jsx`. The middleware now handles server-side protection - the layout only needs to render the shell:
 
 ```jsx
 "use client";
@@ -983,7 +983,7 @@ export default function AdminPanelLayout({ children }) {
 }
 ```
 
-### AdminTopbar — add logout button
+### AdminTopbar - add logout button
 
 Find the logout button in `app/admin/components/AdminTopbar.jsx` and update it to call Supabase signOut:
 
@@ -1004,7 +1004,7 @@ const handleLogout = async () => {
 
 ---
 
-## Phase 9 — Fix Experience Component
+## Phase 9 - Fix Experience Component
 
 In `app/about/components/experience.jsx`, the component accesses `experience.position` but the API returns `role`. The API response now includes both `role` and `position` (alias), so no change is needed here.
 
@@ -1018,7 +1018,7 @@ However, if you want to clean up, change line 89:
 
 ---
 
-## Phase 10 — Environment Variables
+## Phase 10 - Environment Variables
 
 ### `.env.example` (updated)
 
@@ -1034,7 +1034,7 @@ NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET=
 NEXT_PUBLIC_SPOTIFY_REFRESH_TOKEN=
 ```
 
-### `.env.local` (your actual values — never commit this)
+### `.env.local` (your actual values - never commit this)
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
@@ -1051,7 +1051,7 @@ Add all the same variables in **Project Settings → Environment Variables**. Ma
 
 ---
 
-## Phase 11 — Cleanup
+## Phase 11 - Cleanup
 
 Delete these directories after all changes are working:
 
@@ -1070,9 +1070,9 @@ rm lib/adminAuth.js
 
 ## Implementation Order (step by step)
 
-1. **Supabase setup** — Create Supabase project, run `schema.sql`, invite admin user
-2. **Config** — Update `vercel.json`, `pnpm-workspace.yaml`
-3. **Dependencies** — `pnpm add @supabase/supabase-js @supabase/ssr`
+1. **Supabase setup** - Create Supabase project, run `schema.sql`, invite admin user
+2. **Config** - Update `vercel.json`, `pnpm-workspace.yaml`
+3. **Dependencies** - `pnpm add @supabase/supabase-js @supabase/ssr`
 4. **Create** `lib/supabase/client.js`, `lib/supabase/server.js`, `lib/supabase/admin.js`
 5. **Create** `lib/supabase/mappers.js`
 6. **Create** `middleware.js`
@@ -1101,9 +1101,9 @@ rm lib/adminAuth.js
 - SEO / sitemap generation (`generate-sitemap.js`)
 - Vercel Analytics & Speed Insights
 - All admin CRUD page UI (only the API call target changes, transparently)
-- `app/projects/page.jsx` — already calls `/api/projects` (relative path, works as-is after `lib/api.js` fix)
-- `app/about/components/experience.jsx` — works as-is since API returns `position` alias
-- `app/about/components/education.jsx` — works as-is
+- `app/projects/page.jsx` - already calls `/api/projects` (relative path, works as-is after `lib/api.js` fix)
+- `app/about/components/experience.jsx` - works as-is since API returns `position` alias
+- `app/about/components/education.jsx` - works as-is
 
 ---
 

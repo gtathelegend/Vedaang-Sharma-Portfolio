@@ -6,7 +6,7 @@
 /* Enable Tailwind's `dark:` variant when [data-theme="dark"] is set on <html>. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ── Base reset — accessible font sizing ── */
+/* ── Base reset - accessible font sizing ── */
 html {
 	font-size: 16px;
 }
@@ -86,7 +86,7 @@ a[title]:hover:after {
 	color: #fff;
 }
 
-/* Monochrome theme — same as light, but de-saturate all imagery so the site
+/* Monochrome theme - same as light, but de-saturate all imagery so the site
    feels stripped-down and editorial. Images use blend + filter for a uniform
    look across the gallery. */
 [data-theme="mono"] img {

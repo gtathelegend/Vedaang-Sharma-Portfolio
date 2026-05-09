@@ -208,7 +208,7 @@ export default function AdminSettingsPage() {
         </div>
       </form>
 
-      {/* /now editor (separate save — writes to a `now` jsonb column on site_settings) */}
+      {/* /now editor (separate save - writes to a `now` jsonb column on site_settings) */}
       <form onSubmit={handleNowSave} className="space-y-4">
         <section className="bg-white rounded-xl shadow p-6 space-y-4">
           <div className="flex items-baseline justify-between border-b pb-2">
@@ -220,7 +220,7 @@ export default function AdminSettingsPage() {
             fields fall back to defaults on the public page.
           </p>
           <AdminFormTextarea
-            label="Focus — what you're working on"
+            label="Focus - what you're working on"
             name="focus"
             value={now.focus}
             onChange={handleNowChange}

@@ -132,7 +132,7 @@ export default function ContactForm() {
 
 				{status === "success" && (
 					<span className="inline-flex items-center gap-1.5 text-sm text-emerald-400">
-						<FontAwesomeIcon icon={faCircleCheck} /> Message sent — I&apos;ll be in touch soon.
+						<FontAwesomeIcon icon={faCircleCheck} /> Message sent - I&apos;ll be in touch soon.
 					</span>
 				)}
 				{status === "error" && (
