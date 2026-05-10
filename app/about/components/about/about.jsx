@@ -33,7 +33,7 @@ export default function About() {
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ type: "spring", delay: 0.1 }}
         viewport={{ once: true, amount: 0.2 }}>
-        <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-500 shadow-lg">
+        <div className="relative w-full max-w-[260px] sm:max-w-sm md:max-w-md aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-500 shadow-lg">
           <Image src={Me1} alt="Vedaang Sharma" fill className="object-cover" placeholder="blur" sizes="(max-width: 768px) 90vw, 400px" />
         </div>
       </motion.div>

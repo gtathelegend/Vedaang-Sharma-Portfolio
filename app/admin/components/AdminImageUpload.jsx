@@ -3,7 +3,7 @@
 import { useState } from "react";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
-export default function AdminImageUpload({ label, onUpload }) {
+export default function AdminImageUpload({ label, onUpload, accept = "image/*", successMessage = "File uploaded successfully" }) {
   const [uploading, setUploading] = useState(false);
   const { showToast } = useAdminToast();
 
@@ -25,12 +25,12 @@ export default function AdminImageUpload({ label, onUpload }) {
       if (!response.ok) throw new Error(body.message || "Upload failed");
 
       onUpload(body.url);
-      showToast("Image uploaded successfully");
+      showToast(successMessage);
     } catch (error) {
       showToast(error.message, "error");
     } finally {
       setUploading(false);
-      e.target.value = null; // Reset input
+      e.target.value = null;
     }
   };
 
@@ -39,7 +39,7 @@ export default function AdminImageUpload({ label, onUpload }) {
       {label && <label className="text-sm font-medium text-slate-700">{label}</label>}
       <input
         type="file"
-        accept="image/*"
+        accept={accept}
         onChange={handleUpload}
         disabled={uploading}
         className="block w-full text-sm text-slate-500

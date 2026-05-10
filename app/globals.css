@@ -86,12 +86,6 @@ a[title]:hover:after {
 	color: #fff;
 }
 
-/* Monochrome theme - same as light, but de-saturate all imagery so the site
-   feels stripped-down and editorial. Images use blend + filter for a uniform
-   look across the gallery. */
-[data-theme="mono"] img {
-	filter: grayscale(1) saturate(0.4) contrast(1.02);
-}
 
 /* ── Markdown / Rich-text content ──────────────────────────────────────── */
 .md-content { line-height: 1.75; color: var(--color-text); }

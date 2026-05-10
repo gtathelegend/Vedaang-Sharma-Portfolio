@@ -25,8 +25,8 @@ const FOOTER_LINKS = [
 		group: "Connect",
 		links: [
 			{ label: "Contact", href: "/contact" },
-			{ label: "GitHub", href: "https://github.com/vedaangsharma", external: true },
-			{ label: "LinkedIn", href: "https://www.linkedin.com/in/vedaang-sharma", external: true },
+			{ label: "GitHub", href: "https://github.com/gtathelegend", external: true },
+			{ label: "LinkedIn", href: "https://www.linkedin.com/in/vedaangsharma2006/", external: true },
 			{ label: "Email", href: "mailto:vedaangsharma2006@gmail.com", external: true },
 		],
 	},

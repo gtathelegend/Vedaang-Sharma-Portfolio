@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon, faCircleHalfStroke } from "@fortawesome/free-solid-svg-icons";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 const OPTIONS = [
 	{ key: "light", label: "Light", icon: faSun },
-	{ key: "dark", label: "Dark", icon: faMoon },
-	{ key: "mono", label: "Mono", icon: faCircleHalfStroke },
+	{ key: "dark",  label: "Dark",  icon: faMoon },
 ];
 
 function readTheme() {

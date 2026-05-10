@@ -150,15 +150,6 @@ export default function Page(props) {
 
   return (
     <div className="bg-transparent min-h-screen">
-      {/* ── Back button ── */}
-      <Link
-        href="/projects"
-        className="fixed top-6 left-6 z-30 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur border border-neutral-200 rounded-full text-sm font-medium text-neutral-700 hover:bg-white transition shadow-sm"
-      >
-        <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
-        All Projects
-      </Link>
-
       {/* ── Hero / Thumbnail ── */}
       <motion.div
         className="relative w-full h-[45vh] sm:h-[55vh] md:h-[65vh] bg-neutral-900 overflow-hidden"
@@ -181,6 +172,17 @@ export default function Page(props) {
 
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+        {/* Back button — inside hero, clear of navbar */}
+        <div className="absolute top-24 left-6 sm:left-8 md:left-14">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-full text-sm font-medium text-white transition"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
+            All Projects
+          </Link>
+        </div>
 
         {/* Hero text */}
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-14">

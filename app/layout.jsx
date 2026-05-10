@@ -36,6 +36,9 @@ export const metadata = {
 		template: "%s | Vedaang Sharma",
 	},
 	description: "Full Stack Developer specializing in React, Node.js, and Artificial Intelligence.",
+	icons: {
+		icon: [{ url: "/image/favicon.ico" }],
+	},
 	keywords: ["Vedaang Sharma", "Portfolio", "Web Developer", "AI Enthusiast", "Jaipur"],
 	authors: [{ name: "Vedaang Sharma" }],
 	creator: "Vedaang Sharma",

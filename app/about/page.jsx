@@ -27,7 +27,7 @@ export default function Page() {
 					initial={{ x: 80, opacity: 0 }}
 					animate={{ x: 0, opacity: 1 }}
 					transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}>
-					<div className="relative h-full w-full grayscale hover:grayscale-0 transition-all duration-700">
+					<div className="relative h-full w-full transition-all duration-700">
 						<Image src={Hero} fill className="object-cover object-top" alt="Vedaang Sharma" placeholder="blur" priority sizes="(max-width: 768px) 0px, 40vw" />
 						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent" />
 					</div>
@@ -41,7 +41,7 @@ export default function Page() {
 							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.05 }}>
 							Get to know me
 						</motion.p>
-						<motion.h1 className="text-gray-900 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
+						<motion.h1 className="text-gray-900 text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
 							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.15 }}>
 							About Me
 						</motion.h1>

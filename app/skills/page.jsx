@@ -72,7 +72,7 @@ function CategorySection({ k, skills, index, span = 1 }) {
 	const theme = themeFor(k);
 	const Icon  = meta.icon;
 	const chipsGrid = span === 2
-		? "grid-cols-3 sm:grid-cols-4 lg:grid-cols-5"
+		? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
 		: "grid-cols-2 sm:grid-cols-3";
 
 	return (
@@ -124,12 +124,12 @@ function Skeleton() {
 	// Mirrors BENTO_ORDER + BENTO_SPAN_MAP: frontend(2),ai(1),mobile(1),backend(2),devops(1),database(2),other(1)
 	const skeletonSpans = [2, 1, 1, 2, 1, 2, 1];
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-pulse">
+		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 animate-pulse">
 			{skeletonSpans.map((span, i) => (
 				<div key={i} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
 					<div className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
 						<div className="h-16 bg-gray-200 dark:bg-white/10" />
-						<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 ${span === 2 ? "grid-cols-4" : "grid-cols-3"}`}>
+						<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 grid-cols-2 ${span === 2 ? "sm:grid-cols-3" : ""}`}>
 							{Array.from({ length: span === 2 ? 8 : 4 }).map((_, j) => (
 								<div key={j} className="h-9 rounded-xl bg-gray-200 dark:bg-white/10" />
 							))}
@@ -235,7 +235,7 @@ export default function SkillsPage() {
 						<p className="text-gray-500 italic">No skills added yet.</p>
 					) : (
 						<>
-							<div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+							<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 								{[
 									...BENTO_ORDER.filter(k => (skillsByCategory[k] || []).length > 0),
 									...categories.filter(k => !BENTO_ORDER.includes(k)),

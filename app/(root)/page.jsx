@@ -110,7 +110,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 	return (
 		<section
 			id="home"
-			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-transparent pt-32 md:pt-0"
+			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-transparent pt-28 md:pt-0"
 		>
 			{/* Right portrait (desktop) */}
 			<motion.div
@@ -138,7 +138,8 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 					<Image
 						src={Me}
 						fill
-						className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-[900ms]"
+						className="object-cover object-top"
+						style={{ filter: "none" }}
 						alt={fullName}
 						placeholder="blur"
 						priority
@@ -152,13 +153,14 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 				<div className="md:max-w-[52%] lg:max-w-[46%]">
 
 					{/* Mobile portrait */}
-					<div className="flex md:hidden justify-center mb-16">
-						<div className="w-32 h-32 rounded-full overflow-hidden grayscale ring-4 ring-white dark:ring-gray-900 shadow-xl">
+					<div className="flex md:hidden justify-center mb-10 sm:mb-14">
+						<div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-white dark:ring-gray-900 shadow-xl">
 							<Image
 								src={Me}
 								width={128}
 								height={128}
 								className="object-cover object-top w-full h-full"
+								style={{ filter: "none" }}
 								alt={fullName}
 								placeholder="blur"
 							/>
@@ -178,7 +180,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 
 					{/* Heading */}
 					<motion.h1
-						className="text-gray-900 dark:text-white text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-12"
+						className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-8 sm:mb-12"
 						variants={slideLeft}
 						custom={0.22}
 						initial="hidden"
@@ -189,7 +191,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 
 					{/* Subtitle */}
 					<motion.p
-						className="text-gray-600 dark:text-gray-400 text-lg sm:text-xl leading-[1.7] max-w-xl mb-16"
+						className="text-gray-600 dark:text-gray-400 text-base sm:text-lg md:text-xl leading-[1.7] max-w-xl mb-10 sm:mb-16"
 						variants={slideLeft}
 						custom={0.32}
 						initial="hidden"
@@ -214,7 +216,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 
 					{/* Quiet social row */}
 					<motion.div
-						className="mt-20 pt-8 border-t border-gray-100 dark:border-white/10 flex flex-wrap items-center gap-x-8 gap-y-3"
+						className="mt-10 sm:mt-16 pt-6 sm:pt-8 border-t border-gray-100 dark:border-white/10 flex flex-wrap items-center gap-x-6 sm:gap-x-8 gap-y-3"
 						variants={fadeUp}
 						custom={0.55}
 						initial="hidden"
@@ -275,16 +277,16 @@ function SectionCard({ id, label, heading, lead, children }) {
 		<section id={id} className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<div className="rounded-3xl border border-amber-200/40 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB]/95 to-[#FAFAF9]/90 dark:from-gray-900 dark:to-gray-900/40 shadow-[0_8px_40px_-16px_rgba(245,158,11,0.18)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
-					<div className="p-8 sm:p-10 md:p-14">
+					<div className="p-6 sm:p-10 md:p-14">
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ type: "spring", stiffness: 90, damping: 18 }}
 							viewport={{ once: true, amount: 0.2 }}
-							className="mb-10 max-w-2xl"
+							className="mb-8 sm:mb-10 max-w-2xl"
 						>
 							<SectionLabel>{label}</SectionLabel>
-							<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
+							<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-4">
 								{heading}
 							</h2>
 							{lead && (
@@ -350,13 +352,13 @@ function SkillsPreview() {
 			lead="A snapshot of the stacks I work with day‑to‑day - from modern web frameworks to AI tooling and cloud infrastructure."
 		>
 			{categories === null ? (
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-5 animate-pulse">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 animate-pulse">
 					{/* Mirrors HOME_BENTO_ORDER+SPAN_MAP: frontend(2),ai(1),mobile(1),backend(2),devops(1),database(2) */}
 					{[2, 1, 1, 2, 1, 2].map((span, i) => (
 						<div key={i} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
 							<div className="rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10">
 								<div className="h-16 bg-gray-200 dark:bg-white/10" />
-								<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 ${span === 2 ? "grid-cols-3" : "grid-cols-2"}`}>
+								<div className={`p-4 bg-gray-50 dark:bg-white/5 grid gap-2 grid-cols-2 ${span === 2 ? "sm:grid-cols-3" : ""}`}>
 									{Array.from({ length: span === 2 ? 6 : 4 }).map((_, j) => (
 										<div key={j} className="h-9 rounded-xl bg-gray-200 dark:bg-white/10" />
 									))}
@@ -369,7 +371,7 @@ function SkillsPreview() {
 				<p className="text-gray-500 italic">Skills coming soon.</p>
 			) : (
 				<>
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 						{[
 							...HOME_BENTO_ORDER.filter(k => skillsByCategory?.[k]?.length > 0),
 							...Object.keys(skillsByCategory || {}).filter(k => !HOME_BENTO_ORDER.includes(k) && skillsByCategory[k]?.length > 0),
@@ -380,7 +382,7 @@ function SkillsPreview() {
 							const theme = SKILL_CATEGORY_THEMES[key] || SKILL_CATEGORY_THEMES.other;
 							const Icon      = meta.icon;
 							const top       = list.slice(0, span === 2 ? 6 : 4);
-							const chipsGrid = span === 2 ? "grid-cols-3" : "grid-cols-2";
+							const chipsGrid = span === 2 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2";
 							return (
 								<div key={key} className={span === 2 ? "lg:col-span-2" : "lg:col-span-1"}>
 									<motion.div
@@ -476,7 +478,7 @@ function FeaturedProjectsPreview() {
 			lead="A few hand‑picked projects that show the kind of problems I enjoy solving - full‑stack, AI, and everything in between."
 		>
 			{projects === null ? (
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-5 animate-pulse">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 animate-pulse">
 					{Array.from({ length: 3 }).map((_, i) => (
 						<div key={i} className="aspect-[4/3] rounded-2xl bg-gray-100" />
 					))}
@@ -485,7 +487,7 @@ function FeaturedProjectsPreview() {
 				<p className="text-gray-500 italic">Projects are on the way.</p>
 			) : (
 				<>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
 						{display.map((project, i) => {
 							const tech = project.tech || project.techStack || [];
 							const desc = project.desc || project.description || [];
@@ -569,13 +571,13 @@ function AboutPreview() {
 								src={MeAbout}
 								alt="About Vedaang"
 								fill
-								className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-700"
+								className="object-cover object-center transition-all duration-700"
 								placeholder="blur"
 								sizes="(max-width: 768px) 100vw, 50vw"
 							/>
 						</motion.div>
 
-						<div className="p-8 sm:p-10 md:p-14 flex flex-col justify-center">
+						<div className="p-6 sm:p-10 md:p-14 flex flex-col justify-center">
 							<motion.div
 								initial={{ opacity: 0, y: 20 }}
 								whileInView={{ opacity: 1, y: 0 }}
@@ -583,7 +585,7 @@ function AboutPreview() {
 								viewport={{ once: true, amount: 0.2 }}
 							>
 								<SectionLabel>About me</SectionLabel>
-								<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
+								<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-5">
 									Building thoughtful, modern software.
 								</h2>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5">
@@ -698,7 +700,7 @@ function CurrentlyBuildingSection() {
 		<section id="building" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
-					className="relative rounded-3xl overflow-hidden p-10 sm:p-14 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.20)]"
+					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-14 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.20)]"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ type: "spring", stiffness: 80, damping: 20 }}
@@ -710,10 +712,10 @@ function CurrentlyBuildingSection() {
 					</div>
 
 					<div className="relative">
-						<div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+						<div className="flex flex-wrap items-center justify-between gap-4 mb-6 sm:mb-8">
 							<div>
 								<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-4">In progress</span>
-								<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight">
+								<h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
 									Currently Building.
 								</h2>
 							</div>
@@ -827,7 +829,7 @@ function LiveSection() {
 					className="mb-10 max-w-2xl"
 				>
 					<SectionLabel>Live signals</SectionLabel>
-					<h2 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4">
+					<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-4">
 						What&apos;s happening, right now.
 					</h2>
 					<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
@@ -853,7 +855,7 @@ function ContactCTA() {
 		<section id="contact-cta" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
-					className="relative rounded-3xl overflow-hidden p-10 sm:p-14 md:p-20 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] via-[#FFF8E7] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.22)]"
+					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-16 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] via-[#FFF8E7] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.22)]"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ type: "spring", stiffness: 80, damping: 20 }}
@@ -868,7 +870,7 @@ function ContactCTA() {
 						<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-5">
 							Let&apos;s connect
 						</span>
-						<h2 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-5">
+						<h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-5">
 							Have a project in mind, or just want to say hi?
 						</h2>
 						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8">
