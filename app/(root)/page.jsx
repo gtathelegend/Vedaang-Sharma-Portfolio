@@ -208,9 +208,13 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						initial="hidden"
 						animate="visible"
 					>
-						<PrimaryLink href={cvUrl} external>
+						<a
+							href={cvUrl}
+							download
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
+						>
 							Download CV <FontAwesomeIcon icon={faArrowRight} />
-						</PrimaryLink>
+						</a>
 						<SecondaryLink href="/contact">Get in touch</SecondaryLink>
 					</motion.div>
 

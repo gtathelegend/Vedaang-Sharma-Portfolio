@@ -153,7 +153,7 @@ export default function CertificationsPage() {
           </motion.p>
 
           <motion.h1
-            className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
+            className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", delay: 0.15 }}

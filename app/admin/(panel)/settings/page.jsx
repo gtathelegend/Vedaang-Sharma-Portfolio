@@ -169,16 +169,33 @@ export default function AdminSettingsPage() {
         {/* CV / Resume */}
         <section className="bg-white rounded-xl shadow p-6 space-y-4">
           <h3 className="text-base font-semibold text-slate-700 border-b pb-2">CV / Resume</h3>
-          <AdminFormInput label="CV / Resume URL" name="cv_url" value={form.cv_url} onChange={handleChange} />
+          <p className="text-xs text-slate-500">Upload a PDF — it will be available via the Download CV button on the homepage.</p>
+
           <AdminImageUpload
-            label="Or upload CV (PDF)"
+            label="Upload new resume (PDF)"
+            accept="application/pdf,.pdf"
+            successMessage="Resume uploaded — click Save Settings to apply."
             onUpload={(url) => setForm(p => ({ ...p, cv_url: url, resume_pdf_url: url }))}
           />
+
           {form.cv_url && (
-            <a href={form.cv_url} target="_blank" rel="noreferrer" className="text-sm text-slate-500 hover:text-slate-800 underline">
-              View current CV ↗
-            </a>
+            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <svg className="w-8 h-8 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+              </svg>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-slate-700 truncate">Current resume</p>
+                <p className="text-xs text-slate-400 truncate">{form.cv_url}</p>
+              </div>
+              <a href={form.cv_url} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-medium text-slate-600 hover:text-slate-900 underline">
+                Preview ↗
+              </a>
+            </div>
           )}
+
+          <div className="pt-1">
+            <AdminFormInput label="Or paste a direct URL" name="cv_url" value={form.cv_url} onChange={handleChange} />
+          </div>
         </section>
 
         {/* SEO */}

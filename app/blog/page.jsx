@@ -76,7 +76,7 @@ export default function BlogPage() {
           </motion.div>
 
           <motion.h1
-            className="text-gray-900 dark:text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
+            className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: "spring", delay: 0.15 }}
@@ -149,7 +149,7 @@ export default function BlogPage() {
         <section className="py-16 md:py-20">
           <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
             <motion.div
-              className="rounded-3xl border border-gray-100 dark:border-white/10 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-900/60 p-10 sm:p-14 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.06)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.4)]"
+              className="rounded-3xl border border-gray-100 dark:border-white/10 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-900/60 p-6 sm:p-10 md:p-14 shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.06)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.4)]"
               variants={fadeUp}
               custom={0}
               initial="hidden"

@@ -87,7 +87,7 @@ export default function NowPage() {
 						</span>
 					</div>
 
-					<h1 className="text-gray-900 text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight max-w-3xl mb-5">
+					<h1 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight max-w-3xl mb-5">
 						What I&apos;m doing right now.
 					</h1>
 					<p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl">
@@ -115,7 +115,7 @@ export default function NowPage() {
 				<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 					{error && <p className="text-red-500 mb-6">{error}</p>}
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+					<div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						{ITEMS.map((item, i) => {
 							const value = (now?.[item.key] ?? "").trim() || DEFAULTS[item.key];
 							return (
