@@ -8,6 +8,64 @@ import AdminImageUpload from "@/app/admin/components/AdminImageUpload";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
+function ResumeUploadSection({ showToast }) {
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      showToast("Please select a PDF file", "error");
+      return;
+    }
+    setUploading(true);
+    setUploaded(false);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/upload/resume", { method: "POST", body: formData });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.message || "Upload failed");
+      setUploaded(true);
+      showToast("Resume uploaded successfully — it's now live on the site.");
+    } catch (err) {
+      showToast(err.message, "error");
+    } finally {
+      setUploading(false);
+      e.target.value = null;
+    }
+  };
+
+  return (
+    <section className="bg-white rounded-xl shadow p-6 space-y-4">
+      <h3 className="text-base font-semibold text-slate-700 border-b pb-2">CV / Resume</h3>
+      <p className="text-xs text-slate-500">
+        Upload your latest resume PDF. It replaces the previous one instantly — no need to save settings separately.
+      </p>
+      <label className="flex flex-col gap-2">
+        <span className="text-sm font-medium text-slate-700">Upload resume (PDF)</span>
+        <input
+          type="file"
+          accept="application/pdf,.pdf"
+          onChange={handleFile}
+          disabled={uploading}
+          className="block w-full text-sm text-slate-500
+            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
+            file:text-sm file:font-semibold file:bg-slate-50 file:text-slate-700
+            hover:file:bg-slate-100 disabled:opacity-50"
+        />
+      </label>
+      {uploading && <p className="text-xs text-slate-500">Uploading...</p>}
+      {uploaded && (
+        <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+          <span>✓</span> Resume is live. <a href="/api/resume" target="_blank" rel="noreferrer" className="underline font-medium">Test download ↗</a>
+        </div>
+      )}
+    </section>
+  );
+}
+
 const emptyForm = {
   full_name: "",
   tagline: "",
@@ -167,36 +225,7 @@ export default function AdminSettingsPage() {
         </section>
 
         {/* CV / Resume */}
-        <section className="bg-white rounded-xl shadow p-6 space-y-4">
-          <h3 className="text-base font-semibold text-slate-700 border-b pb-2">CV / Resume</h3>
-          <p className="text-xs text-slate-500">Upload a PDF — it will be available via the Download CV button on the homepage.</p>
-
-          <AdminImageUpload
-            label="Upload new resume (PDF)"
-            accept="application/pdf,.pdf"
-            successMessage="Resume uploaded — click Save Settings to apply."
-            onUpload={(url) => setForm(p => ({ ...p, cv_url: url, resume_pdf_url: url }))}
-          />
-
-          {form.cv_url && (
-            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <svg className="w-8 h-8 text-red-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-              </svg>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-slate-700 truncate">Current resume</p>
-                <p className="text-xs text-slate-400 truncate">{form.cv_url}</p>
-              </div>
-              <a href={form.cv_url} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-medium text-slate-600 hover:text-slate-900 underline">
-                Preview ↗
-              </a>
-            </div>
-          )}
-
-          <div className="pt-1">
-            <AdminFormInput label="Or paste a direct URL" name="cv_url" value={form.cv_url} onChange={handleChange} />
-          </div>
-        </section>
+        <ResumeUploadSection showToast={showToast} />
 
         {/* SEO */}
         <section className="bg-white rounded-xl shadow p-6 space-y-4">

@@ -104,7 +104,7 @@ export default function CommandPalette() {
 		return e.replace(/^mailto:/, "");
 	}, [settings]);
 
-	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
+	const cvUrl = "/api/resume";
 
 	const allItems = useMemo(() => {
 		const projectItems = (projects || [])
@@ -140,10 +140,13 @@ export default function CommandPalette() {
 			{
 				icon: faDownload,
 				label: "Download CV",
-				hint: cvUrl,
+				hint: "Resume PDF",
 				group: "Actions",
 				onSelect: () => {
-					window.open(cvUrl, "_blank", "noopener,noreferrer");
+					const a = document.createElement("a");
+					a.href = "/api/resume";
+					a.download = "Vedaang_Sharma_Resume.pdf";
+					a.click();
 				},
 			},
 			{
@@ -176,7 +179,7 @@ export default function CommandPalette() {
 		];
 
 		return [...PAGES, ...projectItems, ...actions, ...themes];
-	}, [projects, email, cvUrl, setTheme]);
+	}, [projects, email, setTheme]);
 
 	const filtered = useMemo(() => {
 		if (!query) return allItems;
