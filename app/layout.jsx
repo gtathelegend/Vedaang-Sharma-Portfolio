@@ -30,39 +30,53 @@ export const viewport = {
 	themeColor: "#ffffff",
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vedaangsharma.dev";
+
 export const metadata = {
+	metadataBase: new URL(SITE_URL),
 	title: {
 		default: "Vedaang Sharma | Portfolio",
 		template: "%s | Vedaang Sharma",
 	},
-	description: "Full Stack Developer specializing in React, Node.js, and Artificial Intelligence.",
+	description: "Vedaang Sharma — Full Stack & AI Systems Developer. I build high-performance web apps, AI-powered products, and thoughtful user experiences.",
 	icons: {
-		icon: [{ url: "/image/favicon.ico" }],
+		icon: [{ url: "/favicon.ico" }],
 	},
-	keywords: ["Vedaang Sharma", "Portfolio", "Web Developer", "AI Enthusiast", "Jaipur"],
+	keywords: [
+		"Vedaang Sharma",
+		"Portfolio",
+		"Full Stack Developer",
+		"AI Systems Developer",
+		"Next.js",
+		"React",
+		"Node.js",
+	],
 	authors: [{ name: "Vedaang Sharma" }],
 	creator: "Vedaang Sharma",
+	alternates: {
+		canonical: "/",
+	},
 	openGraph: {
 		type: "website",
 		locale: "en_US",
-		url: "https://www.vedaangsharma.dev",
+		url: SITE_URL,
 		title: "Vedaang Sharma | Portfolio",
-		description: "Full Stack Developer specializing in React, Node.js, and Artificial Intelligence.",
+		description: "Full Stack & AI Systems Developer. Projects, research, and writing by Vedaang Sharma.",
 		siteName: "Vedaang Sharma",
 		images: [
 			{
-				url: "/api/og?title=Vedaang%20Sharma&subtitle=Full%20Stack%20Developer%20%26%20AI%20Enthusiast",
+				url: "/og-image-rev.png",
 				width: 1200,
 				height: 630,
-				alt: "Vedaang Sharma Portfolio",
+				alt: "Vedaang Sharma",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
 		title: "Vedaang Sharma | Portfolio",
-		description: "Full Stack Developer specializing in React, Node.js, and Artificial Intelligence.",
-		images: ["/api/og?title=Vedaang%20Sharma&subtitle=Full%20Stack%20Developer%20%26%20AI%20Enthusiast"],
+		description: "Full Stack & AI Systems Developer. Projects, research, and writing by Vedaang Sharma.",
+		images: ["/og-image-rev.png"],
 	},
 };
 

@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://www.Vedaang.my.id/sitemap2.xml
+Sitemap: https://vedaangsharma.dev/sitemap.xml
