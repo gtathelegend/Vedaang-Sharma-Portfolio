@@ -605,9 +605,9 @@ function AboutPreview() {
 
 								<div className="grid grid-cols-3 gap-3 mb-8 max-w-sm">
 									{[
-										{ v: "10+", l: "Projects" },
+										{ v: "5+", l: "Projects" },
 										{ v: "1", l: "Publication" },
-										{ v: "2", l: "Internships" },
+										{ v: "1", l: "Internships" },
 									].map((s) => (
 										<div
 											key={s.l}
