@@ -166,7 +166,7 @@ export default function BlogPage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
-                  href="https://github.com/vedaangsharma"
+                  href="https://github.com/gtathelegend"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
@@ -174,7 +174,7 @@ export default function BlogPage() {
                   <FontAwesomeIcon icon={faGithub} /> Follow on GitHub
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/vedaang-sharma"
+                  href="https://www.linkedin.com/in/vedaangsharma2006/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition"

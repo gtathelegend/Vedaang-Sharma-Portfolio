@@ -152,17 +152,17 @@ export default function CommandPalette() {
 			{
 				icon: faGithub,
 				label: "Open GitHub",
-				hint: "github.com/vedaangsharma",
+				hint: "github.com/gtathelegend",
 				group: "Actions",
-				onSelect: () => window.open("https://github.com/vedaangsharma", "_blank", "noopener,noreferrer"),
+				onSelect: () => window.open("https://github.com/gtathelegend", "_blank", "noopener,noreferrer"),
 			},
 			{
 				icon: faLinkedin,
 				label: "Open LinkedIn",
-				hint: "linkedin.com/in/vedaang-sharma",
+				hint: "linkedin.com/in/vedaangsharma2006",
 				group: "Actions",
 				onSelect: () =>
-					window.open("https://www.linkedin.com/in/vedaang-sharma", "_blank", "noopener,noreferrer"),
+					window.open("https://www.linkedin.com/in/vedaangsharma2006/", "_blank", "noopener,noreferrer"),
 			},
 		];
 

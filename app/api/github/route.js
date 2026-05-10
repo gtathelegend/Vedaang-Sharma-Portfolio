@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export const runtime = "nodejs";
 export const revalidate = 600; // re-fetch upstream every 10 min
 
-const DEFAULT_USER = process.env.NEXT_PUBLIC_GITHUB_USER || "vedaangsharma";
+const DEFAULT_USER = process.env.NEXT_PUBLIC_GITHUB_USER || "gtathelegend";
 
 function summarize(event) {
 	const repo = event.repo?.name;

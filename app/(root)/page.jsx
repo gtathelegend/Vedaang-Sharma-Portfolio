@@ -227,7 +227,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						animate="visible"
 					>
 						<a
-							href="https://github.com/vedaangsharma"
+							href="https://github.com/gtathelegend"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
@@ -236,7 +236,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 							GitHub
 						</a>
 						<a
-							href="https://www.linkedin.com/in/vedaang-sharma"
+							href="https://www.linkedin.com/in/vedaangsharma2006/"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
@@ -889,7 +889,7 @@ function ContactCTA() {
 								<FontAwesomeIcon icon={faPaperPlane} /> Send a message
 							</Link>
 							<a
-								href="https://github.com/vedaangsharma"
+								href="https://github.com/gtathelegend"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-amber-200 text-gray-700 text-sm font-semibold hover:bg-amber-50 transition"
