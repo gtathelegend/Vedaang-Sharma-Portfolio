@@ -561,7 +561,7 @@ function AboutPreview() {
 	return (
 		<section id="about" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<div className="rounded-3xl border border-amber-200/40 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB]/95 to-[#FAFAF9]/90 dark:bg-white/[0.03] shadow-[0_8px_40px_-16px_rgba(245,158,11,0.18)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
+				<div className="rounded-3xl border border-amber-200/40 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB]/95 to-[#FAFAF9]/90 dark:from-gray-900 dark:to-gray-900/60 shadow-[0_8px_40px_-16px_rgba(245,158,11,0.18)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)] overflow-hidden">
 					<div className="grid grid-cols-1 md:grid-cols-2">
 						<motion.div
 							className="relative min-h-[320px] md:min-h-[480px] bg-gray-50 dark:bg-white/5"
