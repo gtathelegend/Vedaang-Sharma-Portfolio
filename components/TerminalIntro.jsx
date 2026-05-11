@@ -6,12 +6,14 @@ import BootConsole from "@/components/BootConsole";
 
 const SESSION_KEY = "vs_intro_seen";
 
-export default function TerminalIntro() {
+export default function TerminalIntro({ onDone }) {
 	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
 		if (!sessionStorage.getItem(SESSION_KEY)) {
 			setVisible(true);
+		} else {
+			onDone?.();
 		}
 	}, []);
 
@@ -19,6 +21,7 @@ export default function TerminalIntro() {
 		setTimeout(() => {
 			sessionStorage.setItem(SESSION_KEY, "1");
 			setVisible(false);
+			onDone?.();
 		}, 700);
 	}
 

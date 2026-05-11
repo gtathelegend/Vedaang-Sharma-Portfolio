@@ -19,7 +19,6 @@ import {
 	faPaperPlane,
 	faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import TerminalIntro from "@/components/TerminalIntro";
 import GithubActivity from "@/components/GithubActivity";
 import {
 	ActivityIcon,
@@ -704,30 +703,30 @@ function CurrentlyBuildingSection() {
 		<section id="building" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
-					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-14 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.20)]"
+					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-14 border border-amber-200/50 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB] to-[#FAFAF9] dark:from-gray-900 dark:to-gray-900/40 shadow-[0_16px_48px_-16px_rgba(245,158,11,0.20)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)]"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ type: "spring", stiffness: 80, damping: 20 }}
 					viewport={{ once: true, amount: 0.2 }}
 				>
 					<div className="pointer-events-none absolute inset-0">
-						<div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-amber-200/40 blur-3xl" />
-						<div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-stone-200/50 blur-3xl" />
+						<div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-amber-200/40 dark:bg-amber-500/5 blur-3xl" />
+						<div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-stone-200/50 dark:bg-stone-500/5 blur-3xl" />
 					</div>
 
 					<div className="relative">
 						<div className="flex flex-wrap items-center justify-between gap-4 mb-6 sm:mb-8">
 							<div>
-								<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-4">In progress</span>
-								<h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
+								<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 dark:text-amber-400 bg-amber-100/80 dark:bg-amber-500/10 border border-amber-200/60 dark:border-amber-500/20 px-3 py-1.5 rounded-full mb-4">In progress</span>
+								<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
 									Currently Building.
 								</h2>
 							</div>
-							<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3 py-1.5 rounded-full">
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200/60 dark:border-emerald-500/20 px-3 py-1.5 rounded-full">
 								<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active
 							</span>
 						</div>
-						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl">
+						<p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl">
 							Not everything ships at once. These are the directions I&apos;m actively exploring - some are side projects, some are experiments, all are intentional.
 						</p>
 
@@ -739,13 +738,13 @@ function CurrentlyBuildingSection() {
 									whileInView={{ opacity: 1, y: 0 }}
 									transition={{ delay: i * 0.07, type: "spring", stiffness: 90, damping: 18 }}
 									viewport={{ once: true, amount: 0.2 }}
-									className="rounded-2xl border border-amber-100 bg-white/70 backdrop-blur-sm p-5 hover:bg-white/90 hover:border-amber-200 transition"
+									className="rounded-2xl border border-amber-100 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-sm p-5 hover:bg-white/90 dark:hover:bg-white/[0.06] hover:border-amber-200 dark:hover:border-white/20 transition"
 								>
 									<div className="flex items-center gap-2 mb-2">
 										<span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
-										<h3 className="text-sm font-semibold text-gray-900">{item.label}</h3>
+										<h3 className="text-sm font-semibold text-gray-900 dark:text-white">{item.label}</h3>
 									</div>
-									<p className="text-gray-500 text-sm leading-relaxed pl-4">{item.desc}</p>
+									<p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed pl-4">{item.desc}</p>
 								</motion.div>
 							))}
 						</div>
@@ -753,7 +752,7 @@ function CurrentlyBuildingSection() {
 						<div className="mt-10">
 							<Link
 								href="/now"
-								className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition"
+								className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
 							>
 								See the full /now page <FontAwesomeIcon icon={faArrowRight} />
 							</Link>
@@ -859,32 +858,32 @@ function ContactCTA() {
 		<section id="contact-cta" className="py-20 md:py-28 bg-transparent">
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
 				<motion.div
-					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-16 border border-amber-200/50 bg-gradient-to-br from-[#FFFBEB] via-[#FFF8E7] to-[#FAFAF9] shadow-[0_16px_48px_-16px_rgba(245,158,11,0.22)]"
+					className="relative rounded-3xl overflow-hidden p-6 sm:p-10 md:p-16 border border-amber-200/50 dark:border-white/10 bg-gradient-to-br from-[#FFFBEB] via-[#FFF8E7] to-[#FAFAF9] dark:from-gray-900 dark:via-gray-900 dark:to-gray-900/40 shadow-[0_16px_48px_-16px_rgba(245,158,11,0.22)] dark:shadow-[0_2px_30px_-12px_rgb(0_0_0_/_0.6)]"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ type: "spring", stiffness: 80, damping: 20 }}
 					viewport={{ once: true, amount: 0.2 }}
 				>
 					<div className="pointer-events-none absolute inset-0">
-						<div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-amber-200/50 blur-3xl" />
-						<div className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-stone-200/60 blur-3xl" />
+						<div className="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-amber-200/50 dark:bg-amber-500/5 blur-3xl" />
+						<div className="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-stone-200/60 dark:bg-stone-500/5 blur-3xl" />
 					</div>
 
 					<div className="relative max-w-3xl">
-						<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-5">
+						<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 dark:text-amber-400 bg-amber-100/80 dark:bg-amber-500/10 border border-amber-200/60 dark:border-amber-500/20 px-3 py-1.5 rounded-full mb-5">
 							Let&apos;s connect
 						</span>
-						<h2 className="text-gray-900 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-5">
+						<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-5">
 							Have a project in mind, or just want to say hi?
 						</h2>
-						<p className="text-gray-500 text-base sm:text-lg leading-relaxed mb-8">
+						<p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg leading-relaxed mb-8">
 							I&apos;m always open to interesting collaborations, freelance opportunities, and
 							thoughtful conversations about the web, AI, and great software.
 						</p>
 						<div className="flex flex-wrap gap-3">
 							<Link
 								href="/contact"
-								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm"
+								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
 							>
 								<FontAwesomeIcon icon={faPaperPlane} /> Send a message
 							</Link>
@@ -892,7 +891,7 @@ function ContactCTA() {
 								href="https://github.com/gtathelegend"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-amber-200 text-gray-700 text-sm font-semibold hover:bg-amber-50 transition"
+								className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-amber-200 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-amber-50 dark:hover:bg-white/5 transition"
 							>
 								<FontAwesomeIcon icon={faArrowUpRightFromSquare} /> GitHub
 							</a>
@@ -933,7 +932,6 @@ export default function MyPage() {
 
 	return (
 		<main className="bg-transparent overflow-hidden">
-			<TerminalIntro />
 			<HeroSection
 				fullName={fullName}
 				tagline={tagline}

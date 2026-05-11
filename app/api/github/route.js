@@ -13,12 +13,17 @@ function summarize(event) {
 	switch (event.type) {
 		case "PushEvent": {
 			const commits = event.payload?.commits || [];
-			const count = event.payload?.size ?? commits.length;
+			const count =
+				event.payload?.size ||
+				event.payload?.distinct_size ||
+				commits.length;
 			const head = commits[commits.length - 1];
 			return {
 				kind: "push",
 				icon: "↑",
-				title: `Pushed ${count} commit${count === 1 ? "" : "s"}`,
+				title: count > 0
+					? `Pushed ${count} commit${count === 1 ? "" : "s"}`
+					: "Pushed commits",
 				detail: head?.message?.split("\n")[0]?.slice(0, 90) || "",
 				repo,
 				url: head ? `${url}/commit/${head.sha}` : url,

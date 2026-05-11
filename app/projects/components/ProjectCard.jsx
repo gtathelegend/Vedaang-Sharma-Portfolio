@@ -22,14 +22,14 @@ export default function ProjectCard({ project, activeCategory }) {
 
 	return (
 		<motion.div
-			className="group bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300"
+			className="group bg-white dark:bg-white/[0.03] border border-neutral-200 dark:border-white/10 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300"
 			initial={{ opacity: 0, y: 30 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			transition={{ type: "spring", duration: 0.6 }}
 			viewport={{ once: true }}>
 			{/* Image */}
 			<Link href={`/projects/${project.slug}`}>
-				<div className="relative aspect-video overflow-hidden bg-gray-100">
+				<div className="relative aspect-video overflow-hidden bg-gray-100 dark:bg-white/5">
 					<Image
 						src={thumbnail || BlurImage}
 						alt={project.title || "Project"}
@@ -49,30 +49,30 @@ export default function ProjectCard({ project, activeCategory }) {
 			{/* Content */}
 			<div className="p-5">
 				<Link href={`/projects/${project.slug}`}>
-					<h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-gray-700 transition-colors">{project.title}</h3>
+					<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">{project.title}</h3>
 				</Link>
 				{desc[0] && (
-					<p className="text-sm text-gray-600 mb-3 line-clamp-2">{desc[0]}</p>
+					<p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">{desc[0]}</p>
 				)}
 				{tech.length > 0 && (
 					<div className="flex flex-wrap gap-1.5 mb-4">
 						{tech.map((t) => (
-							<span key={t} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-md border border-gray-200">{t}</span>
+							<span key={t} className="text-xs px-2 py-1 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 rounded-md border border-gray-200 dark:border-white/10">{t}</span>
 						))}
 					</div>
 				)}
 				{/* Action links */}
-				<div className="flex items-center gap-3 pt-2 border-t border-gray-100">
-					<Link href={`/projects/${project.slug}`} className="text-xs font-semibold text-gray-900 hover:text-blue-700 transition-colors">
+				<div className="flex items-center gap-3 pt-2 border-t border-gray-100 dark:border-white/10">
+					<Link href={`/projects/${project.slug}`} className="text-xs font-semibold text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
 						Details →
 					</Link>
 					{githubUrl && (
-						<a href={githubUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 transition-colors" title="GitHub">
+						<a href={githubUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
 							<FontAwesomeIcon icon={faGithub} className="text-base" />
 						</a>
 					)}
 					{liveUrl && (
-						<a href={liveUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors" title="Live Preview">
+						<a href={liveUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
 							<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-sm" />
 						</a>
 					)}

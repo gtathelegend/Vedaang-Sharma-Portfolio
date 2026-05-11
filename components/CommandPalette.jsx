@@ -61,7 +61,7 @@ function copy(text) {
 	}
 }
 
-export default function CommandPalette() {
+export default function CommandPalette({ introReady = false }) {
 	const router = useRouter();
 	const pathname = usePathname();
 	const [open, setOpen] = useState(false);
@@ -295,34 +295,34 @@ export default function CommandPalette() {
 							role="dialog"
 							aria-label="Command palette"
 							onClick={(e) => e.stopPropagation()}
-							className="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
+							className="w-full max-w-xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden"
 							initial={{ y: 16, opacity: 0, scale: 0.98 }}
 							animate={{ y: 0, opacity: 1, scale: 1 }}
 							exit={{ y: 8, opacity: 0, scale: 0.98 }}
 							transition={{ type: "spring", stiffness: 260, damping: 24 }}
 						>
-							<div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
-								<FontAwesomeIcon icon={faMagnifyingGlass} className="text-gray-400" />
+							<div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-white/10">
+								<FontAwesomeIcon icon={faMagnifyingGlass} className="text-gray-400 dark:text-gray-500" />
 								<input
 									ref={inputRef}
 									value={query}
 									onChange={(e) => setQuery(e.target.value)}
 									onKeyDown={handleKey}
 									placeholder="Search pages, projects, or actions…"
-									className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 outline-none text-sm"
+									className="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none text-sm"
 								/>
-								<kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded">
+								<kbd className="hidden sm:inline px-1.5 py-0.5 text-[10px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded">
 									esc
 								</kbd>
 							</div>
 
 							<div ref={listRef} className="max-h-[55vh] overflow-y-auto py-2">
 								{grouped.length === 0 ? (
-									<p className="px-4 py-10 text-center text-sm text-gray-400">No matches.</p>
+									<p className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">No matches.</p>
 								) : (
 									grouped.map(([group, items]) => (
 										<div key={group} className="py-1">
-											<p className="px-4 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+											<p className="px-4 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
 												{group}
 											</p>
 											<ul>
@@ -337,24 +337,24 @@ export default function CommandPalette() {
 																onMouseEnter={() => setActive(idx)}
 																onClick={() => runItem(item)}
 																className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition ${
-																	isActive ? "bg-gray-100" : "hover:bg-gray-50"
+																	isActive ? "bg-gray-100 dark:bg-white/10" : "hover:bg-gray-50 dark:hover:bg-white/5"
 																}`}
 															>
-																<span className="w-7 h-7 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-600 text-xs">
+																<span className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 text-xs">
 																	<FontAwesomeIcon icon={item.icon} />
 																</span>
 																<span className="flex-1 min-w-0">
-																	<span className="block text-sm font-medium text-gray-900 truncate">
+																	<span className="block text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
 																		{item.label}
 																	</span>
 																	{item.hint && (
-																		<span className="block text-[11px] text-gray-400 truncate font-mono">
+																		<span className="block text-[11px] text-gray-400 dark:text-gray-500 truncate font-mono">
 																			{item.hint}
 																		</span>
 																	)}
 																</span>
 																{isActive && (
-																	<FontAwesomeIcon icon={faCircleArrowRight} className="text-gray-400 text-xs" />
+																	<FontAwesomeIcon icon={faCircleArrowRight} className="text-gray-400 dark:text-gray-500 text-xs" />
 																)}
 															</button>
 														</li>
@@ -366,19 +366,19 @@ export default function CommandPalette() {
 								)}
 							</div>
 
-							<div className="flex items-center justify-between gap-3 px-4 py-2.5 text-[11px] text-gray-500 border-t border-gray-100 bg-gray-50/60">
+							<div className="flex items-center justify-between gap-3 px-4 py-2.5 text-[11px] text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-white/10 bg-gray-50/60 dark:bg-white/[0.02]">
 								<div className="flex items-center gap-3">
 									<span>
-										<kbd className="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-semibold">↑↓</kbd>{" "}
+										<kbd className="px-1.5 py-0.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded font-semibold">↑↓</kbd>{" "}
 										navigate
 									</span>
 									<span>
-										<kbd className="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-semibold">↵</kbd>{" "}
+										<kbd className="px-1.5 py-0.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded font-semibold">↵</kbd>{" "}
 										select
 									</span>
 								</div>
 								<span className="hidden sm:inline">
-									<kbd className="px-1.5 py-0.5 bg-white border border-gray-200 rounded font-semibold">⌘K</kbd>{" "}
+									<kbd className="px-1.5 py-0.5 bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded font-semibold">⌘K</kbd>{" "}
 									anywhere
 								</span>
 							</div>
@@ -388,18 +388,22 @@ export default function CommandPalette() {
 			</AnimatePresence>
 
 			{/* Floating launcher (visible on desktop) */}
-			<button
+			<motion.button
 				type="button"
 				onClick={() => setOpen(true)}
 				aria-label="Open command palette"
-				className="hidden md:flex fixed bottom-6 right-6 z-[80] items-center gap-2 px-3.5 py-2 rounded-full bg-white/85 backdrop-blur border border-gray-200 shadow-lg text-xs font-medium text-gray-600 hover:text-gray-900 hover:bg-white transition"
+				initial={{ opacity: 0, y: 8 }}
+				animate={introReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+				transition={{ duration: 0.4, delay: introReady ? 0.6 : 0 }}
+				className="hidden md:flex fixed bottom-6 right-6 z-[80] items-center gap-2 px-3.5 py-2 rounded-full bg-white/85 dark:bg-gray-900/85 backdrop-blur border border-gray-200 dark:border-white/10 shadow-lg text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-900 transition"
+				style={{ pointerEvents: introReady ? "auto" : "none" }}
 			>
 				<FontAwesomeIcon icon={faMagnifyingGlass} />
 				<span>Quick search</span>
-				<kbd className="px-1.5 py-0.5 bg-gray-100 border border-gray-200 rounded text-[10px] font-semibold">
+				<kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/10 rounded text-[10px] font-semibold">
 					⌘K
 				</kbd>
-			</button>
+			</motion.button>
 		</>
 	);
 }

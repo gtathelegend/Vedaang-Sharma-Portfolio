@@ -23,7 +23,7 @@ export default function SectionHeader({ label, heading, className = "", id }) {
 			)}
 			<motion.h2
 				id={headingId}
-				className="text-black text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+				className="text-gray-900 dark:text-white text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
 				initial={{ opacity: 0, x: -40 }}
 				whileInView={{ opacity: 1, x: 0 }}
 				transition={{ type: "spring", delay: 0.15 }}

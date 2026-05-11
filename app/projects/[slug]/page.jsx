@@ -21,7 +21,7 @@ import Link from "next/link";
 
 function Tag({ label }) {
   return (
-    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700 border border-neutral-200">
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-white/5 text-neutral-700 dark:text-gray-300 border border-neutral-200 dark:border-white/10">
       {label}
     </span>
   );
@@ -30,12 +30,12 @@ function Tag({ label }) {
 function MetaBlock({ icon, label, children }) {
   return (
     <div className="flex gap-3 items-start">
-      <div className="mt-0.5 w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
-        <FontAwesomeIcon icon={icon} className="text-neutral-500 text-sm" />
+      <div className="mt-0.5 w-8 h-8 rounded-lg bg-neutral-100 dark:bg-white/5 flex items-center justify-center shrink-0">
+        <FontAwesomeIcon icon={icon} className="text-neutral-500 dark:text-gray-400 text-sm" />
       </div>
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 mb-0.5">{label}</p>
-        <div className="text-neutral-800 font-medium">{children}</div>
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-gray-500 mb-0.5">{label}</p>
+        <div className="text-neutral-800 dark:text-gray-200 font-medium">{children}</div>
       </div>
     </div>
   );
@@ -44,19 +44,19 @@ function MetaBlock({ icon, label, children }) {
 /* ─── loading skeleton ─────────────────────────────────── */
 function Skeleton() {
   return (
-    <div className="min-h-screen bg-white animate-pulse">
-      <div className="h-[55vh] bg-neutral-200 w-full" />
+    <div className="min-h-screen bg-white dark:bg-gray-950 animate-pulse">
+      <div className="h-[55vh] bg-neutral-200 dark:bg-white/10 w-full" />
       <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-4">
-          <div className="h-10 bg-neutral-200 rounded w-2/3" />
-          <div className="h-4 bg-neutral-200 rounded w-full" />
-          <div className="h-4 bg-neutral-200 rounded w-5/6" />
-          <div className="h-4 bg-neutral-200 rounded w-4/6" />
+          <div className="h-10 bg-neutral-200 dark:bg-white/10 rounded w-2/3" />
+          <div className="h-4 bg-neutral-200 dark:bg-white/5 rounded w-full" />
+          <div className="h-4 bg-neutral-200 dark:bg-white/5 rounded w-5/6" />
+          <div className="h-4 bg-neutral-200 dark:bg-white/5 rounded w-4/6" />
         </div>
         <div className="space-y-4">
-          <div className="h-6 bg-neutral-200 rounded w-1/2" />
-          <div className="h-4 bg-neutral-200 rounded w-full" />
-          <div className="h-4 bg-neutral-200 rounded w-2/3" />
+          <div className="h-6 bg-neutral-200 dark:bg-white/10 rounded w-1/2" />
+          <div className="h-4 bg-neutral-200 dark:bg-white/5 rounded w-full" />
+          <div className="h-4 bg-neutral-200 dark:bg-white/5 rounded w-2/3" />
         </div>
       </div>
     </div>
@@ -228,7 +228,7 @@ export default function Page(props) {
         >
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-6 bg-neutral-900 rounded-full" />
+              <div className="w-1 h-6 bg-neutral-900 dark:bg-white rounded-full" />
               <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
                 About this project
               </h2>
@@ -236,12 +236,12 @@ export default function Page(props) {
             <div className="space-y-4">
               {desc.length > 0 ? (
                 desc.map((para, i) => (
-                  <p key={i} className="text-neutral-600 text-base sm:text-lg leading-relaxed">
+                  <p key={i} className="text-neutral-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed">
                     {para}
                   </p>
                 ))
               ) : (
-                <p className="text-neutral-400 italic">No description provided.</p>
+                <p className="text-neutral-400 dark:text-gray-500 italic">No description provided.</p>
               )}
             </div>
           </div>
@@ -250,8 +250,8 @@ export default function Page(props) {
           {tech.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-1 h-6 bg-neutral-900 rounded-full" />
-                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                <div className="w-1 h-6 bg-neutral-900 dark:bg-white rounded-full" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400 dark:text-gray-500">
                   Tech Stack
                 </h2>
               </div>
@@ -268,7 +268,7 @@ export default function Page(props) {
                 href={data.preview}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-neutral-900 text-white text-sm font-medium hover:bg-neutral-700 transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
               >
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
                 Live Preview
@@ -279,7 +279,7 @@ export default function Page(props) {
                 href={data.code}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-neutral-300 text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-neutral-300 dark:border-white/15 text-neutral-800 dark:text-gray-200 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-white/5 transition"
               >
                 <FontAwesomeIcon icon={faGithub} />
                 Source Code
@@ -297,24 +297,24 @@ export default function Page(props) {
               className="mt-4"
             >
               <div className="flex items-center gap-2 mb-6">
-                <div className="w-1 h-6 bg-neutral-900 rounded-full" />
-                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                <div className="w-1 h-6 bg-neutral-900 dark:bg-white rounded-full" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-400 dark:text-gray-500">
                   Case Study
                 </h2>
               </div>
-              <div className="rounded-2xl border border-neutral-200 overflow-hidden">
+              <div className="rounded-2xl border border-neutral-200 dark:border-white/10 overflow-hidden">
                 {caseStudyRows.map((row, idx) => (
                   <div
                     key={row.label}
-                    className={`grid grid-cols-1 sm:grid-cols-[200px_1fr] ${idx !== caseStudyRows.length - 1 ? "border-b border-neutral-100" : ""}`}
+                    className={`grid grid-cols-1 sm:grid-cols-[200px_1fr] ${idx !== caseStudyRows.length - 1 ? "border-b border-neutral-100 dark:border-white/10" : ""}`}
                   >
-                    <div className="px-5 py-4 bg-neutral-50 sm:border-r border-neutral-100">
-                      <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                    <div className="px-5 py-4 bg-neutral-50 dark:bg-white/[0.03] sm:border-r border-neutral-100 dark:border-white/10">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-gray-500">
                         {row.label}
                       </p>
                     </div>
                     <div className="px-5 py-4">
-                      <p className="text-neutral-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                      <p className="text-neutral-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
                         {row.content}
                       </p>
                     </div>
@@ -322,9 +322,9 @@ export default function Page(props) {
                 ))}
               </div>
               {data.architectureDiagram && (
-                <div className="mt-4 rounded-2xl border border-neutral-200 overflow-hidden">
-                  <div className="px-5 py-3 bg-neutral-50 border-b border-neutral-100">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400">Architecture Diagram</p>
+                <div className="mt-4 rounded-2xl border border-neutral-200 dark:border-white/10 overflow-hidden">
+                  <div className="px-5 py-3 bg-neutral-50 dark:bg-white/[0.03] border-b border-neutral-100 dark:border-white/10">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-gray-500">Architecture Diagram</p>
                   </div>
                   <div className="p-4">
                     <img
@@ -346,7 +346,7 @@ export default function Page(props) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <div className="rounded-2xl border border-neutral-200 p-6 space-y-6 bg-neutral-50">
+          <div className="rounded-2xl border border-neutral-200 dark:border-white/10 p-6 space-y-6 bg-neutral-50 dark:bg-white/[0.03]">
             {data.year && (
               <MetaBlock icon={faCalendar} label="Year">
                 {data.year}
@@ -356,9 +356,9 @@ export default function Page(props) {
             {data.status && (
               <MetaBlock icon={faLayerGroup} label="Status">
                 <span className={`capitalize px-2 py-0.5 rounded-full text-xs font-semibold ${
-                  data.status === "published" ? "bg-green-100 text-green-700" :
-                  data.status === "draft" ? "bg-yellow-100 text-yellow-700" :
-                  "bg-neutral-200 text-neutral-600"
+                  data.status === "published" ? "bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400" :
+                  data.status === "draft" ? "bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400" :
+                  "bg-neutral-200 dark:bg-white/10 text-neutral-600 dark:text-gray-400"
                 }`}>
                   {data.status}
                 </span>
@@ -367,7 +367,7 @@ export default function Page(props) {
 
             {tech.length > 0 && (
               <MetaBlock icon={faCode} label="Technologies">
-                <p className="text-sm text-neutral-600 leading-relaxed">
+                <p className="text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
                   {tech.join(" · ")}
                 </p>
               </MetaBlock>
@@ -375,21 +375,21 @@ export default function Page(props) {
 
             {images.length > 0 && (
               <MetaBlock icon={faImages} label="Screenshots">
-                <p className="text-sm text-neutral-600">{images.length} image{images.length !== 1 ? "s" : ""}</p>
+                <p className="text-sm text-neutral-600 dark:text-gray-400">{images.length} image{images.length !== 1 ? "s" : ""}</p>
               </MetaBlock>
             )}
           </div>
 
           {/* Quick links card */}
           {(data.preview || data.code) && (
-            <div className="rounded-2xl border border-neutral-200 p-6 space-y-3 bg-white">
-              <p className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-4">Links</p>
+            <div className="rounded-2xl border border-neutral-200 dark:border-white/10 p-6 space-y-3 bg-white dark:bg-white/[0.03]">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-neutral-400 dark:text-gray-500 mb-4">Links</p>
               {data.preview && (
                 <a
                   href={data.preview}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between group px-4 py-3 rounded-xl bg-neutral-900 text-white hover:bg-neutral-700 transition"
+                  className="flex items-center justify-between group px-4 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-gray-900 hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
                 >
                   <span className="text-sm font-medium">Live Preview</span>
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs text-white/60 group-hover:text-white transition" />
@@ -400,10 +400,10 @@ export default function Page(props) {
                   href={data.code}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between group px-4 py-3 rounded-xl border border-neutral-200 text-neutral-800 hover:bg-neutral-50 transition"
+                  className="flex items-center justify-between group px-4 py-3 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-gray-200 hover:bg-neutral-50 dark:hover:bg-white/5 transition"
                 >
                   <span className="text-sm font-medium">GitHub Repo</span>
-                  <FontAwesomeIcon icon={faGithub} className="text-neutral-400 group-hover:text-neutral-800 transition" />
+                  <FontAwesomeIcon icon={faGithub} className="text-neutral-400 group-hover:text-neutral-800 dark:group-hover:text-white transition" />
                 </a>
               )}
             </div>
@@ -424,7 +424,7 @@ export default function Page(props) {
             {images.map((img, i) => (
               <motion.div
                 key={i}
-                className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-100 cursor-zoom-in group"
+                className="relative aspect-video rounded-2xl overflow-hidden bg-neutral-100 dark:bg-white/5 cursor-zoom-in group"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

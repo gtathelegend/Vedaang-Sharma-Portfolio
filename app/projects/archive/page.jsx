@@ -32,21 +32,21 @@ export default function Page() {
 	return (
 		<main className="overflow-hidden bg-transparent min-h-screen">
 			<div className="pt-28 md:pt-36 pb-16 md:pb-24 px-4 sm:px-8 md:px-16 max-w-6xl mx-auto">
-				<Link href="/projects" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition mb-8">
+				<Link href="/projects" className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition mb-8">
 					<FontAwesomeIcon icon={faChevronLeft} className="text-xs" /> Back to projects
 				</Link>
 				<SectionHeader label="Complete List" heading="Archive" />
-				<p className="text-gray-600 text-sm sm:text-base max-w-2xl mt-4 mb-2">
+				<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base max-w-2xl mt-4 mb-2">
 					Every project I&apos;ve worked on - including older experiments and side projects.
 				</p>
 				<div className="mt-8 overflow-x-auto">
 					<table className="w-full">
 						<thead>
-							<tr className="border-b border-gray-200">
-								<th className="text-start text-sm font-semibold text-gray-500 uppercase tracking-wider py-3 px-4">Year</th>
-								<th className="text-start text-sm font-semibold text-gray-500 uppercase tracking-wider py-3 px-4">Title</th>
-								<th className="text-start text-sm font-semibold text-gray-500 uppercase tracking-wider py-3 px-4 hidden md:table-cell">Technology</th>
-								<th className="text-start text-sm font-semibold text-gray-500 uppercase tracking-wider py-3 px-4">Links</th>
+							<tr className="border-b border-gray-200 dark:border-white/10">
+								<th className="text-start text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider py-3 px-4">Year</th>
+								<th className="text-start text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider py-3 px-4">Title</th>
+								<th className="text-start text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider py-3 px-4 hidden md:table-cell">Technology</th>
+								<th className="text-start text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider py-3 px-4">Links</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -58,33 +58,33 @@ export default function Page() {
 							)}
 							{!isLoading && !error && projects.map((project, index) => (
 								<motion.tr key={index}
-									className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 rounded-lg"
+									className="border-b border-gray-100 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors duration-200 rounded-lg"
 									initial={{ opacity: 0, y: 10 }}
 									whileInView={{ opacity: 1, y: 0 }}
 									transition={{ delay: index * 0.03 }}
 									viewport={{ once: true }}>
-									<td className="py-3 px-4 text-gray-500 text-sm font-medium">{project.year}</td>
+									<td className="py-3 px-4 text-gray-500 dark:text-gray-400 text-sm font-medium">{project.year}</td>
 									<td className="py-3 px-4">
-										<Link href={`/projects/${project.slug}`} className="text-gray-900 font-semibold hover:text-blue-700 transition-colors">
+										<Link href={`/projects/${project.slug}`} className="text-gray-900 dark:text-gray-100 font-semibold hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
 											{project.title}
 										</Link>
 									</td>
 									<td className="py-3 px-4 hidden md:table-cell">
 										<div className="flex flex-wrap gap-1">
 											{(project.tech || []).map((t, i) => (
-												<span key={i} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md">{t}</span>
+												<span key={i} className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 rounded-md">{t}</span>
 											))}
 										</div>
 									</td>
 									<td className="py-3 px-4">
 										<div className="flex items-center gap-3">
 											{(project.code || project.githubLink) && (
-												<a href={project.code || project.githubLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 transition-colors" title="GitHub">
+												<a href={project.code || project.githubLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
 													<FontAwesomeIcon icon={faGithub} className="text-lg" />
 												</a>
 											)}
 											{(project.preview || project.liveLink) && (
-												<a href={project.preview || project.liveLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors" title="Live Preview">
+												<a href={project.preview || project.liveLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
 													<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-base" />
 												</a>
 											)}

@@ -199,30 +199,30 @@ function SnakeGame() {
 
 export default function NotFound() {
 	return (
-		<main className="min-h-screen bg-white">
+		<main className="min-h-screen bg-white dark:bg-transparent">
 			<section className="pt-28 md:pt-36 pb-24 md:pb-32 px-6 sm:px-10 lg:px-16">
 				<div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 					<div>
-						<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 mb-3">
+						<p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 dark:text-gray-500 mb-3">
 							Page not found
 						</p>
-						<h1 className="text-7xl sm:text-8xl md:text-9xl font-bold text-gray-900 leading-none tracking-tight mb-6">
+						<h1 className="text-7xl sm:text-8xl md:text-9xl font-bold text-gray-900 dark:text-white leading-none tracking-tight mb-6">
 							404
 						</h1>
-						<p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-md mb-8">
+						<p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-md mb-8">
 							Looks like you&apos;ve wandered off the map. While you&apos;re here, want to play a
 							quick round of snake?
 						</p>
 						<div className="flex flex-wrap gap-3">
 							<Link
 								href="/"
-								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm"
+								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
 							>
 								Take me home
 							</Link>
 							<button
 								onClick={() => window.history.back()}
-								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition"
+								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition"
 							>
 								Go back
 							</button>

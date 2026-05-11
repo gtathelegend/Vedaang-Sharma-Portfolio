@@ -17,12 +17,10 @@ const navLinks = [
 	{ name: "Contact",        href: "/contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ introReady = false }) {
 	const [isNavOpen, setIsNavOpen] = useState(false);
-	const [mounted, setMounted] = useState(false);
 	const pathname = usePathname();
 
-	useEffect(() => { setMounted(true); }, []);
 	useEffect(() => { setIsNavOpen(false); }, [pathname]);
 
 	return (
@@ -32,8 +30,8 @@ export default function Navbar() {
 				<motion.div
 					className="w-full max-w-6xl pointer-events-auto"
 					initial={{ y: -24, opacity: 0 }}
-					animate={mounted ? { y: 0, opacity: 1 } : {}}
-					transition={{ type: "spring", stiffness: 120, damping: 22, delay: 0.05 }}
+					animate={introReady ? { y: 0, opacity: 1 } : { y: -24, opacity: 0 }}
+					transition={{ type: "spring", stiffness: 120, damping: 22, delay: introReady ? 0.5 : 0 }}
 				>
 					<div className="flex items-center justify-between gap-4 bg-white/75 dark:bg-gray-950/80 backdrop-blur-xl border border-gray-200/70 dark:border-white/10 rounded-2xl shadow-lg shadow-black/[0.06] dark:shadow-black/40 px-4 py-2.5">
 
