@@ -29,8 +29,8 @@ A complete audit of the public-facing portfolio (excluding the admin panel), fol
 ## 2. Critical Issues (fix before sharing with recruiters)
 
 ### 2.1 Placeholder identity bleeding through - credibility-breaking
-- `app/about/components/about/about.jsx:111` - bio renders **"Alvalen Shafelbilyunazra… Pasuruan, East Java, Indonesia… Universitas Negeri Malang"** instead of your name and Vivekananda Global University.
-- `app/about/page.jsx:46` - hero `alt="Alvalen Shafel"`.
+- `app/about/components/about/about.jsx:111` - bio renders a placeholder template name and location instead of your name and Vivekananda Global University.
+- `app/about/page.jsx:46` - hero `alt` uses a placeholder template name.
 - This means the "About" route - the page recruiters open right after the hero - is presenting a different person. This single bug will tank perceived professionalism more than any styling issue.
 
 ### 2.2 Garbled emojis from corrupted UTF-8 in the home page
@@ -257,8 +257,8 @@ A phased, dependency-aware plan that resolves every issue from the review. Seque
 
 | # | Task | Files | Acceptance |
 |---|---|---|---|
-| 1.1 | Replace placeholder bio (Alvalen → Vedaang, Pasuruan → your city, Universitas Negeri Malang → Vivekananda Global University) | `app/about/components/about/about.jsx:109-141` | About page reads as *you* end-to-end |
-| 1.2 | Fix `alt="Alvalen Shafel"` | `app/about/page.jsx:46` | Screen-reader & SEO show correct name |
+| 1.1 | Replace placeholder bio (template name → Vedaang, template city → your city, template university → Vivekananda Global University) | `app/about/components/about/about.jsx:109-141` | About page reads as *you* end-to-end |
+| 1.2 | Fix `alt` attribute that uses a placeholder template name | `app/about/page.jsx:46` | Screen-reader & SEO show correct name |
 | 1.3 | Re-save home page as UTF-8 to fix mojibake emojis and section comments | `app/(root)/page.jsx` lines 21–29, 148, plus all `â`/`ðŸ` comment headers | Hero badges show proper emojis; PLATFORM_CONFIG emojis render |
 | 1.4 | Typo: `Profesional` → `Professional` | `app/about/components/experience.jsx:28` | About page has correct spelling |
 | 1.5 | Fix non-existent Tailwind colors `from-stale-300`, `via-stale/70` → `from-gray-200`/`from-neutral-100` (whatever the section bg is) | `app/about/components/experience.jsx:250`, `app/about/components/education.jsx:252` | Bottom fade gradient is visible above "View More" |
