@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 export const runtime = "nodejs";
 
@@ -80,6 +81,12 @@ export async function POST(request) {
 			subject: `[Portfolio] ${safeSubject}`,
 			text,
 			html,
+		});
+		const posthog = getPostHogClient();
+		posthog.capture({
+			distinctId: email,
+			event: "contact_email_sent",
+			properties: { has_subject: !!subject },
 		});
 		return NextResponse.json({ ok: true });
 	} catch (err) {

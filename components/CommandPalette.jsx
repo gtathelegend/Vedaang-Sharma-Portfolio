@@ -24,6 +24,7 @@ import {
 	faPenNib,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import posthog from "posthog-js";
 
 const PAGES = [
 	{ icon: faHouse, label: "Home", hint: "/", href: "/", group: "Pages" },
@@ -145,6 +146,7 @@ export default function CommandPalette({ introReady = false }) {
 				onSelect: () => {
 					const a = document.createElement("a");
 					a.href = "/api/resume";
+					posthog.capture("cv_downloaded", { source: "command_palette" });
 					a.download = "Vedaang_Sharma_Resume.pdf";
 					a.click();
 				},
@@ -222,6 +224,7 @@ export default function CommandPalette({ introReady = false }) {
 
 	useEffect(() => {
 		if (open) {
+			posthog.capture("command_palette_opened");
 			setQuery("");
 			setActive(0);
 			setTimeout(() => inputRef.current?.focus(), 0);
@@ -241,6 +244,7 @@ export default function CommandPalette({ introReady = false }) {
 	const runItem = useCallback(
 		(item) => {
 			if (!item) return;
+			posthog.capture("command_palette_item_selected", { label: item.label, group: item.group });
 			if (item.onSelect) {
 				item.onSelect();
 				setOpen(false);

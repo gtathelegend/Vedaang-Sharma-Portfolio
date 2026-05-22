@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCircleNotch, faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import posthog from "posthog-js";
 
 const initialForm = { name: "", email: "", subject: "", message: "" };
 
@@ -30,6 +31,7 @@ export default function ContactForm() {
 		if (!trimmed.name || !trimmed.email || !trimmed.message) {
 			setStatus("error");
 			setErrorMsg("Please fill in your name, email and message.");
+			posthog.capture("contact_form_error", { reason: "validation", message: "Name, email and message are required." });
 			return;
 		}
 
@@ -46,9 +48,12 @@ export default function ContactForm() {
 			if (!res.ok) throw new Error(data.message || "Failed to send message");
 			setStatus("success");
 			setForm(initialForm);
+			posthog.capture("contact_form_submitted", { has_subject: !!trimmed.subject });
 		} catch (err) {
 			setStatus("error");
 			setErrorMsg(err.message || "Something went wrong. Please try again.");
+			posthog.capture("contact_form_error", { reason: "server_error", message: err.message });
+			posthog.captureException(err);
 		}
 	};
 

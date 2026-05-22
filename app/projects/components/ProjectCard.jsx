@@ -6,6 +6,7 @@ import BlurImage from "@/public/image/placeholder/blur.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import posthog from "posthog-js";
 
 export default function ProjectCard({ project, activeCategory }) {
 	const categoryMatch =
@@ -67,12 +68,12 @@ export default function ProjectCard({ project, activeCategory }) {
 						Details →
 					</Link>
 					{githubUrl && (
-						<a href={githubUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
+						<a href={githubUrl} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("project_card_github_clicked", { project: project.title, slug: project.slug })} className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
 							<FontAwesomeIcon icon={faGithub} className="text-base" />
 						</a>
 					)}
 					{liveUrl && (
-						<a href={liveUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
+						<a href={liveUrl} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("project_card_live_clicked", { project: project.title, slug: project.slug })} className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
 							<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-sm" />
 						</a>
 					)}

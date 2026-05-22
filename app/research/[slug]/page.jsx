@@ -12,6 +12,7 @@ import {
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { fetchJson } from "@/lib/api";
 import NotFound from "@/app/not-found";
+import posthog from "posthog-js";
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
@@ -163,6 +164,7 @@ export default function ResearchPaperPage(props) {
               href={paper.doiUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => posthog.capture("research_paper_doi_clicked", { paper: paper.title, slug })}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
             >
               Read Paper <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
@@ -178,6 +180,7 @@ export default function ResearchPaperPage(props) {
           )}
           <Link
             href="/contact"
+            onClick={() => posthog.capture("research_discuss_clicked", { paper: paper.title, slug })}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition"
           >
             Discuss Research <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
