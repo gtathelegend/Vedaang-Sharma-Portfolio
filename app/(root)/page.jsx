@@ -636,9 +636,25 @@ function AboutPreview() {
    Research teaser
    ───────────────────────────────────────────── */
 
-const PAPER_AREAS = ["Computer Vision", "MediaPipe", "Pose Estimation", "Real-time Systems", "Human-Centered AI"];
-
 function ResearchTeaser() {
+	const [papers, setPapers] = useState([]);
+
+	useEffect(() => {
+		let mounted = true;
+		fetchJson("/api/research/papers")
+			.then((res) => {
+				if (!mounted) return;
+				setPapers(res?.data || []);
+			})
+			.catch(() => {});
+		return () => {
+			mounted = false;
+		};
+	}, []);
+
+	const displayPapers = (papers?.length ? papers : []).slice(0, 2);
+	const hasPapers = displayPapers.length > 0;
+
 	return (
 		<SectionCard
 			id="research-teaser"
@@ -646,43 +662,103 @@ function ResearchTeaser() {
 			heading="Published Work"
 			lead="Peer-reviewed research at the intersection of computer vision and human health."
 		>
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				transition={{ type: "spring", stiffness: 90, damping: 18 }}
-				viewport={{ once: true, amount: 0.2 }}
-				className="rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-6 sm:p-8"
-			>
-				<div className="flex flex-wrap items-center gap-3 mb-5">
-					<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 px-3 py-1.5 rounded-full">
-						Published · 2024
-					</span>
-					<span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-full">
-						Peer-Reviewed
-					</span>
-				</div>
-				<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
-					PostureSense: Real-Time Posture Detection and Correction Using MediaPipe and Computer Vision
-				</h3>
-				<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed mb-5">
-					A real-time posture monitoring system using MediaPipe pose landmarks and computer vision - providing corrective feedback via webcam with no wearables required.
-				</p>
-				<div className="flex flex-wrap gap-2 mb-6">
-					{PAPER_AREAS.map((area) => (
-						<span key={area} className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300">
-							{area}
-						</span>
-					))}
-				</div>
-				<div className="flex flex-wrap gap-3">
-					<PrimaryLink href="/research">
-						View research <FontAwesomeIcon icon={faArrowRight} />
-					</PrimaryLink>
-					<SecondaryLink href="/projects/posturesense">
-						See project
-					</SecondaryLink>
-				</div>
-			</motion.div>
+			<div className="space-y-4">
+				{hasPapers
+					? displayPapers.map((paper, index) => {
+						const paperAreas = paper?.areas?.length ? paper.areas : [];
+						const primaryHref = paper?.projectSlug ? `/research/${paper.projectSlug}` : "/research";
+						const projectHref = paper?.projectSlug ? `/projects/${paper.projectSlug}` : null;
+						return (
+							<motion.div
+								key={paper?.id || paper?._id || `${paper?.title || "paper"}-${index}`}
+								initial={{ opacity: 0, y: 20 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								transition={{ type: "spring", stiffness: 90, damping: 18, delay: index * 0.05 }}
+								viewport={{ once: true, amount: 0.2 }}
+								className="rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-6 sm:p-8"
+							>
+								<div className="flex flex-wrap items-center gap-3 mb-5">
+									<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 px-3 py-1.5 rounded-full">
+										Published{paper?.year ? ` · ${paper.year}` : ""}
+									</span>
+									<span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-full">
+										{paper?.venue || "Peer-Reviewed"}
+									</span>
+								</div>
+								<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
+									{paper?.title || "Untitled publication"}
+								</h3>
+								{paper?.abstract && (
+									<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed mb-5">
+										{paper.abstract}
+									</p>
+								)}
+								{paperAreas.length > 0 && (
+									<div className="flex flex-wrap gap-2 mb-6">
+										{paperAreas.map((area) => (
+											<span key={area} className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300">
+												{area}
+											</span>
+										))}
+									</div>
+								)}
+								<div className="flex flex-wrap gap-3">
+									<PrimaryLink href={primaryHref}>
+										View research <FontAwesomeIcon icon={faArrowRight} />
+									</PrimaryLink>
+									{paper?.doiUrl ? (
+										<SecondaryLink href={paper.doiUrl} external>
+											Read paper <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+										</SecondaryLink>
+									) : projectHref ? (
+										<SecondaryLink href={projectHref}>
+											See project
+										</SecondaryLink>
+									) : null}
+								</div>
+							</motion.div>
+						);
+					})
+					: (
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							transition={{ type: "spring", stiffness: 90, damping: 18 }}
+							viewport={{ once: true, amount: 0.2 }}
+							className="rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-6 sm:p-8"
+						>
+							<div className="flex flex-wrap items-center gap-3 mb-5">
+								<span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 px-3 py-1.5 rounded-full">
+									Published · 2024
+								</span>
+								<span className="text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-full">
+									Peer-Reviewed
+								</span>
+							</div>
+							<h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
+								PostureSense: Real-Time Posture Detection and Correction Using MediaPipe and Computer Vision
+							</h3>
+							<p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed mb-5">
+								A real-time posture monitoring system using MediaPipe pose landmarks and computer vision - providing corrective feedback via webcam with no wearables required.
+							</p>
+							<div className="flex flex-wrap gap-2 mb-6">
+								{["Computer Vision", "MediaPipe", "Pose Estimation", "Real-time Systems", "Human-Centered AI"].map((area) => (
+									<span key={area} className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300">
+										{area}
+									</span>
+								))}
+							</div>
+							<div className="flex flex-wrap gap-3">
+								<PrimaryLink href="/research">
+									View research <FontAwesomeIcon icon={faArrowRight} />
+								</PrimaryLink>
+								<SecondaryLink href="/projects/posturesense">
+									See project
+								</SecondaryLink>
+							</div>
+						</motion.div>
+					)}
+			</div>
 		</SectionCard>
 	);
 }
