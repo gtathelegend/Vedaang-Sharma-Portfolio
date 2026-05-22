@@ -13,19 +13,35 @@ export default async function sitemap() {
     { path: "/skills", changeFrequency: "monthly", priority: 0.7 },
     { path: "/now", changeFrequency: "weekly", priority: 0.6 },
     { path: "/projects", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/projects/archive", changeFrequency: "monthly", priority: 0.5 },
     { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
     { path: "/research", changeFrequency: "monthly", priority: 0.6 },
     { path: "/certifications", changeFrequency: "monthly", priority: 0.5 },
     { path: "/contact", changeFrequency: "yearly", priority: 0.4 },
   ];
 
-  const items = staticRoutes.map((r) => ({
-    url: url(r.path),
-    lastModified: new Date(),
-    changeFrequency: r.changeFrequency,
-    priority: r.priority,
-  }));
+  const items = [];
+  const seen = new Set();
+
+  function addItem({ path, lastModified, changeFrequency, priority }) {
+    const absoluteUrl = url(path);
+    if (seen.has(absoluteUrl)) return;
+    seen.add(absoluteUrl);
+    items.push({
+      url: absoluteUrl,
+      lastModified: lastModified || new Date(),
+      changeFrequency,
+      priority,
+    });
+  }
+
+  staticRoutes.forEach((r) => {
+    addItem({
+      path: r.path,
+      lastModified: new Date(),
+      changeFrequency: r.changeFrequency,
+      priority: r.priority,
+    });
+  });
 
   try {
     const admin = createAdminClient();
@@ -47,10 +63,16 @@ export default async function sitemap() {
       ]);
 
     (projects || [])
-      .filter((p) => p?.slug && p.show === true && p.status !== "draft")
+      .filter(
+        (p) =>
+          p?.slug &&
+          p.show !== false &&
+          p.status !== "draft" &&
+          p.status !== "archived",
+      )
       .forEach((p) => {
-        items.push({
-          url: url(`/projects/${p.slug}`),
+        addItem({
+          path: `/projects/${p.slug}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
           changeFrequency: "monthly",
           priority: 0.7,
@@ -60,8 +82,8 @@ export default async function sitemap() {
     (posts || [])
       .filter((p) => p?.slug && p.published === true)
       .forEach((p) => {
-        items.push({
-          url: url(`/blog/${p.slug}`),
+        addItem({
+          path: `/blog/${p.slug}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
           changeFrequency: "monthly",
           priority: 0.6,
@@ -71,8 +93,8 @@ export default async function sitemap() {
     (papers || [])
       .filter((p) => p?.project_slug)
       .forEach((p) => {
-        items.push({
-          url: url(`/research/${p.project_slug}`),
+        addItem({
+          path: `/research/${p.project_slug}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
           changeFrequency: "yearly",
           priority: 0.5,
