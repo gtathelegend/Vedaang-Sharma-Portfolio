@@ -208,7 +208,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						animate="visible"
 					>
 						<a
-							href="/api/resume"
+							href={cvUrl || "/api/resume"}
 							download="Vedaang_Sharma_Resume.pdf"
 							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
 						>
@@ -928,7 +928,7 @@ export default function MyPage() {
 	const heroSubtitle =
 		settings?.hero_subtitle ||
 		"Building intelligent applications - AI agents, distributed systems, computer vision, and cloud-native architectures. CS student, published researcher, full-stack engineer.";
-	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/docs/cv.pdf";
+	const cvUrl = settings?.resume_pdf_url || settings?.cv_url || "/api/resume";
 
 	return (
 		<main className="bg-transparent overflow-hidden">
