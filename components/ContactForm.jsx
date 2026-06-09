@@ -2,10 +2,19 @@
 
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faCircleNotch, faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+	faPaperPlane,
+	faCircleNotch,
+	faCircleCheck,
+	faCircleXmark,
+	faUser,
+	faEnvelope,
+	faTag,
+} from "@fortawesome/free-solid-svg-icons";
 import posthog from "posthog-js";
 
 const initialForm = { name: "", email: "", subject: "", message: "", website: "" };
+const MESSAGE_MAX = 4000;
 
 export default function ContactForm() {
 	const [form, setForm] = useState(initialForm);
@@ -60,11 +69,15 @@ export default function ContactForm() {
 
 	const isLoading = status === "loading";
 
-	const inputClass =
-		"w-full rounded-xl border border-white/12 bg-white/8 px-3.5 py-2.5 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-400/50 focus:border-violet-400/40 transition backdrop-blur-sm";
+	const fieldClass =
+		"w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.03] px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-400/40 focus:border-violet-400 dark:focus:border-violet-400/60 transition";
+	const fieldWithIcon = `${fieldClass} pl-10`;
+	const labelClass = "text-xs font-semibold text-gray-700 dark:text-gray-200";
+	const iconClass =
+		"pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm";
 
 	return (
-		<form onSubmit={handleSubmit} className="w-full">
+		<form onSubmit={handleSubmit} className="w-full" aria-label="Contact form" noValidate>
 			{/* Honeypot: hidden from real users; bots tend to fill it. */}
 			<div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}>
 				<label>
@@ -79,61 +92,76 @@ export default function ContactForm() {
 					/>
 				</label>
 			</div>
+
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
 				<label className="flex flex-col gap-1.5">
-					<span className="text-xs font-semibold text-white">Name</span>
-					<input
-						type="text"
-						name="name"
-						value={form.name}
-						onChange={handleChange}
-						required
-						autoComplete="name"
-						maxLength={120}
-						placeholder="Your name"
-						className={inputClass}
-					/>
+					<span className={labelClass}>Name</span>
+					<div className="relative">
+						<FontAwesomeIcon icon={faUser} className={iconClass} aria-hidden="true" />
+						<input
+							type="text"
+							name="name"
+							value={form.name}
+							onChange={handleChange}
+							required
+							autoComplete="name"
+							maxLength={120}
+							placeholder="Your name"
+							className={fieldWithIcon}
+						/>
+					</div>
 				</label>
 				<label className="flex flex-col gap-1.5">
-					<span className="text-xs font-semibold text-white">Email</span>
-					<input
-						type="email"
-						name="email"
-						value={form.email}
-						onChange={handleChange}
-						required
-						autoComplete="email"
-						maxLength={200}
-						placeholder="you@example.com"
-						className={inputClass}
-					/>
+					<span className={labelClass}>Email</span>
+					<div className="relative">
+						<FontAwesomeIcon icon={faEnvelope} className={iconClass} aria-hidden="true" />
+						<input
+							type="email"
+							name="email"
+							value={form.email}
+							onChange={handleChange}
+							required
+							autoComplete="email"
+							maxLength={200}
+							placeholder="you@example.com"
+							className={fieldWithIcon}
+						/>
+					</div>
 				</label>
 			</div>
 
 			<label className="flex flex-col gap-1.5 mb-4">
-				<span className="text-xs font-semibold text-white">Subject</span>
-				<input
-					type="text"
-					name="subject"
-					value={form.subject}
-					onChange={handleChange}
-					maxLength={200}
-					placeholder="What's this about?"
-					className={inputClass}
-				/>
+				<span className={labelClass}>Subject</span>
+				<div className="relative">
+					<FontAwesomeIcon icon={faTag} className={iconClass} aria-hidden="true" />
+					<input
+						type="text"
+						name="subject"
+						value={form.subject}
+						onChange={handleChange}
+						maxLength={200}
+						placeholder="What's this about?"
+						className={fieldWithIcon}
+					/>
+				</div>
 			</label>
 
-			<label className="flex flex-col gap-1.5 mb-7">
-				<span className="text-xs font-semibold text-white">Message</span>
+			<label className="flex flex-col gap-1.5 mb-6">
+				<span className="flex items-center justify-between">
+					<span className={labelClass}>Message</span>
+					<span className="text-[11px] tabular-nums text-gray-400 dark:text-gray-500">
+						{form.message.length}/{MESSAGE_MAX}
+					</span>
+				</span>
 				<textarea
 					name="message"
 					value={form.message}
 					onChange={handleChange}
 					required
-					rows={5}
-					maxLength={4000}
+					rows={6}
+					maxLength={MESSAGE_MAX}
 					placeholder="Tell me about your project, idea, or question…"
-					className={`${inputClass} resize-y min-h-[120px]`}
+					className={`${fieldClass} resize-y min-h-[140px]`}
 				/>
 			</label>
 
@@ -141,25 +169,28 @@ export default function ContactForm() {
 				<button
 					type="submit"
 					disabled={isLoading}
-					className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500 hover:from-violet-400 hover:via-indigo-400 hover:to-blue-400 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 disabled:opacity-60 disabled:cursor-not-allowed"
+					className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-xl bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500 hover:from-violet-400 hover:via-indigo-400 hover:to-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
 				>
 					<FontAwesomeIcon
 						icon={isLoading ? faCircleNotch : faPaperPlane}
 						className={isLoading ? "animate-spin" : ""}
+						aria-hidden="true"
 					/>
 					{isLoading ? "Sending…" : "Send message"}
 				</button>
 
-				{status === "success" && (
-					<span className="inline-flex items-center gap-1.5 text-sm text-emerald-400">
-						<FontAwesomeIcon icon={faCircleCheck} /> Message sent - I&apos;ll be in touch soon.
-					</span>
-				)}
-				{status === "error" && (
-					<span className="inline-flex items-center gap-1.5 text-sm text-red-400">
-						<FontAwesomeIcon icon={faCircleXmark} /> {errorMsg}
-					</span>
-				)}
+				<div role="status" aria-live="polite" className="min-h-[1.25rem]">
+					{status === "success" && (
+						<span className="inline-flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
+							<FontAwesomeIcon icon={faCircleCheck} aria-hidden="true" /> Message sent - I&apos;ll be in touch soon.
+						</span>
+					)}
+					{status === "error" && (
+						<span className="inline-flex items-center gap-1.5 text-sm text-red-500 dark:text-red-400">
+							<FontAwesomeIcon icon={faCircleXmark} aria-hidden="true" /> {errorMsg}
+						</span>
+					)}
+				</div>
 			</div>
 		</form>
 	);

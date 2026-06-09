@@ -19,7 +19,6 @@ import {
 	faPaperPlane,
 	faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import GithubActivity from "@/components/GithubActivity";
 import {
 	ActivityIcon,
 	CodepenIcon,
@@ -827,99 +826,14 @@ function CurrentlyBuildingSection() {
 
 						<div className="mt-10">
 							<Link
-								href="/now"
+								href="/contact"
 								className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
 							>
-								See the full /now page <FontAwesomeIcon icon={faArrowRight} />
+								Let&apos;s talk about it <FontAwesomeIcon icon={faArrowRight} />
 							</Link>
 						</div>
 					</div>
 				</motion.div>
-			</div>
-		</section>
-	);
-}
-
-/* ─────────────────────────────────────────────
-   Live section (GitHub activity + /now teaser)
-   ───────────────────────────────────────────── */
-
-function NowTeaser() {
-	const [now, setNow] = useState(null);
-
-	useEffect(() => {
-		let mounted = true;
-		fetchJson("/api/now")
-			.then((res) => mounted && setNow(res.data || {}))
-			.catch(() => mounted && setNow({}));
-		return () => {
-			mounted = false;
-		};
-	}, []);
-
-	const items = [
-		{ label: "Focus", value: now?.focus, fallback: "Building polished portfolio + side projects." },
-		{ label: "Learning", value: now?.learning, fallback: "Generative AI tooling & system design." },
-		{ label: "Reading", value: now?.reading, fallback: "Designing Data‑Intensive Applications." },
-	].map((x) => ({ ...x, value: x.value || x.fallback }));
-
-	return (
-		<div className="rounded-2xl border border-white/70 dark:border-white/10 bg-white/55 dark:bg-white/[0.03] backdrop-blur-xl p-6 sm:p-8 shadow-[0_4px_24px_-8px_rgba(245,158,11,0.10)] dark:shadow-sm h-full">
-			<div className="flex items-center justify-between gap-3 mb-5">
-				<div>
-					<h3 className="text-sm font-semibold text-gray-900 dark:text-white">What I&apos;m up to now</h3>
-					<p className="text-[11px] text-gray-500 dark:text-gray-400">A snapshot, refreshed whenever life shifts.</p>
-				</div>
-				<span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/30 px-2 py-1 rounded-full">
-					<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> live
-				</span>
-			</div>
-
-			<dl className="space-y-4">
-				{items.map((it) => (
-					<div key={it.label}>
-						<dt className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-1">
-							{it.label}
-						</dt>
-						<dd className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">{it.value}</dd>
-					</div>
-				))}
-			</dl>
-
-			<Link
-				href="/now"
-				className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300"
-			>
-				Read the full /now page <FontAwesomeIcon icon={faArrowRight} />
-			</Link>
-		</div>
-	);
-}
-
-function LiveSection() {
-	return (
-		<section id="live" className="py-20 md:py-28 bg-transparent">
-			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					transition={{ type: "spring", stiffness: 90, damping: 18 }}
-					viewport={{ once: true, amount: 0.2 }}
-					className="mb-10 max-w-2xl"
-				>
-					<SectionLabel>Live signals</SectionLabel>
-					<h2 className="text-gray-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight mb-4">
-						What&apos;s happening, right now.
-					</h2>
-					<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
-						The static parts of a portfolio age fast. These two panels stay current - pulled
-						from GitHub and a hand‑written /now page.
-					</p>
-				</motion.div>
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					<GithubActivity />
-					<NowTeaser />
-				</div>
 			</div>
 		</section>
 	);
@@ -1018,7 +932,6 @@ export default function MyPage() {
 			<FeaturedProjectsPreview />
 			<ResearchTeaser />
 			<CurrentlyBuildingSection />
-			<LiveSection />
 			<AboutPreview />
 			<ContactCTA />
 		</main>

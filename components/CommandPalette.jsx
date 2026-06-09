@@ -11,7 +11,6 @@ import {
 	faCode,
 	faFolderOpen,
 	faPaperPlane,
-	faClock,
 	faMagnifyingGlass,
 	faCircleArrowRight,
 	faCopy,
@@ -34,7 +33,6 @@ const PAGES = [
 	{ icon: faFolderOpen, label: "Project archive", hint: "/projects/archive", href: "/projects/archive", group: "Pages" },
 	{ icon: faBookOpen, label: "Research", hint: "/research", href: "/research", group: "Pages" },
 	{ icon: faPenNib, label: "Blog", hint: "/blog", href: "/blog", group: "Pages" },
-	{ icon: faClock, label: "/now", hint: "/now", href: "/now", group: "Pages" },
 	{ icon: faPaperPlane, label: "Contact", hint: "/contact", href: "/contact", group: "Pages" },
 ];
 
