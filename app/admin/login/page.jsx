@@ -6,13 +6,26 @@ import { createClient } from "@/lib/supabase/client";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
 
+/**
+ * Only allow redirects to internal /admin paths (never /admin/login, never a
+ * protocol-relative "//host" URL). Prevents open-redirect via the ?next param.
+ */
+function safeNext(next) {
+  const fallback = "/admin/dashboard";
+  if (!next || typeof next !== "string") return fallback;
+  if (!next.startsWith("/admin")) return fallback;
+  if (next.startsWith("//")) return fallback;
+  if (next === "/admin/login") return fallback;
+  return next;
+}
+
 function AdminLoginContent() {
   const [form, setForm]       = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const router                = useRouter();
   const searchParams          = useSearchParams();
   const { toast, showToast }  = useAdminToast();
-  const nextPath              = searchParams.get("next") || "/admin/dashboard";
+  const nextPath              = safeNext(searchParams.get("next"));
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

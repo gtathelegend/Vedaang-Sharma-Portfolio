@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { rateLimit, getClientIp } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
 
@@ -16,11 +17,28 @@ function escapeHtml(value = "") {
 }
 
 export async function POST(request) {
+	// Rate limit by IP (5 requests / 10 min). Blocks spam / mail-relay abuse.
+	const ip = getClientIp(request);
+	const { success, reset } = await rateLimit(`contact:${ip}`, { limit: 5, windowMs: 10 * 60 * 1000 });
+	if (!success) {
+		const retryAfter = Math.max(1, Math.ceil((reset - Date.now()) / 1000));
+		return NextResponse.json(
+			{ message: "Too many messages. Please try again later." },
+			{ status: 429, headers: { "Retry-After": String(retryAfter) } },
+		);
+	}
+
 	let body;
 	try {
 		body = await request.json();
 	} catch {
 		return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
+	}
+
+	// Honeypot: a hidden field real users never fill. If populated, silently accept
+	// (return 200 so bots get no signal) but do not send anything.
+	if ((body?.website || "").toString().trim() !== "") {
+		return NextResponse.json({ ok: true });
 	}
 
 	const name = (body?.name || "").toString().trim().slice(0, 120);
@@ -83,8 +101,9 @@ export async function POST(request) {
 			html,
 		});
 		const posthog = getPostHogClient();
+		// Use a non-PII distinct id; keep the email out of the identity graph.
 		posthog.capture({
-			distinctId: email,
+			distinctId: `contact:${ip}`,
 			event: "contact_email_sent",
 			properties: { has_subject: !!subject },
 		});

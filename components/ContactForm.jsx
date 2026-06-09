@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faCircleNotch, faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import posthog from "posthog-js";
 
-const initialForm = { name: "", email: "", subject: "", message: "" };
+const initialForm = { name: "", email: "", subject: "", message: "", website: "" };
 
 export default function ContactForm() {
 	const [form, setForm] = useState(initialForm);
@@ -26,6 +26,7 @@ export default function ContactForm() {
 			email: form.email.trim(),
 			subject: form.subject.trim(),
 			message: form.message.trim(),
+			website: form.website, // honeypot — sent as-is, must stay empty for humans
 		};
 
 		if (!trimmed.name || !trimmed.email || !trimmed.message) {
@@ -64,6 +65,20 @@ export default function ContactForm() {
 
 	return (
 		<form onSubmit={handleSubmit} className="w-full">
+			{/* Honeypot: hidden from real users; bots tend to fill it. */}
+			<div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}>
+				<label>
+					Website
+					<input
+						type="text"
+						name="website"
+						value={form.website}
+						onChange={handleChange}
+						tabIndex={-1}
+						autoComplete="off"
+					/>
+				</label>
+			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
 				<label className="flex flex-col gap-1.5">
 					<span className="text-xs font-semibold text-white">Name</span>

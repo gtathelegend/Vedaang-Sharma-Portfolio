@@ -1,14 +1,10 @@
-import { createClient }      from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin }      from "@/lib/auth/requireAdmin";
+import { apiError }          from "@/lib/apiError";
 import { mapBlogPost }       from "@/lib/supabase/mappers";
 import { NextResponse }      from "next/server";
 
-async function requireAuth() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
+// Public read: only ever returns a published post (drafts are 404 to non-admins).
 export async function GET(request, { params }) {
   const { id } = await params;
   const admin  = createAdminClient();
@@ -26,43 +22,43 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const user = await requireAuth();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const { id } = await params;
-  const body   = await request.json();
-  const admin  = createAdminClient();
+    const body  = await request.json();
+    const admin = createAdminClient();
 
-  const isPublished = body.published ?? false;
-  const record = {
-    title:        body.title,
-    slug:         body.slug,
-    excerpt:      body.excerpt  || null,
-    content:      body.content  || null,
-    published:    isPublished,
-    published_at: isPublished ? (body.publishedAt || new Date().toISOString()) : null,
-    sort_order:   Number(body.sortOrder) || 0,
-    updated_at:   new Date().toISOString(),
-  };
+    const isPublished = body.published ?? false;
+    const record = {
+      title:        body.title,
+      slug:         body.slug,
+      excerpt:      body.excerpt  || null,
+      content:      body.content  || null,
+      published:    isPublished,
+      published_at: isPublished ? (body.publishedAt || new Date().toISOString()) : null,
+      sort_order:   Number(body.sortOrder) || 0,
+      updated_at:   new Date().toISOString(),
+    };
 
-  const { data, error } = await admin.from("blog_posts").update(record).eq("id", id).select().single();
-  if (error) {
-    console.error("[PUT /api/blog/posts/:id]", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    const { data, error } = await admin.from("blog_posts").update(record).eq("id", id).select().single();
+    if (error) throw error;
+    return NextResponse.json({ data: mapBlogPost(data) });
+  } catch (err) {
+    return apiError(err, "PUT /api/blog/posts/:id");
   }
-  return NextResponse.json({ data: mapBlogPost(data) });
 }
 
 export async function DELETE(request, { params }) {
-  const user = await requireAuth();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const { id } = await params;
-  const admin  = createAdminClient();
-  const { error } = await admin.from("blog_posts").delete().eq("id", id);
-  if (error) {
-    console.error("[DELETE /api/blog/posts/:id]", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    const admin = createAdminClient();
+    const { error } = await admin.from("blog_posts").delete().eq("id", id);
+    if (error) throw error;
+    return NextResponse.json({ message: "Deleted" });
+  } catch (err) {
+    return apiError(err, "DELETE /api/blog/posts/:id");
   }
-  return NextResponse.json({ message: "Deleted" });
 }

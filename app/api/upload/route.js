@@ -1,38 +1,40 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { apiError, clientError } from "@/lib/apiError";
+import { validateUpload, UploadError } from "@/lib/upload/validateUpload";
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+export const runtime = "nodejs";
 
+export async function POST(request) {
   try {
+    await requireAdmin();
+
     const formData = await request.formData();
     const file = formData.get("file");
-    if (!file) return NextResponse.json({ message: "No file provided" }, { status: 400 });
+
+    // Validate type (allowlist), size (<=5MB) and real magic bytes. Rejects
+    // SVG/HTML/scripts/executables and content-type spoofing.
+    const { buffer, contentType, ext } = await validateUpload(file, "image");
+
+    // Filename is generated server-side — never derived from the client name.
+    const fileName = `${Date.now()}-${crypto.randomUUID()}.${ext}`;
 
     const admin = createAdminClient();
-    
-    // Generate unique filename
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-    
-    const { data, error } = await admin.storage
+    const { error } = await admin.storage
       .from("images")
-      .upload(fileName, file, {
+      .upload(fileName, buffer, {
+        contentType,
         cacheControl: "3600",
         upsert: false,
       });
 
     if (error) throw error;
 
-    const { data: { publicUrl } } = admin.storage
-      .from("images")
-      .getPublicUrl(fileName);
-
+    const { data: { publicUrl } } = admin.storage.from("images").getPublicUrl(fileName);
     return NextResponse.json({ url: publicUrl });
-  } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+  } catch (err) {
+    if (err instanceof UploadError) return clientError(err.message);
+    return apiError(err, "POST /api/upload");
   }
 }

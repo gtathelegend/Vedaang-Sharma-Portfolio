@@ -1,52 +1,49 @@
-import { createClient }          from "@/lib/supabase/server";
 import { createAdminClient }     from "@/lib/supabase/admin";
+import { requireAdmin }          from "@/lib/auth/requireAdmin";
+import { apiError }              from "@/lib/apiError";
 import { mapResearchInterest }   from "@/lib/supabase/mappers";
 import { NextResponse }          from "next/server";
 
-async function requireAuth() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 export async function PUT(request, { params }) {
-  const user = await requireAuth();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const body  = await request.json();
-  const admin = createAdminClient();
+    const body  = await request.json();
+    const admin = createAdminClient();
 
-  const record = {
-    title:       body.title,
-    description: body.description || null,
-    icon_name:   body.iconName    || "faCode",
-    sort_order:  Number(body.sortOrder) || 0,
-    updated_at:  new Date().toISOString(),
-  };
+    const record = {
+      title:       body.title,
+      description: body.description || null,
+      icon_name:   body.iconName    || "faCode",
+      sort_order:  Number(body.sortOrder) || 0,
+      updated_at:  new Date().toISOString(),
+    };
 
-  const { data, error } = await admin
-    .from("research_interests")
-    .update(record)
-    .eq("id", params.id)
-    .select()
-    .single();
+    const { data, error } = await admin
+      .from("research_interests")
+      .update(record)
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (error) {
-    console.error("[PUT /api/research/interests/:id]", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    if (error) throw error;
+    return NextResponse.json({ data: mapResearchInterest(data) });
+  } catch (err) {
+    return apiError(err, "PUT /api/research/interests/:id");
   }
-  return NextResponse.json({ data: mapResearchInterest(data) });
 }
 
 export async function DELETE(request, { params }) {
-  const user = await requireAuth();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const admin = createAdminClient();
-  const { error } = await admin.from("research_interests").delete().eq("id", params.id);
-  if (error) {
-    console.error("[DELETE /api/research/interests/:id]", error);
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    const admin = createAdminClient();
+    const { error } = await admin.from("research_interests").delete().eq("id", id);
+    if (error) throw error;
+    return NextResponse.json({ message: "Deleted" });
+  } catch (err) {
+    return apiError(err, "DELETE /api/research/interests/:id");
   }
-  return NextResponse.json({ message: "Deleted" });
 }

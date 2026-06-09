@@ -1,29 +1,36 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
+import { apiError } from "@/lib/apiError";
 import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const body = await request.json();
-  const { data, error } = await createAdminClient().from("categories").update({
-    name:       body.name,
-    slug:       body.slug,
-    sort_order: Number(body.sortOrder) || 0,
-  }).eq("id", params.id).select().single();
+    const body = await request.json();
+    const { data, error } = await createAdminClient().from("categories").update({
+      name:       body.name,
+      slug:       body.slug,
+      sort_order: Number(body.sortOrder) || 0,
+    }).eq("id", id).select().single();
 
-  if (error) return NextResponse.json({ message: error.message }, { status: 500 });
-  return NextResponse.json({ data });
+    if (error) throw error;
+    return NextResponse.json({ data });
+  } catch (err) {
+    return apiError(err, "PUT /api/categories/:id");
+  }
 }
 
 export async function DELETE(request, { params }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  try {
+    await requireAdmin();
+    const { id } = await params;
 
-  const { error } = await createAdminClient().from("categories").delete().eq("id", params.id);
-  if (error) return NextResponse.json({ message: error.message }, { status: 500 });
-  return NextResponse.json({ message: "Deleted" });
+    const { error } = await createAdminClient().from("categories").delete().eq("id", id);
+    if (error) throw error;
+    return NextResponse.json({ message: "Deleted" });
+  } catch (err) {
+    return apiError(err, "DELETE /api/categories/:id");
+  }
 }

@@ -7,10 +7,6 @@ module.exports = withBundleAnalyzer({
 		remotePatterns: [
 			{
 				protocol: "https",
-				hostname: "i.scdn.co",
-			},
-			{
-				protocol: "https",
 				hostname: "*.supabase.co",
 				pathname: "/storage/v1/object/public/**",
 			},
@@ -45,6 +41,24 @@ module.exports = withBundleAnalyzer({
 	},
 	skipTrailingSlashRedirect: true,
 	async headers() {
+		// Report-only CSP: surfaces violations (browser console) without breaking
+		// the app. Tune it against real reports before switching to enforcing
+		// (rename the header to "Content-Security-Policy"). Kept permissive for
+		// Next.js inline runtime, PostHog (proxied via /ingest), Supabase and Vercel.
+		const csp = [
+			"default-src 'self'",
+			"base-uri 'self'",
+			"object-src 'none'",
+			"frame-ancestors 'none'",
+			"form-action 'self'",
+			"script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+			"style-src 'self' 'unsafe-inline'",
+			"img-src 'self' data: blob: https://*.supabase.co",
+			"font-src 'self' data:",
+			"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.i.posthog.com https://vitals.vercel-insights.com",
+			"upgrade-insecure-requests",
+		].join("; ");
+
 		return [
 			{
 				source: "/sitemap.xml.gz",
@@ -73,6 +87,22 @@ module.exports = withBundleAnalyzer({
 					{
 						key: "X-XSS-Protection",
 						value: "1; mode=block",
+					},
+					{
+						key: "Strict-Transport-Security",
+						value: "max-age=63072000; includeSubDomains; preload",
+					},
+					{
+						key: "Referrer-Policy",
+						value: "strict-origin-when-cross-origin",
+					},
+					{
+						key: "Permissions-Policy",
+						value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+					},
+					{
+						key: "Content-Security-Policy-Report-Only",
+						value: csp,
 					},
 				],
 			},

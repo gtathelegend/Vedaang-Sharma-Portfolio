@@ -78,7 +78,6 @@ const emptyForm = {
   meta_title: "",
   meta_description: "",
   og_image: "",
-  spotify_enabled: true,
   about_bio: "",
   quote_text: "",
 };
@@ -232,15 +231,6 @@ export default function AdminSettingsPage() {
           <h3 className="text-base font-semibold text-slate-700 border-b pb-2">SEO</h3>
           <AdminFormInput label="Meta Title" name="meta_title" value={form.meta_title} onChange={handleChange} />
           <AdminFormTextarea label="Meta Description" name="meta_description" value={form.meta_description} onChange={handleChange} />
-        </section>
-
-        {/* Feature Flags */}
-        <section className="bg-white rounded-xl shadow p-6 space-y-3">
-          <h3 className="text-base font-semibold text-slate-700 border-b pb-2">Feature Flags</h3>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="spotify_enabled" checked={!!form.spotify_enabled} onChange={handleChange} />
-            Show Spotify widget
-          </label>
         </section>
 
         <div className="flex justify-end">
