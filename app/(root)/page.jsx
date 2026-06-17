@@ -18,6 +18,7 @@ import {
 	faUser,
 	faPaperPlane,
 	faArrowUpRightFromSquare,
+	faCertificate,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	ActivityIcon,
@@ -763,6 +764,207 @@ function ResearchTeaser() {
 }
 
 /* ─────────────────────────────────────────────
+   Education preview
+   ───────────────────────────────────────────── */
+
+function EducationPreview() {
+	const [educationList, setEducationList] = useState(null);
+
+	useEffect(() => {
+		let mounted = true;
+		fetchJson("/api/education")
+			.then((res) => mounted && setEducationList(res?.data || []))
+			.catch(() => mounted && setEducationList([]));
+		return () => {
+			mounted = false;
+		};
+	}, []);
+
+	const display = (educationList || []).slice(0, 2);
+
+	// Hide the whole section if loaded and empty
+	if (educationList !== null && display.length === 0) return null;
+
+	return (
+		<SectionCard
+			id="education-preview"
+			label="Background"
+			heading="Education"
+			lead="Where I'm building my foundation in computer science and engineering."
+		>
+			{educationList === null ? (
+				<div className="space-y-4 animate-pulse">
+					{[1, 2].map((i) => (
+						<div key={i} className="h-36 rounded-2xl bg-gray-100 dark:bg-white/5" />
+					))}
+				</div>
+			) : (
+				<>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						{display.map((ed, index) => {
+							const subjects = (ed.summary || "")
+								.split(/[,\n]/)
+								.map((s) => s.trim())
+								.filter(Boolean)
+								.slice(0, 4);
+							return (
+								<motion.div
+									key={ed._id || ed.id || index}
+									initial={{ opacity: 0, y: 20 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									transition={{ type: "spring", stiffness: 90, damping: 18, delay: index * 0.06 }}
+									viewport={{ once: true, amount: 0.2 }}
+									className="relative rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-6 overflow-hidden"
+								>
+									<div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-400 to-amber-600" />
+									<div className="pl-3">
+										<div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+											<span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.2rem] text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 px-3 py-1 rounded-full">
+												{ed.startYear} – {ed.endYear}
+											</span>
+											{ed.gpa && (
+												<span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+													<span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+													GPA {ed.gpa}
+												</span>
+											)}
+										</div>
+										<h3 className="text-lg font-bold text-gray-900 dark:text-white leading-snug">
+											{ed.institute}
+										</h3>
+										<p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
+											{ed.degree}
+										</p>
+										{subjects.length > 0 && (
+											<div className="mt-4 flex flex-wrap gap-2">
+												{subjects.map((subject, i) => (
+													<span
+														key={i}
+														className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-white/10"
+													>
+														{subject}
+													</span>
+												))}
+											</div>
+										)}
+									</div>
+								</motion.div>
+							);
+						})}
+					</div>
+					<div className="mt-8">
+						<PrimaryLink href="/about">
+							More about my background <FontAwesomeIcon icon={faArrowRight} />
+						</PrimaryLink>
+					</div>
+				</>
+			)}
+		</SectionCard>
+	);
+}
+
+/* ─────────────────────────────────────────────
+   Certifications preview
+   ───────────────────────────────────────────── */
+
+const CERT_CATEGORY_COLORS = {
+	AI:       "bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-500/20",
+	DevOps:   "bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-300 border-orange-100 dark:border-orange-500/20",
+	Cloud:    "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-500/20",
+	Security: "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 border-red-100 dark:border-red-500/20",
+	Backend:  "bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-300 border-green-100 dark:border-green-500/20",
+	Frontend: "bg-cyan-50 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border-cyan-100 dark:border-cyan-500/20",
+	Mobile:   "bg-pink-50 dark:bg-pink-500/10 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-500/20",
+};
+
+function CertificationsPreview() {
+	const [certs, setCerts] = useState(null);
+
+	useEffect(() => {
+		let mounted = true;
+		fetchJson("/api/certifications")
+			.then((res) => mounted && setCerts(res?.data || []))
+			.catch(() => mounted && setCerts([]));
+		return () => {
+			mounted = false;
+		};
+	}, []);
+
+	const display = (certs || []).slice(0, 6);
+
+	// Hide the whole section if loaded and empty
+	if (certs !== null && display.length === 0) return null;
+
+	return (
+		<SectionCard
+			id="certifications-preview"
+			label="Credentials"
+			heading="Certifications"
+			lead="Curated credentials in AI, cloud, and engineering - the ones that reflect where I focus."
+		>
+			{certs === null ? (
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-pulse">
+					{[1, 2, 3].map((i) => (
+						<div key={i} className="h-32 rounded-2xl bg-gray-100 dark:bg-white/5" />
+					))}
+				</div>
+			) : (
+				<>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{display.map((cert, i) => (
+							<motion.div
+								key={cert.id || i}
+								initial={{ opacity: 0, y: 20 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								transition={{ delay: i * 0.06, type: "spring", stiffness: 90, damping: 18 }}
+								viewport={{ once: true, amount: 0.2 }}
+								className="group rounded-2xl border border-amber-100 dark:border-white/10 bg-white/90 dark:bg-white/[0.03] p-5 hover:border-amber-200 dark:hover:border-white/20 hover:shadow-md transition"
+							>
+								<div className="flex items-start justify-between gap-3 mb-3">
+									<div className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center flex-shrink-0">
+										<FontAwesomeIcon icon={faCertificate} className="text-gray-600 dark:text-gray-400 text-sm" />
+									</div>
+									{cert.category && (
+										<span
+											className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full border ${CERT_CATEGORY_COLORS[cert.category] || "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10"}`}
+										>
+											{cert.category}
+										</span>
+									)}
+								</div>
+								<h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-snug mb-1.5">
+									{cert.name}
+								</h3>
+								<div className="flex items-center justify-between gap-2">
+									<p className="text-xs text-gray-500 dark:text-gray-400">
+										{cert.issuer}{cert.year ? ` · ${cert.year}` : ""}
+									</p>
+									{cert.url && (
+										<a
+											href={cert.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
+										>
+											<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+										</a>
+									)}
+								</div>
+							</motion.div>
+						))}
+					</div>
+					<div className="mt-8">
+						<PrimaryLink href="/certifications">
+							View all certifications <FontAwesomeIcon icon={faArrowRight} />
+						</PrimaryLink>
+					</div>
+				</>
+			)}
+		</SectionCard>
+	);
+}
+
+/* ─────────────────────────────────────────────
    Currently Building section
    ───────────────────────────────────────────── */
 
@@ -931,6 +1133,8 @@ export default function MyPage() {
 			<SkillsPreview />
 			<FeaturedProjectsPreview />
 			<ResearchTeaser />
+			<EducationPreview />
+			<CertificationsPreview />
 			<CurrentlyBuildingSection />
 			<AboutPreview />
 			<ContactCTA />
