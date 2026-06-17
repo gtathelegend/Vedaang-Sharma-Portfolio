@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://vedaangsharma.dev/sitemap.xml

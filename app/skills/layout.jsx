@@ -2,8 +2,13 @@ import Footer from "@/components/Footer";
 
 export const metadata = {
 	title: "Skills",
-	description:
-		"Skills, tools and technologies - frontend, backend, AI/ML, mobile, devops, and databases - that I work with day-to-day.",
+	description: "Skills, tools, and technologies Vedaang Sharma works with day-to-day — frontend, backend, AI/ML, mobile, DevOps, and databases.",
+	alternates: { canonical: "/skills" },
+	openGraph: {
+		title: "Skills | Vedaang Sharma",
+		description: "Skills, tools, and technologies Vedaang Sharma works with day-to-day — frontend, backend, AI/ML, mobile, DevOps, and databases.",
+		url: "/skills",
+	},
 };
 
 export default function Layout({ children }) {
