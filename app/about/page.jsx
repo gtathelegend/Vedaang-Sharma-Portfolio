@@ -1,74 +1,181 @@
 "use client";
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { fetchJson } from "@/lib/api";
+
+import HeroImage from "@/public/image/me1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import About from "./components/about/about.jsx";
-import Experience from "./components/experience.jsx";
-import Education from "./components/education.jsx";
-import Certifications from "./components/certifications/certifications.jsx";
-import Quote from "./components/quote/quote.jsx";
-import Hero from "@/public/image/me1.jpg";
+import { faDownload, faGraduationCap, faBriefcase, faAward, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 
-export default function Page() {
-	useEffect(() => { window.scrollTo(0, 0); }, []);
+import {
+  Button,
+  Card,
+  CardBody,
+  Section,
+  Container,
+  Heading,
+  Badge,
+  Tag,
+  Timeline,
+  CTA,
+  PageTransition,
+} from "@/components/ui";
 
-	return (
-		<main className="overflow-hidden bg-transparent">
-			{/* Hero */}
-			<section className="relative min-h-[100svh] md:h-screen flex justify-center items-center overflow-hidden pt-24 md:pt-0 pb-12 md:pb-0">
-				<div className="pointer-events-none absolute inset-0 -z-10">
-					<div className="absolute top-1/3 -left-24 h-72 w-72 rounded-full bg-gray-100 dark:bg-white/5 blur-3xl opacity-70" />
-				</div>
-				<motion.div
-					className="z-0 hidden md:block md:absolute top-0 right-0 h-full w-[40vw]"
-					initial={{ x: 80, opacity: 0 }}
-					animate={{ x: 0, opacity: 1 }}
-					transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}>
-					<div className="relative h-full w-full transition-all duration-700">
-						<Image src={Hero} fill className="object-cover object-top" alt="Vedaang Sharma" placeholder="blur" priority sizes="(max-width: 768px) 0px, 40vw" />
-						<div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent dark:from-gray-950 dark:via-gray-950/60" />
-					</div>
-				</motion.div>
-				<div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16">
-					<Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition mb-8">
-						<FontAwesomeIcon icon={faChevronLeft} className="text-xs" /> Back home
-					</Link>
-					<div className="md:max-w-[58%] lg:max-w-[52%]">
-						<motion.p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 dark:text-gray-500 mb-3"
-							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.05 }}>
-							Get to know me
-						</motion.p>
-						<motion.h1 className="text-gray-900 dark:text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
-							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.15 }}>
-							About Me
-						</motion.h1>
-						<motion.p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl mb-8"
-							initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ type: "spring", delay: 0.25 }}>
-							A bit about who I am, where I come from, and what gets me excited about
-							building software.
-						</motion.p>
-						<motion.div className="flex flex-wrap gap-3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", delay: 0.35 }}>
-							<a href="#about-section"
-								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm">
-								Read more <FontAwesomeIcon icon={faArrowRight} />
-							</a>
-							<Link href="/skills"
-								className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition">
-								See my skills
-							</Link>
-						</motion.div>
-					</div>
-				</div>
-			</section>
+export default function AboutPage() {
+  const [experiences, setExperiences] = useState([]);
+  const [education, setEducation] = useState([]);
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-			<div id="about-section"><About /></div>
-			<Experience />
-			<Education />
-			<Certifications />
-			<Quote />
-		</main>
-	);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    Promise.all([
+      fetchJson("/api/experience").catch(() => ({ data: [] })),
+      fetchJson("/api/education").catch(() => ({ data: [] })),
+      fetchJson("/api/settings").catch(() => ({ data: {} })),
+    ]).then(([expRes, eduRes, setRes]) => {
+      setExperiences(expRes.data || []);
+      setEducation(eduRes.data || []);
+      setSettings(setRes.data || {});
+      setLoading(false);
+    });
+  }, []);
+
+  const formattedTimeline = experiences.map((exp) => ({
+    id: exp.id,
+    period: exp.period || exp.duration || (exp.year ? `${exp.year}` : ""),
+    title: exp.role || exp.title,
+    subtitle: exp.company || exp.organization,
+    description: exp.description || exp.summary,
+    tags: exp.skills || exp.technologies || [],
+  }));
+
+  const fullName = settings?.full_name || "Vedaang Sharma";
+
+  return (
+    <PageTransition>
+      {/* ── 1. HERO / ABOUT OVERVIEW ── */}
+      <Section spacing="none" className="pt-28 pb-16">
+        <Container size="lg">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <Badge variant="gold" size="lg">
+                Engineering &amp; Journey
+              </Badge>
+              <h1 className="font-heading font-bold text-4xl sm:text-5xl md:text-6xl text-[#181713] dark:text-[#F7F5DC] tracking-tight leading-tight">
+                Building with technical precision &amp; algorithmic curiosity.
+              </h1>
+              <p className="text-base sm:text-lg text-[#57534E] dark:text-[#9E9A8B] leading-relaxed">
+                I&apos;m Vedaang Sharma — a Computer Science student, full-stack engineer, and AI researcher focused on designing resilient distributed systems, intelligent web applications, and computer vision models.
+              </p>
+              <p className="text-sm sm:text-base text-[#57534E] dark:text-[#9E9A8B] leading-relaxed">
+                My work spans low-latency backend architectures, deep learning model deployment, and human-centered user experiences. I thrive on solving hard engineering challenges and translating research into production systems.
+              </p>
+              <div className="pt-4 flex flex-wrap gap-4">
+                <Button href="/contact" variant="gold" size="md">
+                  Get In Touch
+                </Button>
+                <Button href="/api/resume" variant="outline" size="md" icon={<FontAwesomeIcon icon={faDownload} />}>
+                  Download Resume
+                </Button>
+              </div>
+            </div>
+
+            {/* Portrait Frame */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-full max-w-sm aspect-[4/5] rounded-2xl overflow-hidden border border-[#E3DEC3] dark:border-[#33312B] bg-[#F0EDD4] dark:bg-[#1C1B17] shadow-editorial">
+                <Image
+                  src={HeroImage}
+                  alt={fullName}
+                  fill
+                  priority
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ── 2. EXPERIENCE TIMELINE ── */}
+      <Section bg="alt" spacing="default">
+        <Container size="lg">
+          <div className="max-w-3xl mb-12">
+            <Heading
+              level={2}
+              badge="Journey Timeline"
+              badgeVariant="orange"
+              subtitle="Chronological work history, internships, and engineering positions."
+            >
+              Work Experience
+            </Heading>
+          </div>
+
+          {formattedTimeline.length > 0 ? (
+            <Timeline items={formattedTimeline} />
+          ) : (
+            <div className="text-sm font-mono text-[#787467]">Loading experience journey...</div>
+          )}
+        </Container>
+      </Section>
+
+      {/* ── 3. EDUCATION ── */}
+      {education.length > 0 && (
+        <Section spacing="default">
+          <Container size="lg">
+            <div className="max-w-3xl mb-12">
+              <Heading
+                level={2}
+                badge="Academic Background"
+                badgeVariant="gold"
+                subtitle="Formal degree program and specialized coursework."
+              >
+                Education
+              </Heading>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {education.map((edu) => (
+                <Card key={edu.id || edu.degree} variant="warm" className="p-6">
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <Badge variant="gold" size="sm">{edu.year || edu.period || "CS"}</Badge>
+                    <FontAwesomeIcon icon={faGraduationCap} className="text-[#FF8A00]" />
+                  </div>
+                  <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC] mb-1">
+                    {edu.degree || edu.title}
+                  </h3>
+                  <p className="text-sm font-mono text-[#57534E] dark:text-[#9E9A8B] mb-3">
+                    {edu.institution || edu.school}
+                  </p>
+                  {edu.description && (
+                    <p className="text-xs text-[#4A473E] dark:text-[#D1CDBC] leading-relaxed">
+                      {edu.description}
+                    </p>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* ── 4. PHILOSOPHY QUOTE ── */}
+      <Section bg="surface" spacing="default">
+        <Container size="md">
+          <Card variant="warm" className="p-8 sm:p-12 text-center relative overflow-hidden">
+            <FontAwesomeIcon icon={faQuoteLeft} className="text-4xl text-[#FFC233]/40 mb-4" />
+            <blockquote className="font-heading font-bold text-xl sm:text-2xl text-[#181713] dark:text-[#F7F5DC] leading-relaxed mb-4">
+              &ldquo;Great engineering isn&apos;t just about making code work; it&apos;s about building resilient, understandable, and elegant systems that empower users.&rdquo;
+            </blockquote>
+            <p className="text-xs font-mono uppercase tracking-widest text-[#FF8A00]">
+              &mdash; Vedaang Sharma
+            </p>
+          </Card>
+        </Container>
+      </Section>
+    </PageTransition>
+  );
 }

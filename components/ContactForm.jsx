@@ -70,11 +70,11 @@ export default function ContactForm() {
 	const isLoading = status === "loading";
 
 	const fieldClass =
-		"w-full rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.03] px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-400/40 focus:border-violet-400 dark:focus:border-violet-400/60 transition";
+		"w-full rounded-xl border border-[#E3DEC3] dark:border-[#33312B] bg-[#FAF8EC] dark:bg-[#1A1915] px-3.5 py-2.5 text-sm text-[#181713] dark:text-[#F7F5DC] placeholder-[#9E9A8B] focus:outline-none focus:ring-2 focus:ring-[#FFC233] focus:border-[#FFC233] transition";
 	const fieldWithIcon = `${fieldClass} pl-10`;
-	const labelClass = "text-xs font-semibold text-gray-700 dark:text-gray-200";
+	const labelClass = "text-xs font-mono font-semibold uppercase tracking-wider text-[#57534E] dark:text-[#9E9A8B]";
 	const iconClass =
-		"pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm";
+		"pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#787467] text-sm";
 
 	return (
 		<form onSubmit={handleSubmit} className="w-full" aria-label="Contact form" noValidate>
