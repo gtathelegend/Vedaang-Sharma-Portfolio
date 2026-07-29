@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getAggregatedKnowledge } from "@/lib/ask/knowledgeAggregator";
 import { answerQuestion } from "@/lib/ask/askEngine";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request) {
   try {
     const body = await request.json();

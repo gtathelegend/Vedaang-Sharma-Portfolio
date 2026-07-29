@@ -49,14 +49,14 @@ module.exports = withBundleAnalyzer({
 			"default-src 'self'",
 			"base-uri 'self'",
 			"object-src 'none'",
-			"frame-ancestors 'none'",
+			"frame-ancestors 'self' https://*.vercel.live https://vercel.live",
+			"frame-src 'self' https://*.vercel.live https://vercel.live",
 			"form-action 'self'",
-			"script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-			"style-src 'self' 'unsafe-inline'",
-			"img-src 'self' data: blob: https://*.supabase.co",
-			"font-src 'self' data:",
-			"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.i.posthog.com https://vitals.vercel-insights.com",
-			"upgrade-insecure-requests",
+			"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.live https://vercel.live https://*.posthog.com https://*.i.posthog.com",
+			"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+			"img-src 'self' data: blob: https://*.supabase.co https://*.vercel.live https://vercel.live",
+			"font-src 'self' data: https://fonts.gstatic.com",
+			"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.i.posthog.com https://vitals.vercel-insights.com https://*.vercel.live wss://*.vercel.live https://vercel.live",
 		].join("; ");
 
 		return [
