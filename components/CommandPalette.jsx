@@ -27,6 +27,7 @@ import posthog from "posthog-js";
 
 const PAGES = [
 	{ icon: faHouse, label: "Home", hint: "/", href: "/", group: "Pages" },
+	{ icon: faUser, label: "Ask Vedaang AI", hint: "/ask", href: "/ask", group: "Pages" },
 	{ icon: faUser, label: "About", hint: "/about", href: "/about", group: "Pages" },
 	{ icon: faCode, label: "Skills", hint: "/skills", href: "/skills", group: "Pages" },
 	{ icon: faFolderOpen, label: "Projects", hint: "/projects", href: "/projects", group: "Pages" },
