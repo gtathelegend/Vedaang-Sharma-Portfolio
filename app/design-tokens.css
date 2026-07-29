@@ -1,76 +1,106 @@
 /* ═══════════════════════════════════════════════════════════════
-   Design Tokens - Single Source of Truth
+   Portfolio V2 Design Tokens - Single Source of Truth
+   Warm Editorial Aesthetic & Engineering Portfolio
    ═══════════════════════════════════════════════════════════════ */
 
 :root,
-[data-theme="light"],
-[data-theme="mono"] {
-	/* ── Brand ── */
-	--color-accent: #1e40af;
-	--color-accent-hover: #1e3a8a;
-	--color-accent-light: #dbeafe;
-	--color-accent-muted: #93c5fd;
+[data-theme="light"] {
+	/* ── Editorial Brand & Accents ── */
+	--color-accent-gold: #FFC233;
+	--color-accent-gold-hover: #E5AC25;
+	--color-accent-gold-muted: rgba(255, 194, 51, 0.15);
+	
+	--color-accent-orange: #FF8A00;
+	--color-accent-orange-hover: #E07900;
+	--color-accent-orange-muted: rgba(255, 138, 0, 0.15);
 
-	/* ── Surfaces ── */
-	--color-bg: #ffffff;
-	--color-bg-alt: #f9fafb;
-	--color-surface: #ffffff;
-	--color-surface-hover: #f3f4f6;
+	--color-accent-red: #CE2929;
+	--color-accent-red-hover: #B52222;
+	--color-accent-red-muted: rgba(206, 41, 41, 0.15);
 
-	/* ── Text ── */
-	--color-text: #111827;
-	--color-text-secondary: #4b5563;
-	--color-text-muted: #6b7280;
-	--color-text-faint: #9ca3af;
+	--color-accent: var(--color-accent-orange);
+	--color-accent-hover: var(--color-accent-orange-hover);
+
+	/* ── Surfaces (Warm Cream Aesthetic) ── */
+	--color-bg: #F7F5DC;
+	--color-bg-alt: #F0EDD4;
+	--color-surface: #FFFFFF;
+	--color-surface-hover: #FAF8EA;
+	--color-surface-card: #FAF8EC;
+
+	/* ── Text (High contrast editorial readability) ── */
+	--color-text: #181713;
+	--color-text-secondary: #4A473E;
+	--color-text-muted: #787467;
+	--color-text-faint: #A19C8E;
 
 	/* ── Borders ── */
-	--color-border: #e5e7eb;
-	--color-border-light: #f3f4f6;
+	--color-border: #E3DEC3;
+	--color-border-light: #EFEBCF;
+	--color-border-strong: #C9C4A6;
 
 	color-scheme: light;
 }
 
 [data-theme="dark"] {
-	/* ── Brand ── */
-	--color-accent: #60a5fa;
-	--color-accent-hover: #93c5fd;
-	--color-accent-light: #1e3a8a;
-	--color-accent-muted: #1e40af;
+	/* ── Editorial Brand & Accents (Dark) ── */
+	--color-accent-gold: #FFC233;
+	--color-accent-gold-hover: #FFD266;
+	--color-accent-gold-muted: rgba(255, 194, 51, 0.2);
 
-	/* ── Surfaces ── */
-	--color-bg: #0a0a0c;
-	--color-bg-alt: #111114;
-	--color-surface: #15151a;
-	--color-surface-hover: #1d1d24;
+	--color-accent-orange: #FF8A00;
+	--color-accent-orange-hover: #FFA333;
+	--color-accent-orange-muted: rgba(255, 138, 0, 0.2);
+
+	--color-accent-red: #CE2929;
+	--color-accent-red-hover: #E04848;
+	--color-accent-red-muted: rgba(206, 41, 41, 0.2);
+
+	--color-accent: var(--color-accent-gold);
+	--color-accent-hover: var(--color-accent-gold-hover);
+
+	/* ── Surfaces (Dark Warm Editorial) ── */
+	--color-bg: #141310;
+	--color-bg-alt: #1C1B17;
+	--color-surface: #22211C;
+	--color-surface-hover: #2A2923;
+	--color-surface-card: #1E1D19;
 
 	/* ── Text ── */
-	--color-text: #f5f5f5;
-	--color-text-secondary: #d4d4d8;
-	--color-text-muted: #a1a1aa;
-	--color-text-faint: #71717a;
+	--color-text: #F7F5DC;
+	--color-text-secondary: #D1CDBC;
+	--color-text-muted: #9E9A8B;
+	--color-text-faint: #6E6B5F;
 
 	/* ── Borders ── */
-	--color-border: #27272a;
-	--color-border-light: #1f1f24;
+	--color-border: #33312B;
+	--color-border-light: #282722;
+	--color-border-strong: #4A473F;
 
 	color-scheme: dark;
 }
 
 :root {
-	/* ── Radius ── */
-	--radius-sm: 0.5rem;
-	--radius-md: 0.75rem;
-	--radius-lg: 1rem;
-	--radius-xl: 1.25rem;
-	--radius-2xl: 1.5rem;
+	/* ── Radius (Minimal, Editorial Curves) ── */
+	--radius-xs: 0.25rem;  /* 4px */
+	--radius-sm: 0.375rem; /* 6px */
+	--radius-md: 0.5rem;   /* 8px */
+	--radius-lg: 0.75rem;  /* 12px */
+	--radius-xl: 1rem;     /* 16px */
+	--radius-2xl: 1.5rem;  /* 24px */
 	--radius-full: 9999px;
 
-	/* ── Shadows ── */
-	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+	/* ── Shadows (Warm, Editorial Depth) ── */
+	--shadow-subtle: 0 1px 3px 0 rgba(24, 23, 19, 0.05);
+	--shadow-editorial: 0 4px 12px -2px rgba(24, 23, 19, 0.08);
+	--shadow-hover: 0 12px 24px -4px rgba(24, 23, 19, 0.12);
 
-	/* ── Typography scale (fluid) ── */
-	--font-body: var(--font-poppins), system-ui, sans-serif;
-	--font-heading: var(--font-jost), system-ui, sans-serif;
+	/* ── Typography Stack ── */
+	--font-heading: var(--font-space-grotesk), system-ui, sans-serif;
+	--font-body: var(--font-inter), system-ui, sans-serif;
+	--font-mono: var(--font-jetbrains-mono), monospace;
+
+	/* ── Spacing Scale Primitives ── */
+	--space-section-padding-y: clamp(4rem, 8vw, 8rem);
+	--space-container-max: 76rem;
 }

@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Jost, Poppins } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
@@ -11,16 +11,22 @@ import ShellChrome from "@/components/ShellChrome";
 import AuroraBackground from "@/components/AuroraBackground";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 
-const jost = Jost({
+const spaceGrotesk = Space_Grotesk({
 	subsets: ["latin"],
 	weight: ["400", "500", "600", "700"],
-	variable: "--font-jost",
+	variable: "--font-space-grotesk",
 });
 
-const poppins = Poppins({
+const inter = Inter({
 	subsets: ["latin"],
 	weight: ["300", "400", "500", "600", "700"],
-	variable: "--font-poppins",
+	variable: "--font-inter",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+	subsets: ["latin"],
+	weight: ["400", "500", "600"],
+	variable: "--font-jetbrains-mono",
 });
 
 export const viewport = {
@@ -136,7 +142,7 @@ const websiteJsonLd = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en" className={`${jost.variable} ${poppins.variable}`} suppressHydrationWarning>
+		<html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
 			<head>
 				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 				{/* Structured data — parsed by Google for sitelinks & Knowledge Panel */}
@@ -149,10 +155,10 @@ export default function RootLayout({ children }) {
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
 				/>
 			</head>
-			<body className="font-poppins text-gray-900 dark:text-gray-100 selection:bg-blue-600 selection:text-white">
+			<body className="font-body text-[#181713] dark:text-[#F7F5DC] bg-[#F7F5DC] dark:bg-[#141310] selection:bg-[#FFC233] selection:text-[#181713] antialiased">
 				<ClientTopProgressBar />
 				<ShellChrome />
-				<div className="relative isolate min-h-screen bg-white dark:bg-gray-950">
+				<div className="relative isolate min-h-screen bg-[#F7F5DC] dark:bg-[#141310]">
 					<AuroraBackground />
 					{children}
 				</div>

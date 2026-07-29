@@ -3,6 +3,21 @@
 
 @import "tailwindcss";
 
+@theme {
+	--font-heading: var(--font-space-grotesk), system-ui, sans-serif;
+	--font-body: var(--font-inter), system-ui, sans-serif;
+	--font-mono: var(--font-jetbrains-mono), monospace;
+
+	--color-cream: #F7F5DC;
+	--color-cream-alt: #F0EDD4;
+	--color-ink: #181713;
+	--color-ink-muted: #4A473E;
+
+	--color-accent-gold: #FFC233;
+	--color-accent-orange: #FF8A00;
+	--color-accent-red: #CE2929;
+}
+
 /* Enable Tailwind's `dark:` variant when [data-theme="dark"] is set on <html>. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -11,6 +26,7 @@ html {
 	font-size: 16px;
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
+	font-family: var(--font-body);
 }
 
 @media (min-width: 1280px) {
@@ -22,6 +38,7 @@ html {
 body {
 	color: var(--color-text);
 	background-color: var(--color-bg);
+	font-family: var(--font-body);
 	transition:
 		background-color 0.25s ease,
 		color 0.25s ease;
@@ -29,10 +46,15 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-heading);
+	letter-spacing: -0.02em;
 }
 
 .title {
 	font-family: var(--font-heading);
+}
+
+code, kbd, pre, samp, .font-mono {
+	font-family: var(--font-mono);
 }
 
 .section {

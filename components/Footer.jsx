@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Container from "@/components/ui/Container";
 
 const FOOTER_LINKS = [
 	{
@@ -33,79 +34,96 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
 	return (
-		<footer className="bg-gradient-to-b from-[#FFFBEB]/80 to-[#FAFAF9]/80 border-t border-amber-200/40 dark:border-[color:var(--color-border)] dark:bg-gradient-to-b dark:from-[color:var(--color-bg)] dark:to-[color:var(--color-bg-alt)]">
-			{/* CTA strip */}
-			<div className="flex justify-center items-center py-12 md:py-16 px-6">
-				<motion.div
-					className="text-center"
-					initial={{ opacity: 0, y: 30 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					transition={{ type: "spring", delay: 0.1 }}
-					viewport={{ once: true }}>
-					<span className="inline-block text-[10px] font-bold uppercase tracking-[.35rem] text-amber-700 bg-amber-100/80 border border-amber-200/60 px-3 py-1.5 rounded-full mb-5 dark:text-amber-200 dark:bg-amber-400/10 dark:border-amber-400/20">
-						Interested?
-					</span>
-					<h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-4 dark:text-[color:var(--color-text)]">
-						Let&apos;s Work Together
-					</h2>
-					<Link
-						href="/contact"
-						className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition shadow-sm dark:bg-[color:var(--color-text)] dark:text-[color:var(--color-bg)] dark:hover:bg-[color:var(--color-text-secondary)]">
-						Get In Touch →
-					</Link>
-				</motion.div>
+		<footer className="bg-[#F0EDD4]/60 dark:bg-[#1A1915] border-t border-[#E3DEC3] dark:border-[#33312B] text-[#181713] dark:text-[#F7F5DC]">
+			{/* CTA Strip */}
+			<div className="py-12 md:py-16 border-b border-[#E3DEC3]/60 dark:border-[#33312B]/60">
+				<Container size="lg">
+					<motion.div
+						className="text-center max-w-2xl mx-auto"
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.4 }}
+						viewport={{ once: true }}
+					>
+						<span className="inline-block text-[11px] font-mono font-bold uppercase tracking-widest text-[#FF8A00] dark:text-[#FFC233] bg-[#FF8A00]/10 dark:bg-[#FFC233]/10 border border-[#FF8A00]/20 dark:border-[#FFC233]/20 px-3 py-1 rounded-full mb-4">
+							Interested in collaborating?
+						</span>
+						<h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-[#181713] dark:text-[#F7F5DC] mb-4">
+							Let&apos;s Work Together
+						</h2>
+						<p className="text-sm sm:text-base text-[#57534E] dark:text-[#9E9A8B] mb-6 leading-relaxed">
+							Have an AI engineering project, research inquiry, or open position? Let&apos;s talk.
+						</p>
+						<Link
+							href="/contact"
+							className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#181713] text-[#F7F5DC] dark:bg-[#F7F5DC] dark:text-[#181713] text-sm font-semibold hover:bg-[#2A2823] dark:hover:bg-[#EFECCA] transition-all shadow-subtle"
+						>
+							<span>Get In Touch</span>
+							<span>&rarr;</span>
+						</Link>
+					</motion.div>
+				</Container>
 			</div>
 
 			{/* Link columns */}
-			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 py-10 border-t border-amber-100/60 dark:border-[color:var(--color-border)]">
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-					{/* Brand column */}
-					<div className="col-span-2 md:col-span-1">
-						<p className="text-base font-bold text-gray-900 mb-1 dark:text-[color:var(--color-text)]">Vedaang Sharma</p>
-						<p className="text-xs text-gray-500 leading-relaxed max-w-[180px] dark:text-[color:var(--color-text-muted)]">
-							Full Stack &amp; AI Systems Developer
-						</p>
-					</div>
-					{/* Nav columns */}
-					{FOOTER_LINKS.map((col) => (
-						<div key={col.group}>
-							<p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-3 dark:text-amber-300">
-								{col.group}
+			<div className="py-12">
+				<Container size="lg">
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+						{/* Brand column */}
+						<div className="col-span-2 md:col-span-1">
+							<Link href="/" className="font-heading font-bold text-lg text-[#181713] dark:text-[#F7F5DC] block mb-1">
+								Vedaang Sharma
+							</Link>
+							<p className="text-xs text-[#57534E] dark:text-[#9E9A8B] leading-relaxed max-w-[200px]">
+								Full Stack &amp; AI Systems Developer
 							</p>
-							<ul className="space-y-2">
-								{col.links.map((link) => (
-									<li key={link.label}>
-										{link.external ? (
-											<a
-												href={link.href}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-sm text-gray-600 hover:text-gray-900 transition dark:text-[color:var(--color-text-secondary)] dark:hover:text-[color:var(--color-text)]"
-											>
-												{link.label}
-											</a>
-										) : (
-											<Link
-												href={link.href}
-												className="text-sm text-gray-600 hover:text-gray-900 transition dark:text-[color:var(--color-text-secondary)] dark:hover:text-[color:var(--color-text)]"
-											>
-												{link.label}
-											</Link>
-										)}
-									</li>
-								))}
-							</ul>
 						</div>
-					))}
-				</div>
+
+						{/* Nav columns */}
+						{FOOTER_LINKS.map((col) => (
+							<div key={col.group}>
+								<p className="text-xs font-mono font-bold uppercase tracking-wider text-[#FF8A00] dark:text-[#FFC233] mb-3">
+									{col.group}
+								</p>
+								<ul className="space-y-2">
+									{col.links.map((link) => (
+										<li key={link.label}>
+											{link.external ? (
+												<a
+													href={link.href}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-sm text-[#57534E] hover:text-[#181713] dark:text-[#9E9A8B] dark:hover:text-[#F7F5DC] transition-colors"
+												>
+													{link.label}
+												</a>
+											) : (
+												<Link
+													href={link.href}
+													className="text-sm text-[#57534E] hover:text-[#181713] dark:text-[#9E9A8B] dark:hover:text-[#F7F5DC] transition-colors"
+												>
+													{link.label}
+												</Link>
+											)}
+										</li>
+									))}
+								</ul>
+							</div>
+						))}
+					</div>
+				</Container>
 			</div>
 
 			{/* Copyright */}
-			<div className="flex justify-center items-center py-4 border-t border-amber-100/60 dark:border-[color:var(--color-border)]">
-				<p className="text-gray-500 text-sm dark:text-[color:var(--color-text-muted)]">
-					&copy;{new Date().getFullYear()}{" "}
-					<span className="text-gray-900 font-medium dark:text-[color:var(--color-text)]">Vedaang Sharma</span>
-				</p>
+			<div className="py-6 border-t border-[#E3DEC3]/60 dark:border-[#33312B]/60">
+				<Container size="lg" className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#787467] dark:text-[#9E9A8B]">
+					<p>
+						&copy;{new Date().getFullYear()} <span className="font-semibold text-[#181713] dark:text-[#F7F5DC]">Vedaang Sharma</span>. All rights reserved.
+					</p>
+					<p className="text-[11px]">
+						Portfolio V2 &middot; Designed with Warm Editorial Aesthetics
+					</p>
+				</Container>
 			</div>
 		</footer>
 	);
