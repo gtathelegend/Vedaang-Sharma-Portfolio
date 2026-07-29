@@ -11,10 +11,6 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faArrowUpRightFromSquare,
   faChevronLeft,
-  faCalendar,
-  faCode,
-  faLayerGroup,
-  faImages,
   faCogs,
   faLightbulb,
   faExclamationTriangle,
@@ -23,6 +19,9 @@ import {
   faListCheck,
   faRocket,
   faXmark,
+  faImages,
+  faLayerGroup,
+  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 
 import NotFound from "@/app/not-found";
@@ -36,6 +35,7 @@ import {
   Badge,
   Tag,
   PageTransition,
+  Skeleton,
 } from "@/components/ui";
 
 /* ── Lightbox Component ── */
@@ -120,9 +120,15 @@ export default function ProjectCaseStudyPage(props) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-32 flex items-center justify-center font-mono text-sm text-[#787467]">
-        Loading engineering case study...
-      </div>
+      <Section spacing="none" className="pt-28 pb-16 min-h-screen">
+        <Container size="lg">
+          <div className="space-y-6">
+            <Skeleton className="h-6 w-32" />
+            <Skeleton className="h-12 w-2/3" />
+            <Skeleton className="h-64 w-full" />
+          </div>
+        </Container>
+      </Section>
     );
   }
 
@@ -162,7 +168,7 @@ export default function ProjectCaseStudyPage(props) {
         <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />
       )}
 
-      {/* ── Case Study Banner / Hero ── */}
+      {/* ── Case Study Hero ── */}
       <Section spacing="none" className="pt-28 pb-12 bg-[#F0EDD4]/40 dark:bg-[#1A1915]/40 border-b border-[#E3DEC3]/60 dark:border-[#33312B]/60">
         <Container size="lg">
           <Link
@@ -205,6 +211,38 @@ export default function ProjectCaseStudyPage(props) {
         </Container>
       </Section>
 
+      {/* ── Engineering Metrics Header Strip (Linear/Stripe style) ── */}
+      <Section spacing="none" className="py-6 bg-[#FAF8EC] dark:bg-[#1E1D19] border-b border-[#E3DEC3]/60 dark:border-[#33312B]/60">
+        <Container size="lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-xs font-mono">
+            <div>
+              <span className="text-[#787467] block uppercase tracking-wider mb-1">Problem Domain:</span>
+              <span className="font-semibold text-[#181713] dark:text-[#F7F5DC] truncate block">
+                {problem ? "Defined & Solved" : "Engineering Architecture"}
+              </span>
+            </div>
+            <div>
+              <span className="text-[#787467] block uppercase tracking-wider mb-1">Core Tech Stack:</span>
+              <span className="font-semibold text-[#FF8A00] truncate block">
+                {tech.slice(0, 3).join(", ") || "Full Stack"}
+              </span>
+            </div>
+            <div>
+              <span className="text-[#787467] block uppercase tracking-wider mb-1">Engineering Decisions:</span>
+              <span className="font-semibold text-[#181713] dark:text-[#F7F5DC] truncate block">
+                {engineeringDecisions ? "Documented" : "Production Grade"}
+              </span>
+            </div>
+            <div>
+              <span className="text-[#787467] block uppercase tracking-wider mb-1">Impact &amp; Status:</span>
+              <span className="font-semibold text-[#FFC233] truncate block">
+                {results ? "Measured Impact" : "Shipped & Verified"}
+              </span>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
       {/* ── Banner Image ── */}
       {thumbnail && (
         <Section spacing="none" className="py-8">
@@ -229,27 +267,27 @@ export default function ProjectCaseStudyPage(props) {
         </Section>
       )}
 
-      {/* ── Case Study Content Sections ── */}
+      {/* ── Case Study Storytelling Grid ── */}
       <Section spacing="default">
         <Container size="lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Main Content Column */}
+            {/* Main Column */}
             <div className="lg:col-span-8 space-y-8">
               {/* 1. Overview */}
               <CaseStudyBlock icon={faCogs} title="Overview">
-                {overviewText || "No overview specified."}
+                {overviewText || "High-performance software engineering case study."}
               </CaseStudyBlock>
 
               {/* 2. Problem Statement */}
               {problem && (
-                <CaseStudyBlock icon={faExclamationTriangle} title="The Problem">
+                <CaseStudyBlock icon={faExclamationTriangle} title="The Problem Solved">
                   {problem}
                 </CaseStudyBlock>
               )}
 
               {/* 3. Requirements */}
               {requirements && (
-                <CaseStudyBlock icon={faListCheck} title="Technical Requirements">
+                <CaseStudyBlock icon={faListCheck} title="Engineering Requirements">
                   {requirements}
                 </CaseStudyBlock>
               )}
@@ -276,18 +314,18 @@ export default function ProjectCaseStudyPage(props) {
                 </CaseStudyBlock>
               )}
 
-              {/* 6. Key Challenges & Trade-offs */}
+              {/* 6. Challenges & Trade-offs */}
               {(challenges || tradeoffs) && (
-                <CaseStudyBlock icon={faScaleUnbalanced} title="Challenges &amp; Trade-offs">
+                <CaseStudyBlock icon={faScaleUnbalanced} title="Key Challenges &amp; Trade-offs">
                   {challenges && (
                     <div>
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-1">Key Challenges:</h4>
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-1">Challenges Encountered:</h4>
                       <p>{challenges}</p>
                     </div>
                   )}
                   {tradeoffs && (
                     <div className="mt-4">
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-1">Trade-offs &amp; Rationale:</h4>
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-1">Architecture Trade-offs:</h4>
                       <p>{tradeoffs}</p>
                     </div>
                   )}
@@ -296,7 +334,7 @@ export default function ProjectCaseStudyPage(props) {
 
               {/* 7. Implementation */}
               {implementation && (
-                <CaseStudyBlock icon={faCode} title="Implementation Details">
+                <CaseStudyBlock icon={faCode} title="Implementation &amp; Tech Stack">
                   {implementation}
                 </CaseStudyBlock>
               )}
@@ -310,7 +348,7 @@ export default function ProjectCaseStudyPage(props) {
 
               {/* 9. Lessons Learned & Future Work */}
               {(lessonsLearned || futureWork) && (
-                <CaseStudyBlock icon={faRocket} title="Lessons Learned &amp; Future Work">
+                <CaseStudyBlock icon={faRocket} title="Lessons Learned &amp; Future Directions">
                   {lessonsLearned && (
                     <div>
                       <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-1">Key Takeaways:</h4>
@@ -326,11 +364,11 @@ export default function ProjectCaseStudyPage(props) {
                 </CaseStudyBlock>
               )}
 
-              {/* 10. Screenshots / Image Gallery */}
+              {/* 10. Screenshots / Gallery */}
               {images.length > 0 && (
                 <Card variant="default" className="p-6 sm:p-8">
                   <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC] mb-4">
-                    Screenshots &amp; Visual Artifacts
+                    Visual Screenshots &amp; Artifacts
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {images.map((img, idx) => (
@@ -354,10 +392,9 @@ export default function ProjectCaseStudyPage(props) {
 
             {/* Sidebar Column */}
             <div className="lg:col-span-4 space-y-6">
-              {/* Sidebar Info Card */}
               <Card variant="default" className="p-6 space-y-6">
                 <div>
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#787467] mb-2">Project Metadata</h4>
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#787467] mb-3">Case Study Highlights</h4>
                   <div className="space-y-3 text-sm">
                     <div>
                       <span className="text-[#57534E] dark:text-[#9E9A8B] block text-xs">Title:</span>
@@ -365,7 +402,7 @@ export default function ProjectCaseStudyPage(props) {
                     </div>
                     {data.year && (
                       <div>
-                        <span className="text-[#57534E] dark:text-[#9E9A8B] block text-xs">Year / Timeline:</span>
+                        <span className="text-[#57534E] dark:text-[#9E9A8B] block text-xs">Timeline:</span>
                         <span className="font-mono text-[#181713] dark:text-[#F7F5DC]">{data.year}</span>
                       </div>
                     )}
@@ -379,7 +416,7 @@ export default function ProjectCaseStudyPage(props) {
                 </div>
 
                 <div className="pt-4 border-t border-[#E3DEC3]/60 dark:border-[#33312B]/60">
-                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#787467] mb-2">Technologies Used</h4>
+                  <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#787467] mb-3">Tech Stack</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {tech.map((t) => (
                       <Tag key={t} size="sm" variant="mono">{t}</Tag>

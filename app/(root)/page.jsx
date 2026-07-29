@@ -8,7 +8,7 @@ import { fetchJson } from "@/lib/api";
 import Me from "@/public/image/me.jpg";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faDownload, faPaperPlane, faCode, faFlask, faAward, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faDownload, faPaperPlane, faCode, faFlask, faAward, faLayerGroup, faBolt, faChartLine, faBookOpen, faTerminal } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 import {
@@ -81,7 +81,7 @@ export default function HomePage() {
   return (
     <PageTransition>
       {/* ── 1. HERO SECTION ── */}
-      <Section spacing="none" className="min-h-[90vh] flex items-center pt-28 pb-16">
+      <Section spacing="none" className="min-h-[85vh] flex items-center pt-28 pb-12">
         <Container size="lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Hero Left Content */}
@@ -133,7 +133,7 @@ export default function HomePage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-4 mt-10 pt-6 border-t border-[#E3DEC3]/60 dark:border-[#33312B]/60 text-xs font-mono text-[#787467] dark:text-[#9E9A8B]"
+                className="flex items-center gap-4 mt-8 pt-6 border-t border-[#E3DEC3]/60 dark:border-[#33312B]/60 text-xs font-mono text-[#787467] dark:text-[#9E9A8B]"
               >
                 <span className="font-semibold text-[#181713] dark:text-[#F7F5DC]">Connect:</span>
                 <a href="https://github.com/gtathelegend" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF8A00] dark:hover:text-[#FFC233] transition-colors flex items-center gap-1">
@@ -174,7 +174,39 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ── 2. FEATURED WORK ── */}
+      {/* ── 2. ENGINEERING IMPACT COUNTER STRIP (Vercel / Stripe style) ── */}
+      <Section spacing="none" className="py-8 bg-[#FAF8EC] dark:bg-[#1E1D19] border-y border-[#E3DEC3]/60 dark:border-[#33312B]/60">
+        <Container size="lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="p-4">
+              <p className="font-heading font-bold text-3xl sm:text-4xl text-[#FF8A00] dark:text-[#FFC233]">
+                {projects.length || "10+"}
+              </p>
+              <p className="text-xs font-mono uppercase tracking-wider text-[#787467] mt-1">Systems &amp; Case Studies</p>
+            </div>
+            <div className="p-4">
+              <p className="font-heading font-bold text-3xl sm:text-4xl text-[#181713] dark:text-[#F7F5DC]">
+                {papers.length || "2+"}
+              </p>
+              <p className="text-xs font-mono uppercase tracking-wider text-[#787467] mt-1">Research Publications</p>
+            </div>
+            <div className="p-4">
+              <p className="font-heading font-bold text-3xl sm:text-4xl text-[#FF8A00] dark:text-[#FFC233]">
+                {skills.length || "25+"}
+              </p>
+              <p className="text-xs font-mono uppercase tracking-wider text-[#787467] mt-1">Core Tech Capabilities</p>
+            </div>
+            <div className="p-4">
+              <p className="font-heading font-bold text-3xl sm:text-4xl text-[#181713] dark:text-[#F7F5DC]">
+                100%
+              </p>
+              <p className="text-xs font-mono uppercase tracking-wider text-[#787467] mt-1">Production Precision</p>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ── 3. FEATURED WORK ── */}
       <Section bg="alt" spacing="default">
         <Container size="lg">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
@@ -205,7 +237,7 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ── 3. PUBLICATIONS ── */}
+      {/* ── 4. PUBLICATIONS ── */}
       {featuredPapers.length > 0 && (
         <Section spacing="default">
           <Container size="lg">
@@ -232,7 +264,7 @@ export default function HomePage() {
         </Section>
       )}
 
-      {/* ── 4. JOURNEY & EXPERIENCE ── */}
+      {/* ── 5. JOURNEY & EXPERIENCE ── */}
       <Section bg="surface" spacing="default">
         <Container size="lg">
           <div className="max-w-3xl mb-12">
@@ -254,7 +286,7 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ── 5. SKILLS PREVIEW ── */}
+      {/* ── 6. SKILLS PREVIEW ── */}
       <Section spacing="default">
         <Container size="lg">
           <Heading
@@ -323,44 +355,6 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
-
-      {/* ── 6. CERTIFICATIONS PREVIEW ── */}
-      {certifications.length > 0 && (
-        <Section bg="alt" spacing="default">
-          <Container size="lg">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-              <Heading
-                level={2}
-                badge="Verified Credentials"
-                badgeVariant="neutral"
-                subtitle="Industry certifications &amp; verified technical credentials."
-              >
-                Certifications
-              </Heading>
-              <Button href="/certifications" variant="outline" size="md">
-                View All &rarr;
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {certifications.slice(0, 3).map((cert) => (
-                <Card key={cert.id || cert.title} variant="default" className="p-5">
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <Badge variant="gold" size="sm">{cert.issuer || "Verified"}</Badge>
-                    {cert.year && <span className="text-xs font-mono text-[#787467]">{cert.year}</span>}
-                  </div>
-                  <h4 className="font-heading font-bold text-base text-[#181713] dark:text-[#F7F5DC] mb-1">
-                    {cert.title || cert.name}
-                  </h4>
-                  {cert.credential_id && (
-                    <p className="text-xs font-mono text-[#57534E] dark:text-[#9E9A8B]">ID: {cert.credential_id}</p>
-                  )}
-                </Card>
-              ))}
-            </div>
-          </Container>
-        </Section>
-      )}
 
       {/* ── 7. CONTACT CTA SECTION ── */}
       <Section spacing="large">

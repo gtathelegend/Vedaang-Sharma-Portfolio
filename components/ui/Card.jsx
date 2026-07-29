@@ -30,7 +30,7 @@ export default function Card({
   };
 
   const interactiveStyles = interactive
-    ? "transition-all duration-200 hover:-translate-y-1 hover:shadow-hover hover:border-[#FFC233]/80 dark:hover:border-[#FFC233]/60 cursor-pointer"
+    ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-hover hover:border-[#FFC233] dark:hover:border-[#FFC233] cursor-pointer group"
     : "";
 
   const combinedClasses = `rounded-xl ${variantStyles[variant] || variantStyles.default} ${paddingStyles[padding] || paddingStyles.md} ${interactiveStyles} ${className}`;

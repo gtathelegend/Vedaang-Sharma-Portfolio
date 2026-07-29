@@ -7,7 +7,7 @@ import { fetchJson } from "@/lib/api";
 
 import HeroImage from "@/public/image/me1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faGraduationCap, faBriefcase, faAward, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faGraduationCap, faBriefcase, faAward, faQuoteLeft, faServer, faBrain, faCompass } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Button,
@@ -100,7 +100,60 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* ── 2. EXPERIENCE TIMELINE ── */}
+      {/* ── 2. ENGINEERING PRINCIPLES (Linear/Stripe style) ── */}
+      <Section spacing="default" bg="surface">
+        <Container size="lg">
+          <Heading
+            level={2}
+            badge="Core Philosophy"
+            badgeVariant="gold"
+            subtitle="The engineering tenets that guide how I architect systems, write code, and collaborate."
+            className="mb-12"
+          >
+            Engineering Principles
+          </Heading>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card variant="warm" className="p-6">
+              <div className="w-10 h-10 rounded-xl bg-[#FF8A00]/20 text-[#FF8A00] flex items-center justify-center text-lg mb-4">
+                <FontAwesomeIcon icon={faServer} />
+              </div>
+              <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC] mb-2">
+                1. Performance &amp; Scale
+              </h3>
+              <p className="text-sm text-[#57534E] dark:text-[#9E9A8B] leading-relaxed">
+                Prioritizing low-latency APIs, efficient query patterns, and resource-conscious memory design from line one.
+              </p>
+            </Card>
+
+            <Card variant="warm" className="p-6">
+              <div className="w-10 h-10 rounded-xl bg-[#FFC233]/20 text-[#FF8A00] flex items-center justify-center text-lg mb-4">
+                <FontAwesomeIcon icon={faBrain} />
+              </div>
+              <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC] mb-2">
+                2. Algorithmic Rigor
+              </h3>
+              <p className="text-sm text-[#57534E] dark:text-[#9E9A8B] leading-relaxed">
+                Bridging state-of-the-art AI research with practical production pipelines and verifiable evaluation metrics.
+              </p>
+            </Card>
+
+            <Card variant="warm" className="p-6">
+              <div className="w-10 h-10 rounded-xl bg-[#CE2929]/20 text-[#CE2929] flex items-center justify-center text-lg mb-4">
+                <FontAwesomeIcon icon={faCompass} />
+              </div>
+              <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC] mb-2">
+                3. Clear Architecture
+              </h3>
+              <p className="text-sm text-[#57534E] dark:text-[#9E9A8B] leading-relaxed">
+                Building modular, well-documented, and predictable software systems that scale cleanly across teams.
+              </p>
+            </Card>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ── 3. EXPERIENCE TIMELINE ── */}
       <Section bg="alt" spacing="default">
         <Container size="lg">
           <div className="max-w-3xl mb-12">
@@ -122,7 +175,7 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* ── 3. EDUCATION ── */}
+      {/* ── 4. EDUCATION ── */}
       {education.length > 0 && (
         <Section spacing="default">
           <Container size="lg">
@@ -162,7 +215,7 @@ export default function AboutPage() {
         </Section>
       )}
 
-      {/* ── 4. PHILOSOPHY QUOTE ── */}
+      {/* ── 5. PHILOSOPHY QUOTE ── */}
       <Section bg="surface" spacing="default">
         <Container size="md">
           <Card variant="warm" className="p-8 sm:p-12 text-center relative overflow-hidden">
