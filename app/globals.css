@@ -134,9 +134,9 @@ a[title]:hover:after {
 .md-content em { font-style: italic; }
 
 .md-content ul, .md-content ol { margin: 0.75em 0 1em 0; padding-left: 1.5em; }
-.md-content ul li { list-style: disc; margin-bottom: 0.3em; }
-.md-content ol li { list-style: decimal; margin-bottom: 0.3em; }
-.md-content ul li::after, .md-content ol li::after { display: none; }
+.md-content ul li { list-style-type: disc !important; margin-bottom: 0.4em; }
+.md-content ol li { list-style-type: decimal !important; margin-bottom: 0.4em; }
+.md-content ul li::after, .md-content ol li::after { display: none !important; }
 
 .md-content blockquote {
 	border-left: 3px solid rgba(128,128,128,0.3);

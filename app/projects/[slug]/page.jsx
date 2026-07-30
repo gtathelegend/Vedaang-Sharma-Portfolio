@@ -25,6 +25,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import NotFound from "@/app/not-found";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 import {
   Button,
   Card,
@@ -83,14 +84,19 @@ function Lightbox({ src, alt, onClose }) {
 /* ── Case Study Section Block ── */
 function CaseStudyBlock({ icon, title, children, className = "" }) {
   if (!children) return null;
+  const contentStr = Array.isArray(children) ? children.join("\n\n") : children;
   return (
     <Card variant="warm" className={`p-6 sm:p-8 ${className}`}>
       <div className="flex items-center gap-3 mb-4 text-[#FF8A00] dark:text-[#FFC233]">
         {icon && <FontAwesomeIcon icon={icon} className="text-xl" />}
         <h3 className="font-heading font-bold text-xl text-[#181713] dark:text-[#F7F5DC]">{title}</h3>
       </div>
-      <div className="text-sm sm:text-base text-[#4A473E] dark:text-[#D1CDBC] leading-relaxed space-y-4 font-normal">
-        {typeof children === "string" ? <p>{children}</p> : children}
+      <div className="text-sm sm:text-base text-[#4A473E] dark:text-[#D1CDBC] leading-relaxed font-normal">
+        {typeof contentStr === "string" ? (
+          <MarkdownRenderer>{contentStr}</MarkdownRenderer>
+        ) : (
+          contentStr
+        )}
       </div>
     </Card>
   );
