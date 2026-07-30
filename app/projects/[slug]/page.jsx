@@ -155,6 +155,8 @@ export default function ProjectCaseStudyPage(props) {
   const githubUrl = data.githubLink || data.code || data.githubUrl || data.github || data.repository;
   const demoUrl = data.liveLink || data.preview || data.demoUrl || data.demo || data.liveDemo;
 
+  const articleContent = data.content;
+
   /* Case study fields */
   const problem = data.problem || data.problemStatement;
   const requirements = data.requirements || data.specifications;
@@ -301,7 +303,7 @@ export default function ProjectCaseStudyPage(props) {
               {/* 4. System Architecture */}
               {(architecture || architectureDiagram) && (
                 <CaseStudyBlock icon={faLayerGroup} title="Architecture &amp; System Design">
-                  {architecture && <p>{architecture}</p>}
+                  {architecture && (typeof architecture === "string" ? <MarkdownRenderer>{architecture}</MarkdownRenderer> : architecture)}
                   {architectureDiagram && (
                     <div
                       className="mt-4 relative aspect-video rounded-xl overflow-hidden border border-[#E3DEC3] dark:border-[#33312B] bg-[#FAF8EC] cursor-pointer"
@@ -324,15 +326,15 @@ export default function ProjectCaseStudyPage(props) {
               {(challenges || tradeoffs) && (
                 <CaseStudyBlock icon={faScaleUnbalanced} title="Key Challenges &amp; Trade-offs">
                   {challenges && (
-                    <div>
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-1">Challenges Encountered:</h4>
-                      <p>{challenges}</p>
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-2">Challenges Encountered:</h4>
+                      {typeof challenges === "string" ? <MarkdownRenderer>{challenges}</MarkdownRenderer> : challenges}
                     </div>
                   )}
                   {tradeoffs && (
                     <div className="mt-4">
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-1">Architecture Trade-offs:</h4>
-                      <p>{tradeoffs}</p>
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-2">Architecture Trade-offs:</h4>
+                      {typeof tradeoffs === "string" ? <MarkdownRenderer>{tradeoffs}</MarkdownRenderer> : tradeoffs}
                     </div>
                   )}
                 </CaseStudyBlock>
@@ -356,17 +358,24 @@ export default function ProjectCaseStudyPage(props) {
               {(lessonsLearned || futureWork) && (
                 <CaseStudyBlock icon={faRocket} title="Lessons Learned &amp; Future Directions">
                   {lessonsLearned && (
-                    <div>
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-1">Key Takeaways:</h4>
-                      <p>{lessonsLearned}</p>
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FF8A00] mb-2">Key Takeaways:</h4>
+                      {typeof lessonsLearned === "string" ? <MarkdownRenderer>{lessonsLearned}</MarkdownRenderer> : lessonsLearned}
                     </div>
                   )}
                   {futureWork && (
                     <div className="mt-4">
-                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-1">Future Enhancements:</h4>
-                      <p>{futureWork}</p>
+                      <h4 className="font-semibold text-xs uppercase tracking-wider text-[#FFC233] mb-2">Future Enhancements:</h4>
+                      {typeof futureWork === "string" ? <MarkdownRenderer>{futureWork}</MarkdownRenderer> : futureWork}
                     </div>
                   )}
+                </CaseStudyBlock>
+              )}
+
+              {/* 10. Long-Form Detailed Article / Case Study Content */}
+              {articleContent && (
+                <CaseStudyBlock icon={faCode} title="Detailed Technical Writeup">
+                  <MarkdownRenderer>{articleContent}</MarkdownRenderer>
                 </CaseStudyBlock>
               )}
 
