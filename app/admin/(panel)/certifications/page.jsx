@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { adminFetch } from "@/lib/adminApi";
 import AdminModal from "@/app/admin/components/AdminModal";
 import AdminConfirmModal from "@/app/admin/components/AdminConfirmModal";
@@ -24,15 +24,15 @@ export default function AdminCertificationsPage() {
   const [form, setForm]         = useState(emptyForm);
   const { toast, showToast }    = useAdminToast();
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const res = await adminFetch("/api/certifications");
       setItems(res.data || []);
     } catch { showToast("Failed to load certifications", "error"); }
     finally { setLoading(false); }
-  };
-  useEffect(() => { fetchItems(); }, []);
+  }, [showToast]);
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setModalOpen(true); };
   const openEdit = (item) => {

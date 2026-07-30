@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { adminFetch } from "@/lib/adminApi";
 import AdminToast from "@/app/admin/components/AdminToast";
 import useAdminToast from "@/app/admin/hooks/useAdminToast";
@@ -103,7 +103,7 @@ export default function AdminSocialsPage() {
   const { toast, showToast } = useAdminToast();
 
   // Load existing social links from DB
-  const fetchLinks = async () => {
+  const fetchLinks = useCallback(async () => {
     setLoading(true);
     try {
       const res = await adminFetch("/api/socials");
@@ -130,9 +130,9 @@ export default function AdminSocialsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
 
-  useEffect(() => { fetchLinks(); }, []);
+  useEffect(() => { fetchLinks(); }, [fetchLinks]);
 
   const handleSavePlatform = async (platform) => {
     const url = links[platform.key].trim();

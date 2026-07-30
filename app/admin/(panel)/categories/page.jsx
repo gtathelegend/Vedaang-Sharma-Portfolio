@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { adminFetch } from "@/lib/adminApi";
 import AdminModal from "@/app/admin/components/AdminModal";
 import AdminFormInput from "@/app/admin/components/AdminFormInput";
@@ -27,7 +27,7 @@ export default function AdminCategoriesPage() {
   const [form, setForm] = useState(emptyForm);
   const { toast, showToast } = useAdminToast();
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     try {
       const res = await adminFetch("/api/categories");
@@ -37,9 +37,9 @@ export default function AdminCategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
 
-  useEffect(() => { fetchItems(); }, []);
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setModalOpen(true); };
   const openEdit = (item) => {

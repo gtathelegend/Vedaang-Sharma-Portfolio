@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { adminFetch } from "@/lib/adminApi";
 import AdminModal from "@/app/admin/components/AdminModal";
 import AdminConfirmModal from "@/app/admin/components/AdminConfirmModal";
@@ -47,7 +48,7 @@ export default function AdminProjectsPage() {
   const [errors, setErrors] = useState({});
   const { toast, showToast } = useAdminToast();
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     setLoading(true);
     try {
       const [projRes, catRes] = await Promise.all([
@@ -61,9 +62,9 @@ export default function AdminProjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
 
-  useEffect(() => { fetchProjects(); }, []);
+  useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setErrors({}); setModalOpen(true); };
   const openEdit = (project) => {
@@ -348,7 +349,7 @@ export default function AdminProjectsPage() {
               onUpload={(url) => setForm((prev) => ({ ...prev, imageUrl: url }))}
             />
             {form.imageUrl && (
-              <img src={form.imageUrl} alt="Thumbnail preview" className="h-20 rounded object-cover mt-1" />
+              <Image src={form.imageUrl} alt="Thumbnail preview" width={80} height={80} unoptimized className="h-20 w-auto rounded object-cover mt-1" />
             )}
           </div>
 

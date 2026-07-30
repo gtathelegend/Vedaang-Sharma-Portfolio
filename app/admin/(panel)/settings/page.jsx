@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { adminFetch } from "@/lib/adminApi";
 import AdminFormInput from "@/app/admin/components/AdminFormInput";
 import AdminFormTextarea from "@/app/admin/components/AdminFormTextarea";
@@ -81,44 +82,70 @@ const emptyForm = {
   about_bio: "",
   quote_text: "",
 };
-
-const emptyNow = {
-  focus: "",
-  learning: "",
-  reading: "",
-  listening: "",
-  location: "",
-};
-
 export default function AdminSettingsPage() {
-  const [form, setForm] = useState(emptyForm);
-  const [now, setNow] = useState(emptyNow);
+  const [form, setForm] = useState({
+    full_name: "",
+    title: "",
+    location: "",
+    email: "",
+    bio: "",
+    hero_subtitle: "",
+    hero_image: "",
+    about_image: "",
+    og_image: "",
+  });
+
+  const [now, setNow] = useState({
+    status: "",
+    workingOn: "",
+    learning: "",
+    reading: "",
+  });
+
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingGeneral, setSavingGeneral] = useState(false);
   const [savingNow, setSavingNow] = useState(false);
   const { toast, showToast } = useAdminToast();
 
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const [settingsRes, nowRes] = await Promise.all([
-          adminFetch("/api/settings"),
-          adminFetch("/api/now").catch(() => ({ data: {} })),
-        ]);
-        if (settingsRes.data && Object.keys(settingsRes.data).length > 0) {
-          setForm({ ...emptyForm, ...settingsRes.data });
-        }
-        if (nowRes?.data) {
-          setNow({ ...emptyNow, ...nowRes.data });
-        }
-      } catch {
-        showToast("Failed to load settings", "error");
-      } finally {
-        setLoading(false);
+  const loadSettings = useCallback(async () => {
+    try {
+      const [settingsRes, nowRes] = await Promise.all([
+        adminFetch("/api/settings"),
+        adminFetch("/api/now"),
+      ]);
+
+      if (settingsRes.data) {
+        setForm({
+          full_name: settingsRes.data.full_name || "",
+          title: settingsRes.data.title || "",
+          location: settingsRes.data.location || "",
+          email: settingsRes.data.email || "",
+          bio: settingsRes.data.bio || "",
+          hero_subtitle: settingsRes.data.hero_subtitle || "",
+          hero_image: settingsRes.data.hero_image || "",
+          about_image: settingsRes.data.about_image || "",
+          og_image: settingsRes.data.og_image || "",
+        });
       }
-    };
+
+      if (nowRes.data) {
+        setNow({
+          status: nowRes.data.status || "",
+          workingOn: nowRes.data.working_on || "",
+          learning: nowRes.data.learning || "",
+          reading: nowRes.data.reading || "",
+        });
+      }
+    } catch {
+      showToast("Failed to load settings", "error");
+    } finally {
+      setLoading(false);
+    }
+  }, [showToast]);
+
+  useEffect(() => {
     loadSettings();
-  }, []);
+  }, [loadSettings]);
 
   const handleNowChange = (e) => {
     const { name, value } = e.target;
@@ -209,12 +236,12 @@ export default function AdminSettingsPage() {
             <div className="space-y-2">
               <AdminFormInput label="Hero Image URL" name="hero_image" value={form.hero_image} onChange={handleChange} />
               <AdminImageUpload label="Or upload hero image" onUpload={(url) => setForm(p => ({ ...p, hero_image: url }))} />
-              {form.hero_image && <img src={form.hero_image} alt="Hero preview" className="h-24 rounded-md object-cover" />}
+              {form.hero_image && <Image src={form.hero_image} alt="Hero preview" width={96} height={96} unoptimized className="h-24 w-auto rounded-md object-cover" />}
             </div>
             <div className="space-y-2">
               <AdminFormInput label="About Image URL" name="about_image" value={form.about_image} onChange={handleChange} />
               <AdminImageUpload label="Or upload about image" onUpload={(url) => setForm(p => ({ ...p, about_image: url }))} />
-              {form.about_image && <img src={form.about_image} alt="About preview" className="h-24 rounded-md object-cover" />}
+              {form.about_image && <Image src={form.about_image} alt="About preview" width={96} height={96} unoptimized className="h-24 w-auto rounded-md object-cover" />}
             </div>
             <div className="space-y-2">
               <AdminFormInput label="OG Image URL" name="og_image" value={form.og_image} onChange={handleChange} />

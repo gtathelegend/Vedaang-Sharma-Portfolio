@@ -15,7 +15,7 @@ export default function TerminalIntro({ onDone }) {
 		} else {
 			onDone?.();
 		}
-	}, []);
+	}, [onDone]);
 
 	function handleDone() {
 		setTimeout(() => {

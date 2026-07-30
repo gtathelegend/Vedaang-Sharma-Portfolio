@@ -9,6 +9,7 @@ function url(path) {
 export default async function sitemap() {
   const staticRoutes = [
     { path: "/", changeFrequency: "weekly", priority: 1 },
+    { path: "/ask", changeFrequency: "weekly", priority: 0.9 },
     { path: "/about", changeFrequency: "monthly", priority: 0.8 },
     { path: "/skills", changeFrequency: "monthly", priority: 0.7 },
     { path: "/projects", changeFrequency: "weekly", priority: 0.9 },
