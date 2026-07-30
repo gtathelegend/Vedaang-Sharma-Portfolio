@@ -155,7 +155,7 @@ export default function HomePage() {
                 className="relative w-full max-w-md aspect-[4/5] rounded-2xl overflow-hidden border border-[#E3DEC3] dark:border-[#33312B] bg-[#F0EDD4] dark:bg-[#1C1B17] shadow-editorial"
               >
                 <Image
-                  src={Me}
+                  src={settings?.hero_image || settings?.about_image || Me}
                   alt={fullName}
                   fill
                   priority

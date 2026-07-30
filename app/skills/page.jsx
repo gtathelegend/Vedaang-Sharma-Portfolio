@@ -13,6 +13,7 @@ import {
   Tag,
   Badge,
   PageTransition,
+  Skeleton,
 } from "@/components/ui";
 
 const CATEGORY_ICONS = {
@@ -36,25 +37,32 @@ const CATEGORY_TITLES = {
 };
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState([]);
+  const [groupedSkills, setGroupedSkills] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchJson("/api/skills")
-      .then((res) => setSkills(res.data || []))
-      .catch(() => {})
+      .then((res) => {
+        const raw = res.data || {};
+        if (Array.isArray(raw)) {
+          // Flattened array -> group it
+          const grouped = raw.reduce((acc, skill) => {
+            const cat = skill.category ? skill.category.toLowerCase() : "other";
+            if (!acc[cat]) acc[cat] = [];
+            acc[cat].push(skill);
+            return acc;
+          }, {});
+          setGroupedSkills(grouped);
+        } else if (typeof raw === "object") {
+          setGroupedSkills(raw);
+        }
+      })
+      .catch((err) => console.error("[SkillsPage] Failed to fetch skills:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  const grouped = skills.reduce((acc, skill) => {
-    const cat = skill.category ? skill.category.toLowerCase() : "other";
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(skill);
-    return acc;
-  }, {});
-
-  const categories = Object.keys(grouped);
+  const categories = Object.keys(groupedSkills);
 
   return (
     <PageTransition>
@@ -72,15 +80,24 @@ export default function SkillsPage() {
           </div>
 
           {loading ? (
-            <div className="text-center py-20 font-mono text-sm text-[#787467]">
-              Loading technical skills matrix...
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Card key={i} variant="warm" className="p-6 space-y-4">
+                  <Skeleton className="h-6 w-1/2" />
+                  <div className="flex flex-wrap gap-2">
+                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-24" />
+                  </div>
+                </Card>
+              ))}
             </div>
           ) : categories.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((catKey) => {
-                const title = CATEGORY_TITLES[catKey] || catKey.toUpperCase();
-                const icon = CATEGORY_ICONS[catKey] || faTools;
-                const catSkills = grouped[catKey] || [];
+                const title = CATEGORY_TITLES[catKey.toLowerCase()] || catKey.toUpperCase();
+                const icon = CATEGORY_ICONS[catKey.toLowerCase()] || faTools;
+                const catSkills = groupedSkills[catKey] || [];
 
                 return (
                   <Card key={catKey} variant="warm" className="p-6">

@@ -87,7 +87,7 @@ export default function AboutPage() {
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-full max-w-sm aspect-[4/5] rounded-2xl overflow-hidden border border-[#E3DEC3] dark:border-[#33312B] bg-[#F0EDD4] dark:bg-[#1C1B17] shadow-editorial">
                 <Image
-                  src={HeroImage}
+                  src={settings?.about_image || settings?.hero_image || HeroImage}
                   alt={fullName}
                   fill
                   priority

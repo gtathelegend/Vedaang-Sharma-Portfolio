@@ -146,8 +146,8 @@ export default function ProjectCaseStudyPage(props) {
   const tech = data.tech || data.techStack || [];
   const thumbnail = data.thumbnail || data.imageUrl || data.image || null;
   const images = data.images || data.gallery || data.screenshots || [];
-  const githubUrl = data.githubUrl || data.github || data.repository;
-  const demoUrl = data.demoUrl || data.demo || data.liveDemo;
+  const githubUrl = data.githubLink || data.code || data.githubUrl || data.github || data.repository;
+  const demoUrl = data.liveLink || data.preview || data.demoUrl || data.demo || data.liveDemo;
 
   /* Case study fields */
   const problem = data.problem || data.problemStatement;
