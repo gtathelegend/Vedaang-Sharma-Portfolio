@@ -4,7 +4,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 import "./nprogress.css";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import ClientTopProgressBar from "@/components/ClientTopProgressBar";
 import ShellChrome from "@/components/ShellChrome";
