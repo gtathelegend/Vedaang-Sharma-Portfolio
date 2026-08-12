@@ -103,6 +103,7 @@ export default function ContactForm() {
 							name="name"
 							value={form.name}
 							onChange={handleChange}
+							disabled={isLoading}
 							required
 							autoComplete="name"
 							maxLength={120}
@@ -120,6 +121,7 @@ export default function ContactForm() {
 							name="email"
 							value={form.email}
 							onChange={handleChange}
+							disabled={isLoading}
 							required
 							autoComplete="email"
 							maxLength={200}
@@ -139,6 +141,7 @@ export default function ContactForm() {
 						name="subject"
 						value={form.subject}
 						onChange={handleChange}
+						disabled={isLoading}
 						maxLength={200}
 						placeholder="What's this about?"
 						className={fieldWithIcon}
@@ -157,6 +160,7 @@ export default function ContactForm() {
 					name="message"
 					value={form.message}
 					onChange={handleChange}
+					disabled={isLoading}
 					required
 					rows={6}
 					maxLength={MESSAGE_MAX}
