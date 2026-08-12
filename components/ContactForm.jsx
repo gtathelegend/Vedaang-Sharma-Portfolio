@@ -58,12 +58,16 @@ export default function ContactForm() {
 			if (!res.ok) throw new Error(data.message || "Failed to send message");
 			setStatus("success");
 			setForm(initialForm);
-			posthog.capture("contact_form_submitted", { has_subject: !!trimmed.subject });
+			try {
+				posthog?.capture?.("contact_form_submitted", { has_subject: !!trimmed.subject });
+			} catch {}
 		} catch (err) {
 			setStatus("error");
 			setErrorMsg(err.message || "Something went wrong. Please try again.");
-			posthog.capture("contact_form_error", { reason: "server_error", message: err.message });
-			posthog.captureException(err);
+			try {
+				posthog?.capture?.("contact_form_error", { reason: "server_error", message: err.message });
+				posthog?.captureException?.(err);
+			} catch {}
 		}
 	};
 
