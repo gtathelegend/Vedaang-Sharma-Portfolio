@@ -378,12 +378,16 @@ ADMIN_EMAIL=<your-admin-email>
 UPSTASH_REDIS_REST_URL=<upstash-url>
 UPSTASH_REDIS_REST_TOKEN=<upstash-token>
 
-# Contact form (SMTP)
+# Contact form & resume download notification (SMTP)
 SMTP_HOST=
 SMTP_PORT=587
 SMTP_USER=
 SMTP_PASS=
 SMTP_TO=<inbox@example.com>
+
+# Resume download notification (optional overrides)
+RESUME_NOTIFICATION_EMAIL=<inbox@example.com>
+# RESEND_API_KEY=<optional-resend-key>
 ```
 
 ### Database Setup

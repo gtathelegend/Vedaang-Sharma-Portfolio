@@ -103,7 +103,7 @@ export default function CommandPalette({ introReady = false }) {
 		return e.replace(/^mailto:/, "");
 	}, [settings]);
 
-	const cvUrl = "/api/resume";
+	const cvUrl = "/api/download-resume";
 
 	const allItems = useMemo(() => {
 		const projectItems = (projects || [])
@@ -143,7 +143,7 @@ export default function CommandPalette({ introReady = false }) {
 				group: "Actions",
 				onSelect: () => {
 					const a = document.createElement("a");
-					a.href = "/api/resume";
+					a.href = cvUrl;
 					posthog.capture("cv_downloaded", { source: "command_palette" });
 					a.download = "Vedaang_Sharma_Resume.pdf";
 					a.click();
