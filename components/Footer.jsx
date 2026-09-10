@@ -100,11 +100,20 @@ export default function Footer() {
 				</div>
 			</div>
 
-			{/* Copyright */}
+			{/* Copyright & Legal */}
 			<div className="flex justify-center items-center py-4 border-t border-amber-100/60 dark:border-[color:var(--color-border)]">
-				<p className="text-gray-500 text-sm dark:text-[color:var(--color-text-muted)]">
-					&copy;{new Date().getFullYear()}{" "}
-					<span className="text-gray-900 font-medium dark:text-[color:var(--color-text)]">Vedaang Sharma</span>
+				<p className="text-gray-500 text-sm flex flex-wrap items-center justify-center gap-x-3 gap-y-1 dark:text-[color:var(--color-text-muted)]">
+					<span>
+						&copy;{new Date().getFullYear()}{" "}
+						<span className="text-gray-900 font-medium dark:text-[color:var(--color-text)]">Vedaang Sharma</span>
+					</span>
+					<span className="text-gray-300 dark:text-gray-700">&bull;</span>
+					<Link
+						href="/privacy"
+						className="hover:text-gray-900 dark:hover:text-[color:var(--color-text)] transition"
+					>
+						Privacy Policy
+					</Link>
 				</p>
 			</div>
 		</footer>
