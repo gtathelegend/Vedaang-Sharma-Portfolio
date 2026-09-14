@@ -10,7 +10,8 @@ export async function GET() {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .order("sort_order", { ascending: true });
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("[GET /api/projects]", error);
@@ -39,7 +40,7 @@ export async function POST(request) {
       images:      body.images || [],
       featured:    body.featured ?? false,
       show:        body.show ?? true,
-      sort_order:  Number(body.sort_order) || 0,
+      sort_order:  Number(body.sort_order ?? body.sortOrder) || 0,
     };
 
     // Only add optional columns if they have values (guards against missing columns)

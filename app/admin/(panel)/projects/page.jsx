@@ -29,6 +29,7 @@ const emptyForm = {
   title: "", slug: "", year: "", description: [], techStack: [],
   githubLink: "", liveLink: "", imageUrl: "", images: [],
   category: [], featured: false, show: true, status: "published",
+  sortOrder: 0,
   seo_title: "", seo_desc: "",
   problemStatement: "", architectureNotes: "", engineeringDecisions: "",
   challenges: "", lessonsLearned: "", architectureDiagram: "",
@@ -82,6 +83,7 @@ export default function AdminProjectsPage() {
       featured: project.featured || false,
       show: project.show ?? true,
       status: project.status || "published",
+      sortOrder: project.sortOrder ?? project.sort_order ?? 0,
       seo_title: project.seo_title || "",
       seo_desc: project.seo_desc || "",
       problemStatement: project.problemStatement || "",
@@ -126,7 +128,12 @@ export default function AdminProjectsPage() {
     if (Object.keys(errs).length) { setErrors(errs); return; }
 
     try {
-      const payload = { ...form, category: form.category.map(Number) };
+      const payload = {
+        ...form,
+        sort_order: Number(form.sortOrder) || 0,
+        sortOrder: Number(form.sortOrder) || 0,
+        category: form.category.map(Number),
+      };
       if (editing) {
         const res = await adminFetch(`/api/projects/${editing._id}`, { method: "PUT", body: JSON.stringify(payload) });
         const saved = res?.data;
@@ -138,7 +145,7 @@ export default function AdminProjectsPage() {
         const res = await adminFetch("/api/projects", { method: "POST", body: JSON.stringify(payload) });
         const saved = res?.data;
         if (saved?._id) {
-          setProjects((prev) => [...prev, saved]);
+          setProjects((prev) => [saved, ...prev]);
         }
         showToast("Project created");
       }
@@ -245,6 +252,9 @@ export default function AdminProjectsPage() {
             <div>
               <AdminFormInput label="Year" name="year" value={form.year} onChange={handleChange} type="number" />
               {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year}</p>}
+            </div>
+            <div>
+              <AdminFormInput label="Sort Order" name="sortOrder" value={form.sortOrder} onChange={handleChange} type="number" />
             </div>
             <AdminFormSelect
               label="Status"

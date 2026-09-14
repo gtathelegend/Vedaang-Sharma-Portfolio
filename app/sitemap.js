@@ -50,7 +50,8 @@ export default async function sitemap() {
         admin
           .from("projects")
           .select("slug, updated_at, show, status")
-          .order("sort_order", { ascending: true }),
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false }),
         admin
           .from("blog_posts")
           .select("slug, updated_at, published")

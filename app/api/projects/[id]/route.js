@@ -29,6 +29,9 @@ export async function PUT(request, { params }) {
     };
 
     // Only add optional columns if they have values
+    if (body.sort_order !== undefined || body.sortOrder !== undefined) {
+      record.sort_order = Number(body.sort_order ?? body.sortOrder) || 0;
+    }
     if (body.status !== undefined)    record.status             = body.status || null;
     if (body.seo_title !== undefined) record.seo_title          = body.seo_title || null;
     if (body.seo_desc !== undefined)  record.seo_desc           = body.seo_desc || null;
