@@ -74,6 +74,15 @@ module.exports = withBundleAnalyzer({
 				],
 			},
 			{
+				source: "/ingest/static/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "public, max-age=604800, stale-while-revalidate=86400",
+					},
+				],
+			},
+			{
 				source: "/:path*",
 				headers: [
 					{
@@ -101,7 +110,11 @@ module.exports = withBundleAnalyzer({
 						value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
 					},
 					{
-						key: "Content-Security-Policy-Report-Only",
+						key: "Cross-Origin-Opener-Policy",
+						value: "same-origin",
+					},
+					{
+						key: "Content-Security-Policy",
 						value: csp,
 					},
 				],

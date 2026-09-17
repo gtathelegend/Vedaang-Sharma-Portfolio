@@ -79,13 +79,27 @@ export default function Page() {
 									<td className="py-3 px-4">
 										<div className="flex items-center gap-3">
 											{(project.code || project.githubLink) && (
-												<a href={project.code || project.githubLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
-													<FontAwesomeIcon icon={faGithub} className="text-lg" />
+												<a
+													href={project.code || project.githubLink}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+													aria-label={`View ${project.title} on GitHub`}
+													title="GitHub"
+												>
+													<FontAwesomeIcon icon={faGithub} className="text-lg" aria-hidden="true" />
 												</a>
 											)}
 											{(project.preview || project.liveLink) && (
-												<a href={project.preview || project.liveLink} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
-													<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-base" />
+												<a
+													href={project.preview || project.liveLink}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+													aria-label={`View ${project.title} live preview`}
+													title="Live Preview"
+												>
+													<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-base" aria-hidden="true" />
 												</a>
 											)}
 										</div>

@@ -1,0 +1,30 @@
+# Vedaang Sharma — Portfolio
+
+> Full Stack & AI Systems Developer building intelligent web applications, AI/ML systems, distributed backends, and modern software architectures.
+
+## Overview
+Vedaang Sharma is a Full Stack and AI Systems Developer based in Jaipur, India. He specializes in designing and building high-performance web applications, computer vision models, generative AI integrations, and cloud architectures.
+
+## Core Navigation & Links
+- [Home](https://vedaangsharma.dev): Main portfolio overview, featured projects, latest research, and engineering journey.
+- [About](https://vedaangsharma.dev/about): Detailed engineering biography, background, timeline, and education.
+- [Projects](https://vedaangsharma.dev/projects): Portfolio of production applications, AI systems, open-source tools, and client platforms.
+- [Projects Archive](https://vedaangsharma.dev/projects/archive): Complete historical archive of engineering projects.
+- [Research & Publications](https://vedaangsharma.dev/research): Academic papers, computer vision research, and technical writeups.
+- [Skills](https://vedaangsharma.dev/skills): Comprehensive technical skills matrix covering frontend, backend, AI/ML, cloud, and tools.
+- [Certifications](https://vedaangsharma.dev/certifications): Professional certifications and verifiable credentials.
+- [Blog](https://vedaangsharma.dev/blog): Articles on software engineering, web performance, and AI systems.
+- [Now](https://vedaangsharma.dev/now): Current projects, learning focus, and reading list.
+- [Contact](https://vedaangsharma.dev/contact): Direct contact form and communication channels.
+
+## Featured Technical Expertise
+- **Frontend & Web Platforms**: Next.js (App Router), React 19, JavaScript (ESNext), TypeScript, Tailwind CSS, Responsive & Accessible UI Design, Core Web Vitals optimization.
+- **Backend & Systems**: Node.js, Express, Next.js API routes, Python, REST APIs, GraphQL, WebSockets, Supabase, PostgreSQL, Upstash Redis, authentication & authorization.
+- **AI & Machine Learning**: Computer Vision, Deep Learning, PyTorch, LangChain, LLM prompt engineering and agent workflows, model inference optimization.
+- **DevOps & Tooling**: Git, GitHub, Vercel, Docker, CI/CD, PostHog analytics, performance monitoring.
+
+## Contact & Social Profiles
+- **Email**: [vedaangsharma2006@gmail.com](mailto:vedaangsharma2006@gmail.com)
+- **GitHub**: [github.com/gtathelegend](https://github.com/gtathelegend)
+- **LinkedIn**: [linkedin.com/in/vedaangsharma2006](https://www.linkedin.com/in/vedaangsharma2006/)
+- **Website**: [https://vedaangsharma.dev](https://vedaangsharma.dev)

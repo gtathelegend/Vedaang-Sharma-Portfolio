@@ -78,9 +78,15 @@ export default function Certifications() {
                   {cert.issuer}{cert.year ? ` · ${cert.year}` : ""}
                 </p>
                 {cert.url && (
-                  <a href={cert.url} target="_blank" rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition">
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+                  <a
+                    href={cert.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
+                    aria-label={`View ${cert.name} credential`}
+                  >
+                    <span className="sr-only">View {cert.name} credential</span>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" aria-hidden="true" />
                   </a>
                 )}
               </div>

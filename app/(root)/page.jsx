@@ -112,12 +112,8 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 			className="relative isolate min-h-[100svh] flex items-center overflow-hidden bg-transparent pt-28 md:pt-0"
 		>
 			{/* Right portrait (desktop) */}
-			<motion.div
+			<div
 				className="hidden md:block absolute top-0 right-0 h-full w-[42vw] lg:w-[40vw] -z-0"
-				variants={slideRight}
-				custom={0.1}
-				initial="hidden"
-				animate="visible"
 			>
 				<div
 					className="relative h-full w-full"
@@ -142,10 +138,11 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						alt={fullName}
 						placeholder="blur"
 						priority
-						sizes="(max-width: 768px) 0px, 42vw"
+						fetchPriority="high"
+						sizes="(max-width: 768px) 0px, (max-width: 1024px) 42vw, 40vw"
 					/>
 				</div>
-			</motion.div>
+			</div>
 
 			{/* Content */}
 			<div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-20 py-24 md:py-32">
@@ -162,13 +159,16 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 								style={{ filter: "none" }}
 								alt={fullName}
 								placeholder="blur"
+								priority
+								fetchPriority="high"
+								sizes="128px"
 							/>
 						</div>
 					</div>
 
 					{/* Name eyebrow */}
 					<motion.p
-						className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-gray-400 dark:text-gray-500 mb-8"
+						className="text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase text-gray-600 dark:text-gray-400 mb-8"
 						variants={slideLeft}
 						custom={0.12}
 						initial="hidden"
@@ -246,7 +246,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 							href="/contact"
 							className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
 						>
-							Email
+							Contact
 						</Link>
 					</motion.div>
 
@@ -260,7 +260,7 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 				animate={{ opacity: 1 }}
 				transition={{ delay: 1.4 }}
 			>
-				<span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 dark:text-gray-600">scroll</span>
+				<span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">scroll</span>
 				<motion.div
 					className="w-px h-10 bg-gradient-to-b from-gray-300 to-transparent dark:from-gray-600 origin-top"
 					animate={{ scaleY: [0.2, 1, 0.2] }}
@@ -945,8 +945,10 @@ function CertificationsPreview() {
 											target="_blank"
 											rel="noopener noreferrer"
 											className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
+											aria-label={`View ${cert.name} credential`}
 										>
-											<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+											<span className="sr-only">View {cert.name} credential</span>
+											<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" aria-hidden="true" />
 										</a>
 									)}
 								</div>

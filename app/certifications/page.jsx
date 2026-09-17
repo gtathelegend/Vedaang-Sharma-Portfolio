@@ -98,9 +98,10 @@ function CertCard({ cert, index }) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex-shrink-0 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
-            aria-label="View certificate"
+            aria-label={`View ${cert.name} certificate`}
           >
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+            <span className="sr-only">View {cert.name} certificate</span>
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" aria-hidden="true" />
           </a>
         )}
       </div>

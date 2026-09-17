@@ -68,13 +68,29 @@ export default function ProjectCard({ project, activeCategory }) {
 						Details →
 					</Link>
 					{githubUrl && (
-						<a href={githubUrl} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("project_card_github_clicked", { project: project.title, slug: project.slug })} className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="GitHub">
-							<FontAwesomeIcon icon={faGithub} className="text-base" />
+						<a
+							href={githubUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							onClick={() => posthog.capture("project_card_github_clicked", { project: project.title, slug: project.slug })}
+							className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+							aria-label={`View ${project.title} on GitHub`}
+							title="GitHub"
+						>
+							<FontAwesomeIcon icon={faGithub} className="text-base" aria-hidden="true" />
 						</a>
 					)}
 					{liveUrl && (
-						<a href={liveUrl} target="_blank" rel="noopener noreferrer" onClick={() => posthog.capture("project_card_live_clicked", { project: project.title, slug: project.slug })} className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Live Preview">
-							<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-sm" />
+						<a
+							href={liveUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							onClick={() => posthog.capture("project_card_live_clicked", { project: project.title, slug: project.slug })}
+							className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+							aria-label={`View ${project.title} live preview`}
+							title="Live Preview"
+						>
+							<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-sm" aria-hidden="true" />
 						</a>
 					)}
 				</div>
