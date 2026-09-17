@@ -11,7 +11,7 @@ import {
 	faEnvelope,
 	faTag,
 } from "@fortawesome/free-solid-svg-icons";
-import posthog from "posthog-js";
+import { captureClientEvent, captureClientException } from "@/lib/posthog-client";
 
 const initialForm = { name: "", email: "", subject: "", message: "", website: "" };
 const MESSAGE_MAX = 4000;
@@ -41,7 +41,7 @@ export default function ContactForm() {
 		if (!trimmed.name || !trimmed.email || !trimmed.message) {
 			setStatus("error");
 			setErrorMsg("Please fill in your name, email and message.");
-			posthog.capture("contact_form_error", { reason: "validation", message: "Name, email and message are required." });
+			captureClientEvent("contact_form_error", { reason: "validation", message: "Name, email and message are required." });
 			return;
 		}
 
@@ -59,14 +59,14 @@ export default function ContactForm() {
 			setStatus("success");
 			setForm(initialForm);
 			try {
-				posthog?.capture?.("contact_form_submitted", { has_subject: !!trimmed.subject });
+				captureClientEvent("contact_form_submitted", { has_subject: !!trimmed.subject });
 			} catch {}
 		} catch (err) {
 			setStatus("error");
 			setErrorMsg(err.message || "Something went wrong. Please try again.");
 			try {
-				posthog?.capture?.("contact_form_error", { reason: "server_error", message: err.message });
-				posthog?.captureException?.(err);
+				captureClientEvent("contact_form_error", { reason: "server_error", message: err.message });
+				captureClientException(err);
 			} catch {}
 		}
 	};

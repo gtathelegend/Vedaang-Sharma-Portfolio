@@ -123,6 +123,15 @@ module.exports = withBundleAnalyzer({
 	},
 	// Add performance optimizations
 	reactStrictMode: true,
+	experimental: {
+		optimizePackageImports: [
+			"@fortawesome/free-solid-svg-icons",
+			"@fortawesome/free-brands-svg-icons",
+			"@fortawesome/free-regular-svg-icons",
+			"@fortawesome/react-fontawesome",
+			"framer-motion",
+		],
+	},
 	compiler: {
 		removeConsole:
 			process.env.NODE_ENV === "production"

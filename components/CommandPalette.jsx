@@ -23,7 +23,7 @@ import {
 	faPenNib,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import posthog from "posthog-js";
+import { captureClientEvent } from "@/lib/posthog-client";
 
 const PAGES = [
 	{ icon: faHouse, label: "Home", hint: "/", href: "/", group: "Pages" },
@@ -74,7 +74,7 @@ export default function CommandPalette({ introReady = false }) {
 	const isAdmin = pathname?.startsWith("/admin");
 
 	useEffect(() => {
-		if (isAdmin) return;
+		if (isAdmin || !open) return;
 		let mounted = true;
 		Promise.all([
 			fetchJson("/api/projects").catch(() => ({ data: [] })),
@@ -87,7 +87,7 @@ export default function CommandPalette({ introReady = false }) {
 		return () => {
 			mounted = false;
 		};
-	}, [isAdmin]);
+	}, [isAdmin, open]);
 
 	const setTheme = useCallback((theme) => {
 		try {
@@ -144,7 +144,7 @@ export default function CommandPalette({ introReady = false }) {
 				onSelect: () => {
 					const a = document.createElement("a");
 					a.href = cvUrl;
-					posthog.capture("cv_downloaded", { source: "command_palette" });
+					captureClientEvent("cv_downloaded", { source: "command_palette" });
 					a.download = "Vedaang_Sharma_Resume.pdf";
 					a.click();
 				},
@@ -222,7 +222,7 @@ export default function CommandPalette({ introReady = false }) {
 
 	useEffect(() => {
 		if (open) {
-			posthog.capture("command_palette_opened");
+			captureClientEvent("command_palette_opened");
 			setQuery("");
 			setActive(0);
 			setTimeout(() => inputRef.current?.focus(), 0);
@@ -242,7 +242,7 @@ export default function CommandPalette({ introReady = false }) {
 	const runItem = useCallback(
 		(item) => {
 			if (!item) return;
-			posthog.capture("command_palette_item_selected", { label: item.label, group: item.group });
+			captureClientEvent("command_palette_item_selected", { label: item.label, group: item.group });
 			if (item.onSelect) {
 				item.onSelect();
 				setOpen(false);

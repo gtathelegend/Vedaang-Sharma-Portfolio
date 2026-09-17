@@ -12,7 +12,7 @@ import {
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { fetchJson } from "@/lib/api";
 import NotFound from "@/app/not-found";
-import posthog from "posthog-js";
+import { captureClientEvent } from "@/lib/posthog-client";
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
@@ -164,7 +164,7 @@ export default function ResearchPaperPage(props) {
               href={paper.doiUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => posthog.capture("research_paper_doi_clicked", { paper: paper.title, slug })}
+              onClick={() => captureClientEvent("research_paper_doi_clicked", { paper: paper.title, slug })}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
             >
               Read Paper <FontAwesomeIcon icon={faArrowUpRightFromSquare} />

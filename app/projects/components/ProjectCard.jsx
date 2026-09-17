@@ -6,7 +6,7 @@ import BlurImage from "@/public/image/placeholder/blur.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import posthog from "posthog-js";
+import { captureClientEvent } from "@/lib/posthog-client";
 
 export default function ProjectCard({ project, activeCategory }) {
 	const categoryMatch =
@@ -72,7 +72,7 @@ export default function ProjectCard({ project, activeCategory }) {
 							href={githubUrl}
 							target="_blank"
 							rel="noopener noreferrer"
-							onClick={() => posthog.capture("project_card_github_clicked", { project: project.title, slug: project.slug })}
+							onClick={() => captureClientEvent("project_card_github_clicked", { project: project.title, slug: project.slug })}
 							className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
 							aria-label={`View ${project.title} on GitHub`}
 							title="GitHub"
@@ -85,7 +85,7 @@ export default function ProjectCard({ project, activeCategory }) {
 							href={liveUrl}
 							target="_blank"
 							rel="noopener noreferrer"
-							onClick={() => posthog.capture("project_card_live_clicked", { project: project.title, slug: project.slug })}
+							onClick={() => captureClientEvent("project_card_live_clicked", { project: project.title, slug: project.slug })}
 							className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
 							aria-label={`View ${project.title} live preview`}
 							title="Live Preview"

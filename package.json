@@ -48,5 +48,9 @@
   "devDependencies": {
     "@next/bundle-analyzer": "15.3.9",
     "@types/react": "19.1.5"
-  }
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    "maintained node versions"
+  ]
 }

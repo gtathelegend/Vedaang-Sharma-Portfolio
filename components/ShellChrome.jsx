@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
-import CommandPalette from "@/components/CommandPalette";
 import ThemeProvider from "@/components/ThemeProvider";
-import TerminalIntro from "@/components/TerminalIntro";
+
+const CommandPalette = dynamic(() => import("@/components/CommandPalette"), {
+  ssr: false,
+});
+const TerminalIntro = dynamic(() => import("@/components/TerminalIntro"), {
+  ssr: false,
+});
 
 export default function ShellChrome() {
   const pathname = usePathname();

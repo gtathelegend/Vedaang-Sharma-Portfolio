@@ -16,7 +16,7 @@ import NotFound from "@/app/not-found";
 import Image from "next/image";
 import BlurImage from "@/public/image/placeholder/blur.jpg";
 import Link from "next/link";
-import posthog from "posthog-js";
+import { captureClientEvent } from "@/lib/posthog-client";
 
 /* ─── tiny helpers ─────────────────────────────────────── */
 
@@ -269,7 +269,7 @@ export default function Page(props) {
                 href={data.preview}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => posthog.capture("project_live_preview_clicked", { project: data.title, slug: data.slug })}
+                onClick={() => captureClientEvent("project_live_preview_clicked", { project: data.title, slug: data.slug })}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
               >
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
@@ -281,7 +281,7 @@ export default function Page(props) {
                 href={data.code}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => posthog.capture("project_source_code_clicked", { project: data.title, slug: data.slug })}
+                onClick={() => captureClientEvent("project_source_code_clicked", { project: data.title, slug: data.slug })}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-neutral-300 dark:border-white/15 text-neutral-800 dark:text-gray-200 text-sm font-medium hover:bg-neutral-50 dark:hover:bg-white/5 transition"
               >
                 <FontAwesomeIcon icon={faGithub} />
@@ -392,7 +392,7 @@ export default function Page(props) {
                   href={data.preview}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => posthog.capture("project_live_preview_clicked", { project: data.title, slug: data.slug, source: "sidebar" })}
+                  onClick={() => captureClientEvent("project_live_preview_clicked", { project: data.title, slug: data.slug, source: "sidebar" })}
                   className="flex items-center justify-between group px-4 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-gray-900 hover:bg-neutral-700 dark:hover:bg-gray-200 transition"
                 >
                   <span className="text-sm font-medium">Live Preview</span>
@@ -404,7 +404,7 @@ export default function Page(props) {
                   href={data.code}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => posthog.capture("project_source_code_clicked", { project: data.title, slug: data.slug, source: "sidebar" })}
+                  onClick={() => captureClientEvent("project_source_code_clicked", { project: data.title, slug: data.slug, source: "sidebar" })}
                   className="flex items-center justify-between group px-4 py-3 rounded-xl border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-gray-200 hover:bg-neutral-50 dark:hover:bg-white/5 transition"
                 >
                   <span className="text-sm font-medium">GitHub Repo</span>
