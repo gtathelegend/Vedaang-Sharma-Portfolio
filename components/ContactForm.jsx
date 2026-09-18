@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faPaperPlane,
@@ -22,7 +22,11 @@ export default function ContactForm() {
 	const [form, setForm] = useState(initialForm);
 	const [status, setStatus] = useState("idle");
 	const [errorMsg, setErrorMsg] = useState("");
+	const [isInteractiveRequired, setIsInteractiveRequired] = useState(false);
 	const [turnstileToken, setTurnstileToken] = useState("");
+
+	const tokenRef = useRef("");
+	const isSubmittingRef = useRef(false);
 	const turnstileRef = useRef(null);
 
 	const handleChange = (e) => {
@@ -30,17 +34,40 @@ export default function ContactForm() {
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const handleTurnstileSuccess = useCallback((token) => {
+		tokenRef.current = token;
+		setTurnstileToken(token);
+		setIsInteractiveRequired(false);
+		setErrorMsg((prev) => (prev.includes("verification") ? "" : prev));
+	}, []);
+
+	const handleTurnstileError = useCallback(() => {
+		tokenRef.current = "";
+		setTurnstileToken("");
+	}, []);
+
+	const handleTurnstileExpire = useCallback(() => {
+		tokenRef.current = "";
+		setTurnstileToken("");
+		if (turnstileRef.current) {
+			turnstileRef.current.reset();
+		}
+	}, []);
+
+	const handleBeforeInteractive = useCallback(() => {
+		setIsInteractiveRequired(true);
+	}, []);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (status === "loading") return;
+		if (status === "loading" || isSubmittingRef.current) return;
 
 		const trimmed = {
 			name: form.name.trim(),
 			email: form.email.trim(),
 			subject: form.subject.trim(),
 			message: form.message.trim(),
-			website: form.website, // honeypot — sent as-is, must stay empty for humans
-			turnstileToken,
+			website: form.website, // honeypot
 		};
 
 		if (!trimmed.name || !trimmed.email || !trimmed.message) {
@@ -50,12 +77,15 @@ export default function ContactForm() {
 			return;
 		}
 
-		if (!turnstileToken) {
+		const currentToken = tokenRef.current || turnstileToken;
+		if (!currentToken) {
 			setStatus("error");
+			setIsInteractiveRequired(true);
 			setErrorMsg("Please complete the verification check before sending.");
 			return;
 		}
 
+		isSubmittingRef.current = true;
 		setStatus("loading");
 		setErrorMsg("");
 
@@ -63,30 +93,46 @@ export default function ContactForm() {
 			const res = await fetch("/api/contact", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(trimmed),
+				body: JSON.stringify({
+					...trimmed,
+					turnstileToken: currentToken,
+				}),
 			});
+
 			const data = await res.json().catch(() => ({}));
 			if (!res.ok) throw new Error(data.message || "Failed to send message");
+
 			setStatus("success");
 			setForm(initialForm);
+			tokenRef.current = "";
 			setTurnstileToken("");
+			setIsInteractiveRequired(false);
+
+			// Reset Turnstile once to obtain a fresh token for subsequent submissions
 			if (turnstileRef.current) {
 				turnstileRef.current.reset();
 			}
+
 			try {
 				captureClientEvent("contact_form_submitted", { has_subject: !!trimmed.subject });
 			} catch {}
 		} catch (err) {
 			setStatus("error");
 			setErrorMsg(err.message || "Something went wrong. Please try again.");
+			tokenRef.current = "";
 			setTurnstileToken("");
+
+			// Reset widget to permit immediate retry
 			if (turnstileRef.current) {
 				turnstileRef.current.reset();
 			}
+
 			try {
 				captureClientEvent("contact_form_error", { reason: "server_error", message: err.message });
 				captureClientException(err);
 			} catch {}
+		} finally {
+			isSubmittingRef.current = false;
 		}
 	};
 
@@ -101,7 +147,7 @@ export default function ContactForm() {
 
 	return (
 		<form onSubmit={handleSubmit} className="w-full" aria-label="Contact form" noValidate>
-			{/* Honeypot: hidden from real users; bots tend to fill it. */}
+			{/* Honeypot: hidden from real users */}
 			<div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}>
 				<label>
 					Website
@@ -169,7 +215,7 @@ export default function ContactForm() {
 				</div>
 			</label>
 
-			<label className="flex flex-col gap-1.5 mb-5">
+			<label className="flex flex-col gap-1.5 mb-4">
 				<span className="flex items-center justify-between">
 					<span className={labelClass}>Message</span>
 					<span className="text-[11px] tabular-nums text-gray-400 dark:text-gray-500">
@@ -188,35 +234,30 @@ export default function ContactForm() {
 				/>
 			</label>
 
-			{/* Cloudflare Turnstile Verification */}
-			<div className="mb-5">
-				<div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-2">
-					<FontAwesomeIcon icon={faShieldHalved} className="text-emerald-500 text-[11px]" />
-					<span>Security verification</span>
-				</div>
+			{/* Cloudflare Turnstile: runs unobtrusively in background with appearance: "interaction-only" */}
+			<div className={`mb-4 transition-all ${isInteractiveRequired ? "block" : "overflow-hidden"}`}>
+				{isInteractiveRequired && (
+					<div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mb-2">
+						<FontAwesomeIcon icon={faShieldHalved} className="text-emerald-500 text-[11px]" />
+						<span>Quick verification required</span>
+					</div>
+				)}
 				<Turnstile
 					ref={turnstileRef}
 					action="contact_form"
-					onSuccess={(token) => {
-						setTurnstileToken(token);
-						if (status === "error" && errorMsg.includes("verification")) {
-							setStatus("idle");
-							setErrorMsg("");
-						}
-					}}
-					onError={() => {
-						setTurnstileToken("");
-					}}
-					onExpire={() => {
-						setTurnstileToken("");
-					}}
+					appearance="interaction-only"
+					execution="render"
+					onSuccess={handleTurnstileSuccess}
+					onError={handleTurnstileError}
+					onExpire={handleTurnstileExpire}
+					onBeforeInteractive={handleBeforeInteractive}
 				/>
 			</div>
 
 			<div className="flex flex-col sm:flex-row sm:items-center gap-3">
 				<button
 					type="submit"
-					disabled={isLoading || !turnstileToken}
+					disabled={isLoading}
 					className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 sm:py-2.5 rounded-xl bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500 hover:from-violet-400 hover:via-indigo-400 hover:to-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 				>
 					<FontAwesomeIcon

@@ -137,6 +137,7 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en" className={`${jost.variable} ${poppins.variable}`} suppressHydrationWarning>
 			<head>
+				<link rel="preconnect" href="https://challenges.cloudflare.com" />
 				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
 				{/* Structured data — parsed by Google for sitelinks & Knowledge Panel */}
 				<script
