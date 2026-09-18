@@ -8,6 +8,7 @@ import ClientTopProgressBar from "@/components/ClientTopProgressBar";
 import ShellChrome from "@/components/ShellChrome";
 import AuroraBackground from "@/components/AuroraBackground";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
+import { ResumeDownloadProvider } from "@/context/ResumeDownloadContext";
 
 const jost = Jost({
 	subsets: ["latin"],
@@ -148,14 +149,16 @@ export default function RootLayout({ children }) {
 				/>
 			</head>
 			<body className="font-poppins text-gray-900 dark:text-gray-100 selection:bg-blue-600 selection:text-white">
-				<ClientTopProgressBar />
-				<ShellChrome />
-				<div className="relative isolate min-h-screen bg-white dark:bg-gray-950">
-					<AuroraBackground />
-					{children}
-				</div>
-				<Analytics />
-				<SpeedInsights />
+				<ResumeDownloadProvider>
+					<ClientTopProgressBar />
+					<ShellChrome />
+					<div className="relative isolate min-h-screen bg-white dark:bg-gray-950">
+						<AuroraBackground />
+						{children}
+					</div>
+					<Analytics />
+					<SpeedInsights />
+				</ResumeDownloadProvider>
 			</body>
 		</html>
 	);

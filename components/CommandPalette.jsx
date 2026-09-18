@@ -24,6 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { captureClientEvent } from "@/lib/posthog-client";
+import { useResumeDownload } from "@/context/ResumeDownloadContext";
 
 const PAGES = [
 	{ icon: faHouse, label: "Home", hint: "/", href: "/", group: "Pages" },
@@ -63,6 +64,7 @@ function copy(text) {
 export default function CommandPalette({ introReady = false }) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const { openResumeModal } = useResumeDownload();
 	const [open, setOpen] = useState(false);
 	const [query, setQuery] = useState("");
 	const [active, setActive] = useState(0);
@@ -103,8 +105,6 @@ export default function CommandPalette({ introReady = false }) {
 		return e.replace(/^mailto:/, "");
 	}, [settings]);
 
-	const cvUrl = "/api/download-resume";
-
 	const allItems = useMemo(() => {
 		const projectItems = (projects || [])
 			.filter((p) => p.show !== false && p.status !== "draft")
@@ -142,11 +142,8 @@ export default function CommandPalette({ introReady = false }) {
 				hint: "Resume PDF",
 				group: "Actions",
 				onSelect: () => {
-					const a = document.createElement("a");
-					a.href = cvUrl;
-					captureClientEvent("cv_downloaded", { source: "command_palette" });
-					a.download = "Vedaang_Sharma_Resume.pdf";
-					a.click();
+					setOpen(false);
+					openResumeModal();
 				},
 			},
 			{
@@ -179,7 +176,7 @@ export default function CommandPalette({ introReady = false }) {
 		];
 
 		return [...PAGES, ...projectItems, ...actions, ...themes];
-	}, [projects, email, setTheme]);
+	}, [projects, email, setTheme, openResumeModal]);
 
 	const filtered = useMemo(() => {
 		if (!query) return allItems;

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchJson } from "@/lib/api";
+import { useResumeDownload } from "@/context/ResumeDownloadContext";
 
 import Me from "@/public/image/me.jpg";
 import MeAbout from "@/public/image/me2.jpg";
@@ -105,7 +106,9 @@ function SecondaryLink({ href, children, external = false }) {
    Hero
    ───────────────────────────────────────────── */
 
-function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
+function HeroSection({ fullName, tagline, heroSubtitle }) {
+	const { openResumeModal } = useResumeDownload();
+
 	return (
 		<section
 			id="home"
@@ -207,13 +210,13 @@ function HeroSection({ fullName, tagline, heroSubtitle, cvUrl }) {
 						initial="hidden"
 						animate="visible"
 					>
-						<a
-							href={cvUrl || "/api/download-resume"}
-							download="Vedaang_Sharma_Resume.pdf"
-							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm"
+						<button
+							type="button"
+							onClick={openResumeModal}
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-sm font-semibold hover:bg-gray-700 dark:hover:bg-gray-200 transition shadow-sm cursor-pointer"
 						>
 							Download CV <FontAwesomeIcon icon={faArrowRight} />
-						</a>
+						</button>
 						<SecondaryLink href="/contact">Get in touch</SecondaryLink>
 					</motion.div>
 

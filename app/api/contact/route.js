@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { rateLimit, getClientIp } from "@/lib/rateLimit";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyTurnstileToken } from "@/lib/turnstile";
 
 export const runtime = "nodejs";
 
@@ -115,7 +116,11 @@ export async function POST(request) {
 		const ip = getClientIp(request);
 		console.log("[CONTACT] request received", { ip });
 
-		const { success: rateLimitSuccess, reset } = await rateLimit(`contact:${ip}`, { limit: 5, windowMs: 10 * 60 * 1000 });
+		// 1. IP-based rate limiting (5 requests / 10 minutes)
+		const { success: rateLimitSuccess, reset } = await rateLimit(`contact:${ip}`, {
+			limit: 5,
+			windowMs: 10 * 60 * 1000,
+		});
 		if (!rateLimitSuccess) {
 			const retryAfter = Math.max(1, Math.ceil((reset - Date.now()) / 1000));
 			console.warn("[CONTACT] rate limit exceeded", { ip, retryAfter });
@@ -132,11 +137,34 @@ export async function POST(request) {
 			return NextResponse.json({ message: "Invalid JSON body." }, { status: 400 });
 		}
 
+		// 2. Honeypot check (bots that fill hidden inputs)
 		if ((body?.website || "").toString().trim() !== "") {
 			console.log("[CONTACT] honeypot triggered");
 			return NextResponse.json({ ok: true });
 		}
 
+		// 3. Server-side Cloudflare Turnstile verification
+		const turnstileToken = body?.turnstileToken || body?.["cf-turnstile-response"];
+		if (!turnstileToken) {
+			return NextResponse.json(
+				{ message: "Verification token is required. Please complete the verification check." },
+				{ status: 400 },
+			);
+		}
+
+		const turnstileResult = await verifyTurnstileToken({ token: turnstileToken, ip });
+		if (!turnstileResult.success) {
+			console.warn("[CONTACT] Turnstile verification failed:", { ip, errorCodes: turnstileResult.errorCodes });
+			return NextResponse.json(
+				{
+					message: "Bot verification failed or expired. Please verify and try again.",
+					errorCodes: turnstileResult.errorCodes,
+				},
+				{ status: 403 },
+			);
+		}
+
+		// 4. Payload sanitization and validation
 		const name = (body?.name || "").toString().trim().slice(0, 120);
 		const email = (body?.email || "").toString().trim().slice(0, 200);
 		const subject = (body?.subject || "").toString().trim().slice(0, 200);

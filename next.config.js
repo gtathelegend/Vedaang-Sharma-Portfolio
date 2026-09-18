@@ -50,12 +50,13 @@ module.exports = withBundleAnalyzer({
 			"base-uri 'self'",
 			"object-src 'none'",
 			"frame-ancestors 'none'",
+			"frame-src 'self' https://challenges.cloudflare.com",
 			"form-action 'self'",
-			"script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+			"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
 			"style-src 'self' 'unsafe-inline'",
 			"img-src 'self' data: blob: https://*.supabase.co",
 			"font-src 'self' data:",
-			"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.i.posthog.com https://vitals.vercel-insights.com",
+			"connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.posthog.com https://*.i.posthog.com https://vitals.vercel-insights.com https://challenges.cloudflare.com",
 			"upgrade-insecure-requests",
 		].join("; ");
 
