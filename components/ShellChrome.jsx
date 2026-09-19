@@ -12,6 +12,9 @@ const CommandPalette = dynamic(() => import("@/components/CommandPalette"), {
 const TerminalIntro = dynamic(() => import("@/components/TerminalIntro"), {
   ssr: false,
 });
+const AskVedaang = dynamic(() => import("@/components/AskVedaang"), {
+  ssr: false,
+});
 
 export default function ShellChrome() {
   const pathname = usePathname();
@@ -28,6 +31,7 @@ export default function ShellChrome() {
       <TerminalIntro onDone={() => setIntroReady(true)} />
       <Navbar introReady={introReady} />
       <CommandPalette introReady={introReady} />
+      <AskVedaang />
     </>
   );
 }

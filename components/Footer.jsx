@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import FlyRankBadge from "@/components/FlyRankBadge";
 
 const FOOTER_LINKS = [
 	{
@@ -58,9 +59,9 @@ export default function Footer() {
 
 			{/* Link columns */}
 			<div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 py-10 border-t border-amber-100/60 dark:border-[color:var(--color-border)]">
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
 					{/* Brand column */}
-					<div className="col-span-2 md:col-span-1">
+					<div className="col-span-1">
 						<p className="text-base font-bold text-gray-900 mb-1 dark:text-[color:var(--color-text)]">Vedaang Sharma</p>
 						<p className="text-xs text-gray-500 leading-relaxed max-w-[180px] dark:text-[color:var(--color-text-muted)]">
 							Full Stack &amp; AI Systems Developer
@@ -97,6 +98,13 @@ export default function Footer() {
 							</ul>
 						</div>
 					))}
+					{/* Credential column */}
+					<div>
+						<p className="text-[10px] font-bold uppercase tracking-widest text-amber-600 mb-3 dark:text-amber-300">
+							Credential
+						</p>
+						<FlyRankBadge />
+					</div>
 				</div>
 			</div>
 
