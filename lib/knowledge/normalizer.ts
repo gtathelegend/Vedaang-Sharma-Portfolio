@@ -245,8 +245,8 @@ export function normalizeSettings(row: any): {
   const subtitle =
     row?.hero_subtitle ||
     row?.about_bio ||
-    "CS student, published researcher, and full-stack engineer building AI agents, distributed systems, and cloud-native applications.";
-  const location = row?.location || "India";
+    "Full Stack Developer pursuing a BCA in Cloud Computing and Full Stack Development at Vivekananda Global University, published researcher, and builder of AI systems.";
+  const location = row?.location || "Gurugram, Haryana, India";
   const email = row?.email || "vedaangsharma2006@gmail.com";
   const github = "https://github.com/gtathelegend";
   const linkedin = "https://www.linkedin.com/in/vedaangsharma2006/";

@@ -1,5 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { SITE_URL } from "@/lib/seo/config";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vedaangsharma.in";
 
 function url(path) {
   return `${SITE_URL}${path}`;
@@ -8,14 +9,14 @@ function url(path) {
 export default async function sitemap() {
   const staticRoutes = [
     { path: "/", changeFrequency: "weekly", priority: 1.0 },
-    { path: "/about", changeFrequency: "monthly", priority: 0.9 },
+    { path: "/about", changeFrequency: "monthly", priority: 0.8 },
     { path: "/projects", changeFrequency: "weekly", priority: 0.9 },
     { path: "/projects/archive", changeFrequency: "monthly", priority: 0.6 },
-    { path: "/skills", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/certifications", changeFrequency: "monthly", priority: 0.7 },
-    { path: "/research", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/contact", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/skills", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/certifications", changeFrequency: "monthly", priority: 0.6 },
+    { path: "/research", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
+    { path: "/contact", changeFrequency: "yearly", priority: 0.5 },
     { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
   ];
 

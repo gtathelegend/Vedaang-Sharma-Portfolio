@@ -249,7 +249,7 @@ The Project schema has `seo_title`, `seo_description`. Add admin form fields:
 - Meta description (with counter, max 160)
 - OG image upload
 - Twitter card preview
-- Slug preview (`vedaangsharma.dev/projects/your-slug`)
+- Slug preview (`vedaangsharma.in/projects/your-slug`)
 
 Wire to `app/projects/[slug]/page.jsx` `generateMetadata()` export.
 

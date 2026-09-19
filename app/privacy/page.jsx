@@ -3,10 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faShieldHalved, faFilePdf, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 export const metadata = {
-  title: "Privacy Policy | Vedaang Sharma",
+  title: "Privacy Policy",
   description:
     "Privacy and data collection policy for Vedaang Sharma's portfolio, detailing resume download logging, approximate geolocation, and security practices.",
   alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Privacy Policy | Vedaang Sharma",
+    description: "Privacy and data handling practices for Vedaang Sharma's portfolio.",
+    url: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {

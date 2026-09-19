@@ -1,10 +1,10 @@
 export const metadata = {
-  title: "Admin Panel | Vedaang Sharma",
+  title: "Admin",
   robots: {
     index: false,
     follow: false,
+    nocache: true,
     noarchive: true,
-    nosnippet: true,
   },
 };
 

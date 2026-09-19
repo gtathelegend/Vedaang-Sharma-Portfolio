@@ -1,50 +1,59 @@
 import Footer from "@/components/Footer";
-import { SITE_URL } from "@/lib/seo/config";
-import { getBreadcrumbSchema } from "@/lib/seo/schema";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getItemListSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 export const metadata = {
-  title: "Vedaang Sharma Research | AI, Software & Technology",
-  description:
-    "Published research and academic work by Vedaang Sharma — real-time computer vision systems, pose detection algorithms, and privacy-preserving intelligent interfaces.",
+  title: "Research",
+  description: "Published research and academic work by Vedaang Sharma — computer vision, AI systems, and human-centered intelligent interfaces.",
   alternates: { canonical: "/research" },
   openGraph: {
-    title: "Vedaang Sharma Research | AI, Software & Technology",
-    description:
-      "Academic papers and engineering research by Vedaang Sharma in computer vision, real-time AI, and applied machine learning.",
-    url: `${SITE_URL}/research`,
-    type: "website",
-    images: [
-      {
-        url: "/og-image-rev.png",
-        width: 1200,
-        height: 630,
-        alt: "Vedaang Sharma Research Publications",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Vedaang Sharma Research | AI, Software & Technology",
-    description:
-      "Academic research on real-time computer vision and intelligent AI systems by Vedaang Sharma.",
-    images: ["/og-image-rev.png"],
+    title: "Research | Vedaang Sharma",
+    description: "Published research and academic work by Vedaang Sharma — computer vision, AI systems, and human-centered intelligent interfaces.",
+    url: "/research",
   },
 };
 
-export default function ResearchLayout({ children }) {
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+export default async function Layout({ children }) {
+  let papersList = [];
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("research_papers")
+      .select("id, title, abstract, project_slug, year, venue, doi_url")
+      .order("sort_order", { ascending: true })
+      .order("year", { ascending: false });
+
+    papersList = data || [];
+  } catch (err) {
+    console.warn("[research/layout] Failed to fetch research papers for schema:", err);
+  }
+
+  const itemListSchema = getItemListSchema({
+    name: "Research & Publications by Vedaang Sharma",
+    description: metadata.description,
+    path: "/research",
+    items: papersList.map((p) => ({
+      name: p.title,
+      description: p.abstract || `${p.venue || "Published paper"} (${p.year || ""})`,
+      url: p.project_slug ? `/research/${p.project_slug}` : p.doi_url || "/research",
+    })),
+  });
+
+  const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Research", url: "/research" },
   ]);
 
   return (
     <>
-      {breadcrumbsJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {children}
       <Footer />
     </>
