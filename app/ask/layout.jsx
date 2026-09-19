@@ -1,12 +1,10 @@
 export const metadata = {
-  title: "Chat with Vedaang | AI Portfolio Assistant",
-  description:
-    "Interactive AI portfolio assistant to explore Vedaang Sharma's engineering case studies, backend architecture, and technical projects.",
+  title: "Ask Vedaang",
+  description: "Interactive AI assistant grounded in Vedaang Sharma's engineering work.",
   robots: {
     index: false,
-    follow: true,
+    follow: false,
     noarchive: true,
-    nosnippet: true,
   },
 };
 

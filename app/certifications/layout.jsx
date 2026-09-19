@@ -1,50 +1,68 @@
 import Footer from "@/components/Footer";
-import { SITE_URL } from "@/lib/seo/config";
-import { getBreadcrumbSchema } from "@/lib/seo/schema";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getItemListSchema, getEducationalOccupationalCredentialSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 export const metadata = {
-  title: "Vedaang Sharma Certifications | AWS, Google Cloud & More",
-  description:
-    "Verified professional certifications earned by Vedaang Sharma — AWS Cloud Quest: Solutions Architect, Google Cloud Engineer AI Agents (ADK), MERN Full Stack, and Cisco Network Security.",
+  title: "Certifications",
+  description: "Verified credentials and certifications in AI, Cloud, DevOps, and engineering earned by Vedaang Sharma.",
   alternates: { canonical: "/certifications" },
   openGraph: {
-    title: "Vedaang Sharma Certifications | AWS, Google Cloud & More",
-    description:
-      "Verified credentials in Cloud Architecture, AI Agent Engineering, Full Stack Development, and Network Security earned by Vedaang Sharma.",
-    url: `${SITE_URL}/certifications`,
-    type: "website",
-    images: [
-      {
-        url: "/og-image-rev.png",
-        width: 1200,
-        height: 630,
-        alt: "Vedaang Sharma Professional Certifications and Credentials",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Vedaang Sharma Certifications | AWS, Google Cloud & More",
-    description:
-      "Verified credentials in Cloud Architecture, AI Engineering, and Full Stack Development.",
-    images: ["/og-image-rev.png"],
+    title: "Certifications | Vedaang Sharma",
+    description: "Verified credentials and certifications in AI, Cloud, DevOps, and engineering earned by Vedaang Sharma.",
+    url: "/certifications",
   },
 };
 
-export default function CertificationsLayout({ children }) {
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+export default async function Layout({ children }) {
+  let certList = [];
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("certifications")
+      .select("id, name, issuer, year, category, url")
+      .order("sort_order", { ascending: true })
+      .order("year", { ascending: false });
+
+    certList = data || [];
+  } catch (err) {
+    console.warn("[certifications/layout] Failed to fetch certs for schema:", err);
+  }
+
+  const itemListSchema = getItemListSchema({
+    name: "Certifications & Credentials of Vedaang Sharma",
+    description: metadata.description,
+    path: "/certifications",
+    items: certList.map((c) => ({
+      name: c.name,
+      description: `${c.issuer || "Issued credential"} (${c.year || ""})`,
+      url: c.url || `/certifications#${c.id}`,
+    })),
+  });
+
+  const credentialSchemas = certList.map((c) => getEducationalOccupationalCredentialSchema(c));
+
+  const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Certifications", url: "/certifications" },
   ]);
 
   return (
     <>
-      {breadcrumbsJsonLd && (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      {credentialSchemas.map((schema, idx) => (
         <script
+          key={idx}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
-      )}
+      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {children}
       <Footer />
     </>

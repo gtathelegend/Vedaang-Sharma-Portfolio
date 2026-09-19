@@ -1,50 +1,61 @@
 import Footer from "@/components/Footer";
-import { SITE_URL } from "@/lib/seo/config";
-import { getBreadcrumbSchema } from "@/lib/seo/schema";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getItemListSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 export const metadata = {
-  title: "Vedaang Sharma Projects | Full Stack, AI, Cloud & IoT",
-  description:
-    "Engineering case studies and software projects by Vedaang Sharma — BehaviourSim, PostureSense, AEON Home, Aegis Care, Campus Swap, AI agents, and cloud systems.",
+  title: "Projects",
+  description: "Software projects by Vedaang Sharma — AI agents, full-stack web apps, computer vision systems, and cloud-native applications.",
   alternates: { canonical: "/projects" },
   openGraph: {
-    title: "Vedaang Sharma Projects | Full Stack, AI, Cloud & IoT",
-    description:
-      "Engineering case studies and software projects by Vedaang Sharma — BehaviourSim, PostureSense, AEON Home, Aegis Care, Campus Swap, and full-stack systems.",
-    url: `${SITE_URL}/projects`,
-    type: "website",
-    images: [
-      {
-        url: "/og-image-rev.png",
-        width: 1200,
-        height: 630,
-        alt: "Vedaang Sharma Software Projects Portfolio",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Vedaang Sharma Projects | Full Stack, AI, Cloud & IoT",
-    description:
-      "Software engineering and AI systems portfolio by Vedaang Sharma.",
-    images: ["/og-image-rev.png"],
+    title: "Projects | Vedaang Sharma",
+    description: "Software projects by Vedaang Sharma — AI agents, full-stack web apps, computer vision systems, and cloud-native applications.",
+    url: "/projects",
   },
 };
 
-export default function ProjectsLayout({ children }) {
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+export default async function Layout({ children }) {
+  let projectItems = [];
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("projects")
+      .select("slug, title, description, short_desc, show, status")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false });
+
+    projectItems = (data || [])
+      .filter((p) => p?.slug && p.show !== false && p.status !== "draft" && p.status !== "archived")
+      .map((p) => ({
+        name: p.title,
+        url: `/projects/${p.slug}`,
+        description: p.short_desc || (Array.isArray(p.description) ? p.description[0] : p.description),
+      }));
+  } catch (err) {
+    console.warn("[projects/layout] Failed to fetch projects for ItemList schema:", err);
+  }
+
+  const itemListSchema = getItemListSchema({
+    name: "Projects by Vedaang Sharma",
+    description: metadata.description,
+    path: "/projects",
+    items: projectItems,
+  });
+
+  const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Projects", url: "/projects" },
   ]);
 
   return (
     <>
-      {breadcrumbsJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {children}
       <Footer />
     </>

@@ -595,9 +595,9 @@ function AboutPreview() {
 									Building thoughtful, modern software.
 								</h2>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-5">
-									I&apos;m a full‑stack developer and AI systems builder based in Jaipur - studying CS
-									at Vivekananda Global University. My work spans intelligent web applications,
-									computer vision systems, and multi‑agent AI architectures.
+									I&apos;m a full‑stack developer based in Gurugram - pursuing a BCA in Cloud Computing
+									and Full Stack Development at Vivekananda Global University, Jaipur. My work spans intelligent web applications,
+									computer vision systems, and modern backend architectures.
 								</p>
 								<p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
 									What genuinely excites me: building AI that feels invisible - privacy‑first,
@@ -1124,7 +1124,7 @@ export default function MyPage() {
 	const tagline = settings?.tagline || "Full Stack Developer, AI & Cloud Developer";
 	const heroSubtitle =
 		settings?.hero_subtitle ||
-		"Full Stack Developer specializing in Cloud Computing, AI/ML, and backend engineering. BCA student at Vivekananda Global University, Jaipur, building production-grade web applications and intelligent systems.";
+		"Building intelligent applications — AI agents, distributed systems, computer vision, and cloud architectures. Full Stack Developer, published researcher, and builder of AI systems.";
 	const cvUrl = "/api/download-resume";
 
 	return (

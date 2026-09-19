@@ -1,7 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import Footer from "@/components/Footer";
-import { SITE_URL } from "@/lib/seo/config";
-import { getBlogPostingSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getBlogPostingSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 async function getPost(slug) {
   try {
@@ -21,48 +20,22 @@ async function getPost(slug) {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) {
-    return {
-      title: "Post Not Found",
-      robots: { index: false, follow: false },
-    };
-  }
-
-  const title = `${post.title} | Vedaang Sharma Blog`;
-  const description =
-    post.excerpt || `Technical article on ${post.title} by Vedaang Sharma.`;
-  const canonicalUrl = `${SITE_URL}/blog/${slug}`;
-  const ogImageUrl = post.cover_image
-    ? post.cover_image.startsWith("http")
-      ? post.cover_image
-      : `${SITE_URL}${post.cover_image}`
-    : `${SITE_URL}/og-image-rev.png`;
+  if (!post) return { title: "Post Not Found" };
 
   return {
-    title,
-    description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title: post.title,
+    description: post.excerpt || undefined,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
-      title,
-      description,
-      url: canonicalUrl,
+      title: post.title,
+      description: post.excerpt || undefined,
+      url: `/blog/${slug}`,
       type: "article",
-      publishedTime: post.published_at || post.created_at,
-      modifiedTime: post.updated_at || post.published_at,
-      images: [
-        {
-          url: ogImageUrl,
-          alt: post.title,
-        },
-      ],
     },
     twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [ogImageUrl],
+      card: "summary",
+      title: post.title,
+      description: post.excerpt || undefined,
     },
   };
 }
@@ -71,7 +44,7 @@ export default async function BlogPostLayout({ children, params }) {
   const { slug } = await params;
   const post = await getPost(slug);
 
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+  const breadcrumbsJsonLd = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Blog", url: "/blog" },
     { name: post?.title || slug, url: `/blog/${slug}` },

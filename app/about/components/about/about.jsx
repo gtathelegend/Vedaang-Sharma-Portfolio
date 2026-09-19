@@ -6,9 +6,9 @@ import Me1 from "@/public/image/me1.jpg";
 import { fetchJson } from "@/lib/api";
 
 const DEFAULT_BIO = [
-  "I am a Full Stack Developer specializing in Cloud Computing, AI/ML, and backend engineering. Based in Gurugram, India, and pursuing my Bachelor of Computer Applications (BCA) in Cloud Computing and Full Stack Development at Vivekananda Global University, Jaipur (2024–2027, CGPA 9.6/10), I design scalable web applications, real-time computer vision systems, and AI-driven workflows.",
-  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and cloud-native architectures that are both elegant and production-ready. I have built production software across Python, Next.js, React, FastAPI, Node.js, and AWS, and published peer-reviewed research on real-time computer vision systems.",
-  "Long-term, I focus on building intelligent systems that augment people — deployed reliably at scale, respecting data privacy, and grounded in real-world human needs.",
+  "I build intelligent systems at the intersection of full-stack engineering and AI. Based in Gurugram, India, I’m pursuing a Bachelor of Computer Applications (BCA) in Cloud Computing and Full Stack Development at Vivekananda Global University, Jaipur — and I’ve already published peer-reviewed research on real-time computer vision systems.",
+  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and architectures that are both elegant and production-ready. I don’t just build features — I think about the systems behind them.",
+  "Long-term, I want to build AI that augments people rather than replaces them — deployed at scale, respecting privacy, and grounded in real human needs. That’s the kind of engineer I’m working to become.",
 ];
 
 export default function About() {
@@ -26,7 +26,11 @@ export default function About() {
   }, []);
 
   return (
-    <div className="mx-auto container gap-8 px-6 sm:px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 py-12 md:py-24">
+    <article
+      className="mx-auto container gap-8 px-6 sm:px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 py-12 md:py-24"
+      itemScope
+      itemType="https://schema.org/Person"
+    >
       <motion.div
         className="flex justify-center items-center"
         initial={{ opacity: 0, x: -60 }}
@@ -34,7 +38,7 @@ export default function About() {
         transition={{ type: "spring", delay: 0.1 }}
         viewport={{ once: true, amount: 0.2 }}>
         <div className="relative w-full max-w-[260px] sm:max-w-sm md:max-w-md aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-500 shadow-lg">
-          <Image src={Me1} alt="Vedaang Sharma" fill className="object-cover" placeholder="blur" sizes="(max-width: 768px) 90vw, 400px" />
+          <Image src={Me1} alt="Vedaang Sharma" fill className="object-cover" placeholder="blur" sizes="(max-width: 768px) 90vw, 400px" itemProp="image" />
         </div>
       </motion.div>
       <motion.div
@@ -44,13 +48,15 @@ export default function About() {
         transition={{ type: "spring", delay: 0.2 }}
         viewport={{ once: true, amount: 0.2 }}>
         <p className="text-[11px] font-bold uppercase tracking-[.35rem] text-gray-400 dark:text-gray-500 mb-3">Who I Am</p>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">Vedaang Sharma</h2>
-        {paragraphs.map((para, i) => (
-          <p key={i} className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed mb-4 last:mb-0">
-            {para}
-          </p>
-        ))}
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white" itemProp="name">Vedaang Sharma</h2>
+        <div itemProp="description">
+          {paragraphs.map((para, i) => (
+            <p key={i} className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed mb-4 last:mb-0">
+              {para}
+            </p>
+          ))}
+        </div>
       </motion.div>
-    </div>
+    </article>
   );
 }

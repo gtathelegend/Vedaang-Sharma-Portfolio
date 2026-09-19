@@ -1,6 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { SITE_URL } from "@/lib/seo/config";
-import { getScholarlyArticleSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
+import { getScholarlyArticleSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 async function getPaper(slug) {
   try {
@@ -19,46 +18,28 @@ async function getPaper(slug) {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const paper = await getPaper(slug);
-  if (!paper) {
-    return {
-      title: "Research Paper Not Found",
-      robots: { index: false, follow: false },
-    };
-  }
+  if (!paper) return { title: "Research Paper Not Found" };
 
-  const title = `${paper.title} | Research by Vedaang Sharma`;
+  const title = paper.title;
   const description =
     paper.abstract ||
     [paper.venue, paper.year].filter(Boolean).join(" · ") ||
-    "Research paper and scientific publication by Vedaang Sharma.";
-
-  const canonicalUrl = `${SITE_URL}/research/${slug}`;
+    "Research publication";
 
   return {
     title,
     description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    alternates: { canonical: `/research/${slug}` },
     openGraph: {
       title,
       description,
-      url: canonicalUrl,
+      url: `/research/${slug}`,
       type: "article",
-      images: [
-        {
-          url: "/og-image-rev.png",
-          width: 1200,
-          height: 630,
-          alt: `${paper.title} — Research Publication`,
-        },
-      ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title,
       description,
-      images: ["/og-image-rev.png"],
     },
   };
 }
@@ -67,7 +48,7 @@ export default async function ResearchPaperLayout({ children, params }) {
   const { slug } = await params;
   const paper = await getPaper(slug);
 
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+  const breadcrumbsJsonLd = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Research", url: "/research" },
     { name: paper?.title || slug, url: `/research/${slug}` },

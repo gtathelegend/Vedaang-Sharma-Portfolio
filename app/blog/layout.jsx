@@ -1,50 +1,60 @@
 import Footer from "@/components/Footer";
-import { SITE_URL } from "@/lib/seo/config";
-import { getBreadcrumbSchema } from "@/lib/seo/schema";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getItemListSchema, getBreadcrumbListSchema } from "@/lib/seo/schema";
 
 export const metadata = {
-  title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
-  description:
-    "Technical articles and software engineering write-ups by Vedaang Sharma on AI systems, distributed backends, performance optimization, and modern web applications.",
+  title: "Blog",
+  description: "Technical writing by Vedaang Sharma on AI systems, full-stack engineering, and building software that matters.",
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
-    description:
-      "Technical writing by Vedaang Sharma on full-stack engineering, AI/ML architectures, and production software patterns.",
-    url: `${SITE_URL}/blog`,
-    type: "website",
-    images: [
-      {
-        url: "/og-image-rev.png",
-        width: 1200,
-        height: 630,
-        alt: "Vedaang Sharma Technical Blog",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
-    description:
-      "Technical insights and architectural deep-dives by Vedaang Sharma.",
-    images: ["/og-image-rev.png"],
+    title: "Blog | Vedaang Sharma",
+    description: "Technical writing by Vedaang Sharma on AI systems, full-stack engineering, and building software that matters.",
+    url: "/blog",
   },
 };
 
-export default function BlogLayout({ children }) {
-  const breadcrumbsJsonLd = getBreadcrumbSchema([
+export default async function Layout({ children }) {
+  let postItems = [];
+  try {
+    const admin = createAdminClient();
+    const { data } = await admin
+      .from("blog_posts")
+      .select("slug, title, excerpt, published, published_at")
+      .order("published_at", { ascending: false, nullsFirst: false });
+
+    postItems = (data || [])
+      .filter((p) => p?.slug && p.published === true)
+      .map((p) => ({
+        name: p.title,
+        url: `/blog/${p.slug}`,
+        description: p.excerpt || p.title,
+      }));
+  } catch (err) {
+    console.warn("[blog/layout] Failed to fetch blog posts for schema:", err);
+  }
+
+  const itemListSchema = getItemListSchema({
+    name: "Blog Articles by Vedaang Sharma",
+    description: metadata.description,
+    path: "/blog",
+    items: postItems,
+  });
+
+  const breadcrumbSchema = getBreadcrumbListSchema([
     { name: "Home", url: "/" },
     { name: "Blog", url: "/blog" },
   ]);
 
   return (
     <>
-      {breadcrumbsJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {children}
       <Footer />
     </>

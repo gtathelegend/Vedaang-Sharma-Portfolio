@@ -9,6 +9,7 @@ import About from "./components/about/about.jsx";
 import Experience from "./components/experience.jsx";
 import Education from "./components/education.jsx";
 import Certifications from "./components/certifications/certifications.jsx";
+import FAQ from "./components/faq.jsx";
 import Quote from "./components/quote/quote.jsx";
 import Hero from "@/public/image/me1.jpg";
 
@@ -68,6 +69,7 @@ export default function Page() {
 			<Experience />
 			<Education />
 			<Certifications />
+			<FAQ />
 			<Quote />
 		</main>
 	);

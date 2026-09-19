@@ -4,7 +4,7 @@
 
 ### A full-stack, CMS-driven portfolio platform with a secure admin dashboard, role-based authorization, and production-grade security hardening.
 
-[![Live Demo](https://img.shields.io/badge/Live-vedaangsharma.dev-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vedaangsharma.dev)
+[![Live Demo](https://img.shields.io/badge/Live-vedaangsharma.in-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vedaangsharma.in)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge)](LICENSE)
 
 ![Next.js](https://img.shields.io/badge/Next.js_15-000000?style=flat-square&logo=next.js&logoColor=white)
@@ -512,6 +512,6 @@ You may use, modify, and distribute it under the terms of that license. See the 
 
 <div align="center">
 
-**[🌐 Live Site](https://vedaangsharma.dev)** · Built with Next.js 15, React 19, and Supabase
+**[🌐 Live Site](https://vedaangsharma.in)** · Built with Next.js 15, React 19, and Supabase
 
 </div>
