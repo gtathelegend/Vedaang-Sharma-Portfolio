@@ -6,9 +6,9 @@ import Me1 from "@/public/image/me1.jpg";
 import { fetchJson } from "@/lib/api";
 
 const DEFAULT_BIO = [
-  "I build intelligent systems at the intersection of full-stack engineering and AI. Based in Jaipur, India, I’m studying Computer Science at Vivekananda Global University - and I’ve already published peer-reviewed research on real-time computer vision systems.",
-  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and architectures that are both elegant and production-ready. I don’t just build features - I think about the systems behind them.",
-  "Long-term, I want to build AI that augments people rather than replaces them - deployed at scale, respecting privacy, and grounded in real human needs. That’s the kind of engineer I’m working to become.",
+  "I am a Full Stack Developer specializing in Cloud Computing, AI/ML, and backend engineering. Based in Gurugram, India, and pursuing my Bachelor of Computer Applications (BCA) in Cloud Computing and Full Stack Development at Vivekananda Global University, Jaipur (2024–2027, CGPA 9.6/10), I design scalable web applications, real-time computer vision systems, and AI-driven workflows.",
+  "What excites me technically: privacy-first AI, on-device inference, multi-agent orchestration, and cloud-native architectures that are both elegant and production-ready. I have built production software across Python, Next.js, React, FastAPI, Node.js, and AWS, and published peer-reviewed research on real-time computer vision systems.",
+  "Long-term, I focus on building intelligent systems that augment people — deployed reliably at scale, respecting data privacy, and grounded in real-world human needs.",
 ];
 
 export default function About() {

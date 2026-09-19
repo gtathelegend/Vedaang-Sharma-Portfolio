@@ -1,4 +1,4 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vedaangsharma.dev";
+import { SITE_URL } from "@/lib/seo/config";
 
 export default function robots() {
   return {
@@ -6,7 +6,7 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/"],
+        disallow: ["/admin", "/admin/", "/api/", "/ask"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

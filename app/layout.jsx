@@ -9,6 +9,8 @@ import ShellChrome from "@/components/ShellChrome";
 import AuroraBackground from "@/components/AuroraBackground";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeProvider";
 import { ResumeDownloadProvider } from "@/context/ResumeDownloadContext";
+import { SITE_URL, SITE_IDENTITY } from "@/lib/seo/config";
+import { getPersonSchema, getWebSiteSchema } from "@/lib/seo/schema";
 
 const jost = Jost({
 	subsets: ["latin"],
@@ -29,117 +31,74 @@ export const viewport = {
 	themeColor: "#ffffff",
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vedaangsharma.dev";
-
 export const metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: "Vedaang Sharma | Portfolio",
+		default: "Vedaang Sharma | Full Stack Developer, AI & Cloud Developer",
 		template: "%s | Vedaang Sharma",
 	},
-	description: "Vedaang Sharma — Full Stack & AI Systems Developer. I build high-performance web apps, AI-powered products, and thoughtful user experiences.",
+	description:
+		"Vedaang Sharma — Full Stack Developer specializing in Cloud Computing, AI/ML, backend engineering, and modern web development. BCA student at Vivekananda Global University, Jaipur.",
 	icons: {
 		icon: [{ url: "/favicon.ico" }],
 	},
-	keywords: [
-		"Vedaang Sharma",
-		"Portfolio",
-		"Full Stack Developer",
-		"AI Systems Developer",
-		"Next.js",
-		"React",
-		"Node.js",
-		"Computer Vision",
-		"Machine Learning",
-	],
-	authors: [{ name: "Vedaang Sharma", url: SITE_URL }],
-	creator: "Vedaang Sharma",
+	authors: [{ name: SITE_IDENTITY.name, url: SITE_URL }],
+	creator: SITE_IDENTITY.name,
+	publisher: SITE_IDENTITY.name,
 	alternates: {
-		canonical: SITE_URL,
+		canonical: "/",
 	},
 	openGraph: {
 		type: "website",
 		locale: "en_US",
 		url: SITE_URL,
-		title: "Vedaang Sharma | Portfolio",
-		description: "Full Stack & AI Systems Developer. Projects, research, and writing by Vedaang Sharma.",
-		siteName: "Vedaang Sharma",
+		title: "Vedaang Sharma | Full Stack Developer, AI & Cloud Developer",
+		description:
+			"Full Stack Developer specializing in Cloud Computing, AI/ML, backend engineering, and modern web applications. Explore projects, research, and technical case studies.",
+		siteName: SITE_IDENTITY.name,
 		images: [
 			{
 				url: "/og-image-rev.png",
 				width: 1200,
 				height: 630,
-				alt: "Vedaang Sharma — Full Stack & AI Systems Developer",
+				alt: "Vedaang Sharma — Full Stack Developer, AI & Cloud Developer",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Vedaang Sharma | Portfolio",
-		description: "Full Stack & AI Systems Developer. Projects, research, and writing by Vedaang Sharma.",
+		title: "Vedaang Sharma | Full Stack Developer, AI & Cloud Developer",
+		description:
+			"Full Stack Developer specializing in Cloud Computing, AI/ML, backend engineering, and modern web applications.",
 		images: ["/og-image-rev.png"],
+		creator: "@gtathelegend",
 	},
-};
-
-/* ─── JSON-LD structured data ───────────────────────────────────────────────
-   Person + WebSite schemas give Google the signals it needs to:
-   - Understand who this site is about
-   - Generate sitelinks (the stacked sub-links under the main search result)
-   - Populate the Knowledge Panel for the name "Vedaang Sharma"
-   ─────────────────────────────────────────────────────────────────────────── */
-const personJsonLd = {
-	"@context": "https://schema.org",
-	"@type": "Person",
-	name: "Vedaang Sharma",
-	url: SITE_URL,
-	image: `${SITE_URL}/og-image-rev.png`,
-	jobTitle: "Full Stack & AI Systems Developer",
-	description: "CS student, published researcher, and full-stack engineer building AI agents, distributed systems, and cloud-native applications.",
-	email: "vedaangsharma2006@gmail.com",
-	sameAs: [
-		"https://github.com/gtathelegend",
-		"https://www.linkedin.com/in/vedaangsharma2006/",
-	],
-	knowsAbout: [
-		"Full Stack Development",
-		"Artificial Intelligence",
-		"Computer Vision",
-		"Machine Learning",
-		"Next.js",
-		"React",
-		"Node.js",
-		"Cloud Architecture",
-	],
-};
-
-const websiteJsonLd = {
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	name: "Vedaang Sharma",
-	url: SITE_URL,
-	description: "Portfolio of Vedaang Sharma — Full Stack & AI Systems Developer.",
-	author: {
-		"@type": "Person",
-		name: "Vedaang Sharma",
-	},
-	/* Sitelinks Searchbox — lets Google show a search input under your result */
-	potentialAction: {
-		"@type": "SearchAction",
-		target: {
-			"@type": "EntryPoint",
-			urlTemplate: `${SITE_URL}/projects?q={search_term_string}`,
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
 		},
-		"query-input": "required name=search_term_string",
+	},
+	verification: {
+		google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
 	},
 };
 
 export default function RootLayout({ children }) {
+	const personJsonLd = getPersonSchema();
+	const websiteJsonLd = getWebSiteSchema();
+
 	return (
 		<html lang="en" className={`${jost.variable} ${poppins.variable}`} suppressHydrationWarning>
 			<head>
 				<link rel="preconnect" href="https://challenges.cloudflare.com" />
 				<script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-				{/* Structured data — parsed by Google for sitelinks & Knowledge Panel */}
+				{/* Canonical Entity Schemas for Search Engines */}
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

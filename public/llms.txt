@@ -1,30 +1,37 @@
 # Vedaang Sharma — Portfolio
 
-> Full Stack & AI Systems Developer building intelligent web applications, AI/ML systems, distributed backends, and modern software architectures.
+> Full Stack Developer specializing in Cloud Computing, AI/ML, backend engineering, and modern web development. BCA student at Vivekananda Global University, Jaipur.
 
 ## Overview
-Vedaang Sharma is a Full Stack and AI Systems Developer based in Jaipur, India. He specializes in designing and building high-performance web applications, computer vision models, generative AI integrations, and cloud architectures.
+Vedaang Sharma is a Full Stack Developer based in Gurugram, India, pursuing a Bachelor of Computer Applications (BCA) in Cloud Computing and Full Stack Development at Vivekananda Global University, Jaipur (2024–2027, CGPA 9.6/10). He specializes in designing and building scalable web systems, computer vision applications, LLM workflows, and cloud architectures.
 
 ## Core Navigation & Links
-- [Home](https://vedaangsharma.dev): Main portfolio overview, featured projects, latest research, and engineering journey.
-- [About](https://vedaangsharma.dev/about): Detailed engineering biography, background, timeline, and education.
-- [Projects](https://vedaangsharma.dev/projects): Portfolio of production applications, AI systems, open-source tools, and client platforms.
-- [Projects Archive](https://vedaangsharma.dev/projects/archive): Complete historical archive of engineering projects.
-- [Research & Publications](https://vedaangsharma.dev/research): Academic papers, computer vision research, and technical writeups.
-- [Skills](https://vedaangsharma.dev/skills): Comprehensive technical skills matrix covering frontend, backend, AI/ML, cloud, and tools.
-- [Certifications](https://vedaangsharma.dev/certifications): Professional certifications and verifiable credentials.
-- [Blog](https://vedaangsharma.dev/blog): Articles on software engineering, web performance, and AI systems.
-- [Now](https://vedaangsharma.dev/now): Current projects, learning focus, and reading list.
-- [Contact](https://vedaangsharma.dev/contact): Direct contact form and communication channels.
+- [Home](https://vedaangsharma.in): Main portfolio overview, featured projects, latest research, and engineering journey.
+- [About](https://vedaangsharma.in/about): Detailed engineering biography, background, timeline, and education.
+- [Projects](https://vedaangsharma.in/projects): Portfolio of production applications, AI systems, open-source tools, and client platforms.
+- [Projects Archive](https://vedaangsharma.in/projects/archive): Complete historical archive of engineering projects.
+- [Research & Publications](https://vedaangsharma.in/research): Academic papers, computer vision research, and technical writeups.
+- [Skills](https://vedaangsharma.in/skills): Comprehensive technical skills matrix covering frontend, backend, AI/ML, cloud, and tools.
+- [Certifications](https://vedaangsharma.in/certifications): Professional certifications and verifiable credentials.
+- [Blog](https://vedaangsharma.in/blog): Articles on software engineering, web performance, and AI systems.
+- [Contact](https://vedaangsharma.in/contact): Direct contact form and communication channels.
 
 ## Featured Technical Expertise
 - **Frontend & Web Platforms**: Next.js (App Router), React 19, JavaScript (ESNext), TypeScript, Tailwind CSS, Responsive & Accessible UI Design, Core Web Vitals optimization.
-- **Backend & Systems**: Node.js, Express, Next.js API routes, Python, REST APIs, GraphQL, WebSockets, Supabase, PostgreSQL, Upstash Redis, authentication & authorization.
-- **AI & Machine Learning**: Computer Vision, Deep Learning, PyTorch, LangChain, LLM prompt engineering and agent workflows, model inference optimization.
-- **DevOps & Tooling**: Git, GitHub, Vercel, Docker, CI/CD, PostHog analytics, performance monitoring.
+- **Backend & Systems**: Python, FastAPI, Node.js, Express, Next.js API routes, REST APIs, WebSockets, Supabase, PostgreSQL, Upstash Redis, authentication & authorization.
+- **AI & Machine Learning**: Computer Vision, MediaPipe, OpenCV, Deep Learning, LangChain, Multi-Agent Systems, LLM prompt engineering, synthetic data generation (BehaviourSim).
+- **Cloud & DevOps**: AWS, Azure, Docker, CI/CD, Git, GitHub, Vercel, PostHog analytics, performance monitoring.
+
+## Key Verified Projects
+- **BehaviourSim**: Synthetic behavioral telemetry & simulation platform (PyPI: `https://pypi.org/project/behaviorsim/`, Web: `https://behavioursim.vedaangsharma.in`).
+- **PostureSense**: Real-time posture detection & correction using MediaPipe and computer vision (`https://posture-sense.vedaangsharma.in`).
+- **AEON Home**: Edge AI & IoT home automation with Arduino & ESP8266.
+- **Aegis Care**: Decentralized healthcare records management (`https://aegis-care.vedaangsharma.in`).
+- **Campus Swap**: University student marketplace in Flutter, Dart & Supabase (`https://campus-swap.vedaangsharma.in`).
 
 ## Contact & Social Profiles
 - **Email**: [vedaangsharma2006@gmail.com](mailto:vedaangsharma2006@gmail.com)
 - **GitHub**: [github.com/gtathelegend](https://github.com/gtathelegend)
 - **LinkedIn**: [linkedin.com/in/vedaangsharma2006](https://www.linkedin.com/in/vedaangsharma2006/)
-- **Website**: [https://vedaangsharma.dev](https://vedaangsharma.dev)
+- **PyPI**: [pypi.org/project/behaviorsim](https://pypi.org/project/behaviorsim/)
+- **Website**: [https://vedaangsharma.in](https://vedaangsharma.in)

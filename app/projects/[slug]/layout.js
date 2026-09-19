@@ -1,44 +1,99 @@
 import { createClient } from "@/lib/supabase/server";
-import { mapProject }   from "@/lib/supabase/mappers";
+import { SITE_URL } from "@/lib/seo/config";
+import { getSoftwareApplicationSchema, getBreadcrumbSchema } from "@/lib/seo/schema";
 
 async function getProject(slug) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("projects")
-    .select("title, description, seo_title, seo_desc, thumbnail, slug")
-    .eq("slug", slug)
-    .single();
-  if (error || !data) return null;
-  return data;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("title, description, seo_title, seo_desc, thumbnail, slug, tech_stack, github_link, live_link, category")
+      .eq("slug", slug)
+      .single();
+    if (error || !data) return null;
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }) {
-  const project = await getProject(params.slug);
+  const { slug } = await params;
+  const project = await getProject(slug);
   if (!project) {
-    return { title: "Project Not Found" };
+    return {
+      title: "Project Not Found",
+      robots: { index: false, follow: false },
+    };
   }
 
-  const title       = project.seo_title  || project.title || "Project";
-  const description = project.seo_desc   || (project.description?.[0] ?? "");
-  const ogImage     = project.thumbnail  ? [{ url: project.thumbnail }] : [];
+  const title = project.seo_title || `${project.title} | Vedaang Sharma Project`;
+  const description =
+    project.seo_desc ||
+    (Array.isArray(project.description) ? project.description[0] : project.description) ||
+    `${project.title} case study and architecture overview by Vedaang Sharma.`;
+
+  const canonicalUrl = `${SITE_URL}/projects/${slug}`;
+  const ogImageUrl = project.thumbnail
+    ? project.thumbnail.startsWith("http")
+      ? project.thumbnail
+      : `${SITE_URL}${project.thumbnail}`
+    : `${SITE_URL}/og-image-rev.png`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
-      images: ogImage,
+      url: canonicalUrl,
+      type: "article",
+      images: [
+        {
+          url: ogImageUrl,
+          alt: `${project.title} preview`,
+        },
+      ],
     },
     twitter: {
-      card:        "summary_large_image",
+      card: "summary_large_image",
       title,
       description,
-      images:      ogImage.map((i) => i.url),
+      images: [ogImageUrl],
     },
   };
 }
 
-export default function ProjectSlugLayout({ children }) {
-  return children;
+export default async function ProjectSlugLayout({ children, params }) {
+  const { slug } = await params;
+  const project = await getProject(slug);
+
+  const breadcrumbsJsonLd = getBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Projects", url: "/projects" },
+    { name: project?.title || slug, url: `/projects/${slug}` },
+  ]);
+
+  const softwareJsonLd = project ? getSoftwareApplicationSchema(project) : null;
+
+  return (
+    <>
+      {breadcrumbsJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+        />
+      )}
+      {softwareJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        />
+      )}
+      {children}
+    </>
+  );
 }
