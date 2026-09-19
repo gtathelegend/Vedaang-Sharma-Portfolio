@@ -2,7 +2,7 @@
 
 # Vedaang Sharma — Portfolio Platform
 
-### A full-stack, CMS-driven portfolio platform with a secure admin dashboard, role-based authorization, and production-grade security hardening.
+### A full-stack, CMS-driven portfolio platform with an interactive AI assistant, automated SEO/AEO/GEO engine, secure admin dashboard, role-based authorization, and production-grade security hardening.
 
 [![Live Demo](https://img.shields.io/badge/Live-vedaangsharma.in-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vedaangsharma.in)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge)](LICENSE)
@@ -12,6 +12,8 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Cloudflare Turnstile](https://img.shields.io/badge/Cloudflare_Turnstile-F38020?style=flat-square&logo=cloudflare&logoColor=white)
+![Upstash Redis](https://img.shields.io/badge/Upstash_Redis-00E599?style=flat-square&logo=redis&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![PostHog](https://img.shields.io/badge/PostHog-1D4AFF?style=flat-square&logo=posthog&logoColor=white)
 
@@ -21,497 +23,311 @@
 
 ## Overview
 
-**Vedaang Sharma Portfolio** is not a static personal site — it is a full-stack content platform. The public-facing site (projects, research, blog, certifications, experience, and more) is driven entirely by a **custom CMS** behind a secure admin dashboard, so every piece of content can be created, edited, and published **without touching code or redeploying**.
+**Vedaang Sharma Portfolio** is not a static personal website — it is a modern, full-stack content and intelligence platform. The public-facing site (projects, research, blog, certifications, experience, and interactive AI) is driven entirely by a **custom CMS** behind a secure admin dashboard, allowing every piece of content to be created, edited, and published **without touching code or redeploying**.
 
-The platform is built on **Next.js 15 (App Router)** and **React 19**, backed by **Supabase** for PostgreSQL, authentication, and object storage. It ships with **single-admin authorization**, **middleware-protected routes**, **validated file uploads**, **rate-limited and bot-protected forms**, a hardened **HTTP security header policy**, edge-rendered **dynamic Open Graph images**, and a tuned **AVIF/WebP image pipeline** — deployed on **Vercel** with **PostHog** product analytics and **Vercel Speed Insights**.
+The platform is engineered with **Next.js 15 (App Router)** and **React 19**, backed by **Supabase** for PostgreSQL, authentication, and object storage. It integrates an **in-house RAG-grounded AI conversational assistant (`/ask`)**, a complete **SEO + AEO + GEO optimization layer** (with machine-readable `/llms.txt` discovery files and rich JSON-LD graph schemas), **Cloudflare Turnstile bot verification**, **single-admin edge authorization**, **magic-byte validated file uploads**, **Upstash Redis distributed rate limiting**, and an **AVIF/WebP image pipeline** — deployed on **Vercel** with **PostHog** analytics and **Vercel Speed Insights**.
 
-> The goal: demonstrate that a portfolio can be engineered like a real production SaaS product — secure, observable, performant, and operable by a non-technical owner.
+> **Engineering Principle:** Build personal software with the same rigor as a production SaaS product — secure, observable, performant, entity-consistent, and operable without developer intervention.
 
 ---
 
 ## Why I Built This
 
-Most portfolio sites hardcode their content directly into components. Every new project, blog post, or résumé update means editing JSX, committing, and redeploying. That couples *content* to *engineering* — the worst kind of coupling for something that changes weekly.
+Most portfolio websites hardcode content into static JSX components. Every project, paper, or résumé update requires a commit and build deployment.
 
-I wanted to solve this the way a product team would:
+I engineered this platform to solve real software engineering challenges:
 
-- **Traditional portfolios are limiting.** Static content rots. The moment updating your work feels like a chore, it stops happening. Content should live in a database, not a Git commit.
-- **A CMS-driven architecture decouples content from code.** The presentation layer stays stable while content flows through a typed API and a managed Postgres database. The site becomes a *platform*, not a *page*.
-- **Content should be editable without redeployment.** Adding a project should take 30 seconds in an admin panel, not a build pipeline. This is a real operational requirement for any content-heavy product.
-- **Building full-stack delivers more engineering value.** Anyone can style a landing page. Designing an authenticated CMS — with authorization boundaries, a service-role security model, validated uploads, and abuse protection — exercises the skills that actually matter in production software.
-
-This project is the result: a portfolio that doubles as a demonstration of full-stack architecture, security engineering, and production operability.
+1. **Decoupled Architecture:** Content lives in managed PostgreSQL and Supabase Storage; presentation remains modular in Next.js Server Components.
+2. **No-Deploy Operations:** Content updates, blog drafts, and credential management are performed instantly via the admin dashboard.
+3. **AI Search & Answer Engine Optimization (AEO / GEO):** Beyond traditional meta tags, modern web discovery requires semantic entity graphs, Schema.org microdata, and structured `/llms.txt` feeds for LLMs and AI search engines (Perplexity, ChatGPT, Copilot, Gemini).
+4. **Production Security & Abuse Prevention:** Unprotected forms and endpoints invite scrapers and mail abuse. Integrating Cloudflare Turnstile, distributed rate limiting, and strict input validation demonstrates defensive engineering in practice.
+5. **Grounded AI Interaction:** The portfolio embeds a first-person AI assistant grounded strictly in verified repository facts, demonstrating practical RAG and agent workflow design.
 
 ---
 
 ## Key Features
 
-Each feature below lists **what it does**, **why it exists**, and the **engineering value** it demonstrates.
+### 1. Interactive AI Assistant ("Ask Vedaang" / `/ask`)
+- **What:** A conversational AI assistant grounded strictly in portfolio knowledge, resume facts, case studies, and academic publications.
+- **Why:** Allows recruiters, engineers, and visitors to query projects, architectures, and technical skills interactively.
+- **Value:** Implements domain normalization, knowledge aggregation (`lib/knowledge/aggregate.ts`), streaming responses, and strict guardrails preventing hallucinations. Protected by Cloudflare Turnstile bot verification.
 
-### Content Management System
-- **What:** A full admin CMS that manages projects, categories, skills, experience, education, research, certifications, blog posts, social links, and global site settings.
-- **Why:** Content changes constantly; code shouldn't have to.
-- **Value:** End-to-end CRUD across many resource types, all flowing through a consistent API and data-mapping layer.
+### 2. Full-Stack Content Management System (CMS)
+- **What:** An authenticated dashboard managing Projects, Categories, Skills, Experience, Education, Research, Certifications, Blog Posts, Socials, and Global Settings.
+- **Why:** Eliminates the need to redeploy code for content changes.
+- **Value:** Complete CRUD workflows across 10 resource types with typed database mappers and optimistic UI updates.
 
-### Authentication
-- **What:** Email/password sign-in via Supabase Auth with cookie-based SSR sessions.
-- **Why:** The admin surface must be private.
-- **Value:** Correct server-side session handling with `@supabase/ssr` across middleware, server components, and route handlers.
+### 3. Production SEO, AEO & GEO Optimization Engine
+- **What:** Complete search and answer engine optimization infrastructure:
+  - **Single Source of Truth (`lib/seo/config.js`):** Authoritative centralized configuration ensuring strict entity consistency.
+  - **JSON-LD Schema Graph (`lib/seo/schema.js`):** Rich structured data for `Person`, `WebSite`, `ProfilePage`, `FAQPage`, `ItemList`, `EducationalOccupationalCredential`, `BreadcrumbList`, `SoftwareApplication`, `ScholarlyArticle`, and `BlogPosting`.
+  - **LLM Discovery Feeds (`/llms.txt` & `/llms-full.txt`):** Structured markdown specifications per `llmstxt.org` for answer engines and generative AI agents.
+  - **Dynamic Sitemap (`app/sitemap.js`):** Server-rendered sitemap automatically synchronizing live projects, published articles, and research papers from PostgreSQL.
+  - **Modern Robots Directive (`app/robots.js`):** Crawl rules permitting search engines and verified AI crawlers (GPTBot, ClaudeBot, PerplexityBot) while strictly protecting `/admin`, `/api/`, and `/ask`.
+  - **Visible Synchronized FAQs:** Interactive FAQ on `/about` backed by inline Schema.org microdata matching JSON-LD schemas with zero hidden text.
 
-### Authorization
-- **What:** A single-admin model — only the email in `ADMIN_EMAIL` is treated as an administrator, enforced in both middleware and every write route.
-- **Why:** "Logged in" must never equal "authorized." Any Supabase account existing should not grant admin power.
-- **Value:** A clean authorization boundary independent of authentication.
+### 4. Cloudflare Turnstile Bot Defense
+- **What:** Invisible and interaction-based CAPTCHA alternative via Cloudflare Turnstile.
+- **Why:** Protects public write endpoints (contact forms, resume downloads, chat assistant) from automated bots and scraping without user friction.
+- **Value:** Server-side token validation via Cloudflare Siteverify API before fulfilling requests.
 
-### Project Management
-- **What:** Create and edit projects with tech stack, categories, images, links, and long-form engineering notes (problem statement, architecture, decisions, lessons learned).
-- **Why:** Projects are the core artifact of an engineering portfolio.
-- **Value:** Models rich, structured content rather than flat text.
+### 5. Single-Admin Authorization & Edge Middleware
+- **What:** Single-admin model where only the verified email in `ADMIN_EMAIL` receives administrative privileges.
+- **Why:** "Logged in" must never equal "authorized."
+- **Value:** Edge middleware guards all `/admin/*` routes. Every write API independently enforces `requireAdmin()` with defense-in-depth authorization.
 
-### Image Upload System
-- **What:** Authenticated uploads with MIME allowlists, file-size caps, magic-byte content verification, and server-generated filenames.
-- **Why:** Public buckets are a classic stored-XSS and abuse vector.
-- **Value:** Defense-in-depth file handling that rejects spoofed and malicious files.
+### 6. Secure Upload System & Supabase Storage
+- **What:** Authenticated file uploads with magic-byte content inspection, strict MIME allowlists (JPEG, PNG, WebP, AVIF, PDF), size limits (5 MB images, 10 MB PDFs), and server-generated UUID filenames.
+- **Why:** Prevents stored XSS, polyglot file attacks, and path traversal.
+- **Value:** Safe binary handling decoupling structured data from media storage.
 
-### Supabase Storage Integration
-- **What:** Images and the résumé PDF are stored in Supabase Storage and served via optimized public URLs.
-- **Why:** Binary assets don't belong in a Git repo or a database.
-- **Value:** Proper separation of structured data and object storage.
+### 7. Résumé Telemetry & Access Tracking
+- **What:** Server-side download endpoint logging download events (approximate country/city via IP geolocation, ISP, timestamp, user agent) with automated transactional email notifications.
+- **Why:** Provides visibility into hiring and collaboration interest while respecting user privacy (no GPS or invasive tracking).
+- **Value:** Integrates background transactional notifications via Nodemailer/SMTP/Resend with PostgreSQL storage.
 
-### Dynamic Open Graph Images
-- **What:** Share cards are generated on demand at the edge via `next/og` from query parameters.
-- **Why:** Every page deserves a tailored social preview without manual design work.
-- **Value:** Edge runtime rendering and dynamic image generation.
+### 8. Dynamic Open Graph & Social Cards
+- **What:** Edge-rendered social share previews generated dynamically via `next/og` from query parameters and article metadata.
+- **Why:** Ensures every project, post, and research paper has tailored, high-resolution social previews across Twitter/X, LinkedIn, and Discord.
+- **Value:** Low-latency dynamic image synthesis running on Vercel Edge Runtime.
 
-### SEO Optimization
-- **What:** Metadata templates, Open Graph and Twitter cards, and a generated sitemap.
-- **Why:** Discoverability matters for a public portfolio.
-- **Value:** Framework-native metadata and crawler-friendly output.
+### 9. Upstash Redis Distributed Rate Limiting
+- **What:** Sliding-window rate limiter on unauthenticated public routes (contact submissions, chat interactions) backed by Upstash Redis, with graceful memory-based fallback.
+- **Why:** Prevents spam, denial-of-service, and resource exhaustion on serverless functions.
+- **Value:** Stateful rate limiting across stateless serverless instances.
 
-### Analytics
-- **What:** PostHog product analytics (reverse-proxied through the app), plus Vercel Analytics and Speed Insights.
-- **Why:** You can't improve what you can't measure.
-- **Value:** Event instrumentation and real-user performance monitoring.
-
-### Responsive Design
-- **What:** Mobile-first layouts with Tailwind CSS 4 and Framer Motion transitions.
-- **Why:** Most visitors arrive on mobile.
-- **Value:** Accessible, fluid UI across breakpoints.
-
-### Performance Optimization
-- **What:** Server Components, an AVIF/WebP image pipeline with Sharp, route-level caching, and bundle analysis.
-- **Why:** Speed is a feature and a ranking signal.
-- **Value:** Measurable Core Web Vitals discipline.
-
-### Security Hardening
-- **What:** Authorization gates, validated uploads, rate limiting, honeypot spam protection, safe error handling, and a full security header policy.
-- **Why:** A public, write-capable app is an attack surface.
-- **Value:** A security-first mindset applied throughout the stack. *(See [Security Features](#security-features).)*
-
-### Admin Dashboard
-- **What:** A unified, route-grouped dashboard for operating the entire platform.
-- **Why:** Content owners need one place to work.
-- **Value:** Cohesive internal-tooling UX.
-
-### Research Publication Management
-- **What:** Manage research interests and papers (venue, year, abstract, areas, DOI, linked project).
-- **Why:** Academic and research work needs first-class structure.
-- **Value:** Domain modeling beyond generic "posts."
-
-### Certification Management
-- **What:** Track certifications with issuer, year, category, and verification URL.
-- **Why:** Credentials are part of a professional profile.
-- **Value:** Another cleanly modeled, CMS-driven content type.
-
-### Blog Management
-- **What:** Author posts and topics with a draft/publish workflow; drafts are never exposed publicly.
-- **Why:** Writing in public builds credibility — safely.
-- **Value:** A publishing workflow with proper visibility controls.
+### 10. Design System & Performance Engineering
+- **What:** Modern dark/light theme engine using CSS variables and Tailwind CSS 4 custom variants, Framer Motion springs, accessible typography, and an AVIF/WebP image pipeline powered by Sharp.
+- **Why:** High visual fidelity with fast load times (Core Web Vitals discipline).
+- **Value:** Server Components reducing client JS bundles, zero flash of unstyled theme (THEME_INIT_SCRIPT), and smooth micro-animations.
 
 ---
 
-## Security Features
-
-Security is treated as a first-class concern, not an afterthought. Implemented controls:
-
-| Area | Implementation |
-| ---- | -------------- |
-| **Authentication** | Supabase Auth (email/password) with cookie-based SSR sessions via `@supabase/ssr`. |
-| **Admin-only authorization** | Every write/admin operation passes through a shared `requireAdmin()` gate before any privileged work. |
-| **Protected admin routes** | Edge middleware guards all `/admin/*` routes and redirects unauthorized users to login. |
-| **`ADMIN_EMAIL` allowlist** | Only the configured admin email is authorized — authentication alone never grants admin access. |
-| **Secure middleware** | Centralized request-time enforcement with no redirect loops for authenticated non-admins. |
-| **Role-based access control** | A clear single-admin role boundary separates public and privileged surfaces. |
-| **File upload validation** | Strict per-kind handling for images and the résumé PDF. |
-| **Magic-byte verification** | Real file bytes are inspected; declared MIME types that don't match the content are rejected (blocks disguised SVG/HTML/scripts). |
-| **MIME-type allowlists** | Images: JPEG, PNG, WebP, AVIF. Documents: PDF. Everything else is rejected. |
-| **File size restrictions** | Images ≤ 5 MB, résumé PDF ≤ 10 MB. |
-| **Server-generated filenames** | Filenames are created server-side (timestamp + UUID); client filenames are never trusted — prevents path traversal. |
-| **Rate limiting** | IP-based throttling on the public contact form (5 requests / 10 minutes) with graceful `429` responses. |
-| **Upstash Redis integration** | Distributed rate limiting across serverless instances when configured, with an in-memory fallback otherwise. |
-| **Honeypot spam protection** | A hidden field traps bots; flagged submissions are silently dropped. |
-| **HSTS** | `Strict-Transport-Security` enforces HTTPS for two years, including subdomains. |
-| **Referrer-Policy** | `strict-origin-when-cross-origin` limits referrer leakage. |
-| **Permissions-Policy** | Camera, microphone, geolocation, and browsing-topics are disabled. |
-| **Content Security Policy** | A scoped CSP ships in **Report-Only** mode for safe tuning before enforcement. |
-| **Additional headers** | `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`. |
-| **Input validation** | Request bodies are length-capped, email-validated, and HTML-escaped before use. |
-| **Safe error handling** | Clients receive generic messages; SQL text, database internals, hints, and stack traces are logged server-side only. |
-| **Environment variable protection** | Secrets are server-only (no `NEXT_PUBLIC_` prefix) and never reach the client bundle. |
-| **Service-role security boundary** | The RLS-bypassing service-role key is used only after `requireAdmin()` for writes, and for public-data-only reads — documented at the source. |
-
----
 ## Architecture Overview
 
 ```mermaid
 flowchart TD
-    A[Browser / Visitor] -->|HTTPS| B[Next.js 15 App Router]
-    B --> C{Route Type}
+    subgraph Clients["Clients & Ingestion"]
+        Visitor["Web Visitor (Browser)"]
+        AdminUser["Portfolio Owner (Admin)"]
+        AICrawler["AI Crawlers & Search Engines<br/>(Google, Perplexity, GPTBot)"]
+    end
 
-    C -->|Public Page| D[Server Components + SSR]
-    C -->|/admin/*| E[Edge Middleware<br/>Auth + ADMIN_EMAIL gate]
-    C -->|/api/*| F[API Route Handlers]
+    subgraph EdgeLayer["Edge Runtime & Routing (Vercel)"]
+        Middleware["Edge Middleware<br/>(Auth & ADMIN_EMAIL Gate)"]
+        RobotsSitemap["robots.txt & sitemap.xml<br/>(Dynamic Ingestion)"]
+        LLMsFeeds["/llms.txt & /llms-full.txt<br/>(AEO/GEO Discovery)"]
+    end
 
-    E -->|authorized| G[Admin Dashboard]
-    E -->|unauthorized| H[Redirect → /admin/login]
+    subgraph AppLayer["Next.js 15 App Router"]
+        PublicPages["Server Components (SSR)<br/>(/, /about, /projects, /research, /blog)"]
+        AskAssistant["/ask AI Chat Interface<br/>(Turnstile Protected)"]
+        AdminDashboard["/admin Dashboard<br/>(Route Group: panel)"]
+        
+        subgraph APIRoutes["API Route Handlers"]
+            PublicAPI["Public GET Handlers"]
+            AdminAPI["Protected Write Handlers<br/>(requireAdmin Gate)"]
+            ChatAPI["/api/ask (RAG & SSE Streaming)"]
+            ResumeAPI["/api/resume & /api/download-resume"]
+        end
+    end
 
-    G --> F
-    F --> I[requireAdmin gate<br/>writes only]
+    subgraph Services["Security & Storage Services"]
+        Turnstile["Cloudflare Turnstile<br/>(Bot Verification)"]
+        RedisLimit["Upstash Redis<br/>(Distributed Rate Limiting)"]
+        SupaAuth["Supabase Auth<br/>(@supabase/ssr Sessions)"]
+        SupaDB[(Supabase PostgreSQL<br/>CMS Data & Telemetry)]
+        SupaStore["Supabase Storage<br/>(Media & Resume PDFs)"]
+        MailService["SMTP / Notification Service<br/>(Transactional Alerts)"]
+    end
 
-    D --> J[Supabase Auth]
-    F --> J
-    I --> K[(Supabase PostgreSQL)]
-    F --> K
-    I --> L[Supabase Storage]
-    F --> L
+    %% Client flows
+    Visitor --> PublicPages
+    Visitor --> AskAssistant
+    Visitor --> ResumeAPI
+    AdminUser -->|/admin/login| Middleware
+    Middleware -->|Authorized| AdminDashboard
+    AICrawler --> RobotsSitemap
+    AICrawler --> LLMsFeeds
+    AICrawler --> PublicPages
 
-    B --> M[PostHog / Vercel Analytics]
+    %% Internal flows
+    AskAssistant --> Turnstile
+    AskAssistant --> ChatAPI
+    PublicPages --> PublicAPI
+    AdminDashboard --> AdminAPI
+
+    %% API to services
+    ChatAPI --> RedisLimit
+    ChatAPI --> SupaDB
+    AdminAPI --> SupaAuth
+    AdminAPI --> SupaDB
+    AdminAPI --> SupaStore
+    ResumeAPI --> SupaStore
+    ResumeAPI --> MailService
+    ResumeAPI --> SupaDB
+    PublicAPI --> SupaDB
 ```
 
-### Data Flow
+---
 
-- **Public visitors** request pages that are server-rendered. Public content is read through the data layer and returned as JSON via `/api/*` or fetched directly in Server Components. No privileged credentials are ever exposed.
-- **Authenticated admin** signs in through Supabase Auth. The session cookie is validated at the edge by middleware, which additionally checks the email against `ADMIN_EMAIL` before allowing any `/admin/*` access.
-- **File uploads** are sent to authenticated API routes that validate type, size, and content (magic bytes) before storing the file in Supabase Storage under a server-generated name.
-- **Content management** flows through write API routes. Each one calls `requireAdmin()` first, then performs the mutation using the service-role client (which bypasses Row Level Security) — so the authorization gate, not RLS, is the trust boundary for writes.
-- **API requests** are consistent: GET handlers serve public data; POST/PUT/DELETE handlers are admin-gated and return safe, generic errors while logging full detail server-side.
+## Security Architecture & Controls
+
+| Security Control | Implementation Mechanism | Purpose |
+|---|---|---|
+| **Edge Authorization Gate** | Next.js Edge Middleware (`middleware.js`) | Validates Supabase session and enforces `ADMIN_EMAIL` match before serving `/admin/*` routes. |
+| **Defense-in-Depth Write Checks** | `lib/auth/requireAdmin.js` | Independently re-verifies authentication and admin allowlist on every `POST`/`PUT`/`DELETE` handler. |
+| **Bot Verification** | Cloudflare Turnstile (`lib/turnstile.js`) | Protects contact inquiries, chat assistant, and resume download actions from automated scripts. |
+| **Distributed Rate Limiting** | Upstash Redis + `@upstash/ratelimit` | Enforces sliding-window request throttling across serverless instances (with in-memory fallback). |
+| **Magic-Byte Content Validation** | `lib/upload/validateUpload.js` | Inspects binary file signatures; rejects disguised executable files, scripts, or invalid MIME types. |
+| **Server-Generated Filenames** | UUIDv4 + Timestamp Hashing | Prevents path traversal and filename collisions in Supabase Storage. |
+| **HTTP Security Headers** | `next.config.js` | Implements HSTS (2 years), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, Referrer-Policy, and Permissions-Policy. |
+| **Content Security Policy (CSP)** | Scoped Report-Only / Strict Directives | Restricts script, style, connect, and image sources to approved origins. |
+| **Honeypot Spam Defense** | Hidden Form Trap | Silently drops automated bot form submissions that populate invisible honeypot inputs. |
+| **Data Privacy & Telemetry Guard** | Supabase Row Level Security (RLS) | Telemetry and admin tables are inaccessible publicly; queries flow through server-side authenticated clients. |
 
 ---
 
-## Tech Stack
+## Technical Stack & Dependencies
 
-| Category | Technologies |
-| -------- | ------------ |
-| **Frontend** | Next.js 15 (App Router), React 19, Tailwind CSS 4, Framer Motion, FontAwesome |
-| **Backend** | Next.js API Route Handlers (Node & Edge runtimes) |
-| **Database** | Supabase PostgreSQL |
-| **Authentication** | Supabase Auth (`@supabase/ssr`) |
-| **Storage** | Supabase Storage |
-| **Analytics** | PostHog, Vercel Analytics, Vercel Speed Insights |
-| **Performance** | Sharp, AVIF/WebP pipeline, Server Components, edge runtime, `@next/bundle-analyzer` |
-| **Security** | Upstash Redis (rate limiting), security headers, CSP (Report-Only) |
-| **Deployment** | Vercel |
-| **Developer Tooling** | ESLint 9, Turbopack (dev), pnpm |
-
----
-
-## Engineering Decisions
-
-**Why Next.js 15?** A single framework for SSR, server components, API routes, edge middleware, and image optimization — eliminating the need to wire together a separate frontend and backend.
-
-**Why the App Router?** Server Components reduce client JavaScript, layouts compose cleanly, and route handlers + middleware live next to the UI they protect. It's the modern, future-facing Next.js model.
-
-**Why React 19?** Latest concurrent features and first-class Server Component support, paired naturally with Next 15.
-
-**Why Supabase?** It provides Postgres, authentication, and object storage as one coherent platform with a typed client. That covers the three hardest backend concerns without operating separate services.
-
-**Why a CMS?** To decouple content from code. Content lives in Postgres and is editable through an admin UI, so the site evolves without builds or deploys.
-
-**Why Vercel?** Native Next.js hosting with edge middleware, automatic HTTPS, preview deployments, and built-in analytics/speed insights — the lowest-friction path to a production deployment.
-
-**Why server-side APIs?** Centralizing data access on the server keeps the service-role key off the client, enforces validation in one place, and provides a stable contract for the UI.
-
-**Why middleware-based route protection?** Authorization runs at the edge *before* a protected page renders, which is faster and safer than per-page client checks and impossible to bypass from the browser.
-
-**Why rate limiting?** The contact endpoint is public and unauthenticated — without throttling it's an open mail-relay and spam vector. Upstash Redis makes the limit consistent across serverless instances.
-
-**Why secure uploads?** A public storage bucket that accepts arbitrary files is a stored-XSS and abuse risk. Validating MIME, size, and magic bytes — and generating filenames server-side — closes that surface.
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                              FRONTEND                                  │
+│  Next.js 15 (App Router) • React 19 • Tailwind CSS 4 • Framer Motion   │
+│  FontAwesome 6 • NProgress • Jost & Poppins (next/font)               │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     │
+┌────────────────────────────────────▼───────────────────────────────────┐
+│                              BACKEND                                   │
+│  Next.js API Route Handlers (Node.js & Edge Runtime)                  │
+│  Knowledge Normalizer & Aggregator • RAG Answer Engine                 │
+│  Nodemailer • IP Geolocation Resolution                                │
+└────────────────────────────────────┬───────────────────────────────────┘
+                                     │
+┌────────────────────────────────────▼───────────────────────────────────┐
+│                        INFRASTRUCTURE & DATA                           │
+│  Supabase PostgreSQL • Supabase Auth (@supabase/ssr)                  │
+│  Supabase Storage • Upstash Redis • Cloudflare Turnstile               │
+│  Sharp (Image Processing) • PostHog Analytics • Vercel Analytics       │
+└────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Project Structure
+## Repository Structure
 
 ```
 .
 ├── app/
-│   ├── (root)/                 # Home page (hero, previews, contact)
-│   ├── about/                  # Bio, skills, experience, education
-│   ├── projects/               # List, [slug] detail, archive
-│   ├── blog/                   # Blog index and [slug] post pages
-│   ├── research/               # Research index and [slug] pages
-│   ├── certifications/         # Certifications showcase
-│   ├── skills/                 # Skills showcase
-│   ├── contact/                # Contact page
-│   ├── now/                    # "/now" status page
-│   ├── admin/
-│   │   ├── login/              # Standalone login route
-│   │   └── (panel)/            # Auth-gated dashboard (route group)
-│   │       ├── dashboard/  projects/  categories/  skills/
-│   │       ├── experience/ education/ research/     blog/
-│   │       └── certifications/ socials/ settings/
-│   ├── api/                    # Route handlers (REST)
-│   │   ├── projects, categories, skills, experience, education,
-│   │   ├── socials, certifications, settings, now, github,
-│   │   ├── blog/*, research/*, contact, og, resume,
-│   │   ├── upload, upload/resume, auth/logout
-│   └── sitemap.js              # Dynamic sitemap
-├── components/                 # Shared UI (Navbar, Footer, ContactForm, …)
+│   ├── (root)/                 # Home landing page (Hero, Previews, Teasers, Contact CTA)
+│   ├── about/                  # Bio, Experience, Education, Visible Schema-Backed FAQ
+│   │   └── components/         # Modular About sections (about, education, experience, faq)
+│   ├── projects/               # Projects showcase, ItemList schema
+│   │   ├── [slug]/             # Dynamic project detail (Metadata, SoftwareApplication schema)
+│   │   └── archive/            # Historical project archive
+│   ├── research/               # Academic publications & Research showcase
+│   │   └── [slug]/             # ScholarlyArticle schema, publication details
+│   ├── blog/                   # Technical blog posts & Topic filtering
+│   │   └── [slug]/             # BlogPosting schema, article view
+│   ├── skills/                 # Comprehensive technical skill matrix
+│   │   └── components/         # Interactive skill categories & proficiencies
+│   ├── certifications/         # Verified credentials & EducationalOccupationalCredential schemas
+│   ├── contact/                # Contact form with Turnstile & rate limiting
+│   ├── privacy/                # Privacy policy, telemetry disclosures
+│   ├── ask/                    # "Ask Vedaang" AI Assistant interface (robots: noindex)
+│   ├── admin/                  # Admin surface (robots: noindex)
+│   │   ├── login/              # Admin login interface
+│   │   └── (panel)/            # Protected CMS dashboard routes (projects, blog, settings, etc.)
+│   ├── api/                    # Route handlers (REST endpoints)
+│   │   ├── ask/                # AI assistant conversational endpoint (streaming SSE)
+│   │   ├── contact/            # Turnstile-verified contact handler
+│   │   ├── resume/             # Secure resume download & telemetry logger
+│   │   ├── upload/             # Magic-byte validated media upload handler
+│   │   └── [entities]/         # CRUD handlers for projects, research, blog, skills, etc.
+│   ├── robots.js               # Dynamic robots.txt with search & AI bot directives
+│   ├── sitemap.js              # Dynamic XML sitemap generator
+│   └── layout.jsx              # Root layout (Person & WebSite JSON-LD, Fonts, Theme init)
+├── components/                 # Shared UI (Navbar, Footer, AuroraBackground, FlyRankBadge, etc.)
 ├── lib/
-│   ├── auth/                   # requireAdmin, isAdminEmail (authorization)
-│   ├── upload/                 # validateUpload (MIME/size/magic-byte checks)
-│   ├── supabase/               # client / server / admin clients + mappers
-│   ├── apiError.js             # Safe, centralized error responses
-│   ├── rateLimit.js            # Upstash + in-memory rate limiter
-│   └── api.js / adminApi.js    # Client fetch helpers
-├── middleware.js               # Edge auth + ADMIN_EMAIL gate for /admin/*
-├── next.config.js              # Image, headers (CSP/HSTS/…), analyzer, rewrites
-└── public/                     # Static assets
+│   ├── ask/                    # AskEngine reasoning and prompt grounding logic
+│   ├── auth/                   # requireAdmin & single-admin authorization utilities
+│   ├── knowledge/              # Dynamic repository knowledge aggregator & normalizer
+│   ├── seo/                    # Centralized SEO config (config.js) & JSON-LD generators (schema.js)
+│   ├── supabase/               # Browser, SSR, and Service-Role Supabase clients + mappers
+│   ├── upload/                 # Magic-byte file validation rules
+│   ├── rateLimit.js            # Upstash Redis sliding-window rate limiter
+│   └── turnstile.js            # Cloudflare Turnstile token validation
+├── public/
+│   ├── llms.txt                # Machine-readable LLM summary index
+│   ├── llms-full.txt           # Extended knowledge base for AI answer engines
+│   └── image/                  # Static media and assets
+├── next.config.js              # Security headers, CSP, Sharp optimization, bundle analyzer
+└── README.md                   # Platform documentation
 ```
-
-**Separation of concerns**
-
-- **`app/`** — routing, pages, and the API surface. Public pages and the admin panel are isolated via route groups (`(root)`, `(panel)`).
-- **`components/`** — reusable presentation only; no data-access logic.
-- **`lib/auth/`** — the single source of truth for authorization, shared by middleware and route handlers.
-- **`lib/upload/`** — all file-validation rules in one place, reused by every upload endpoint.
-- **`lib/supabase/`** — three clearly-scoped clients (browser, SSR server, service-role admin) plus DB↔API mappers, so credentials and trust levels never blur.
-- **`lib/apiError.js` & `lib/rateLimit.js`** — cross-cutting concerns (safe errors, abuse protection) factored out for consistency.
-- **`middleware.js`** — request-time authorization at the edge, decoupled from page logic.
-
----
-## Admin Platform
-
-The admin platform is a self-serve CMS that operates the entire public site.
-
-**Authentication flow**
-1. The admin signs in at `/admin/login` with Supabase email/password credentials.
-2. Supabase issues a session stored in secure cookies.
-3. `@supabase/ssr` makes that session available to middleware, server components, and API routes.
-
-**Authorization flow**
-1. Edge middleware intercepts every `/admin/*` request and resolves the current user.
-2. The user's email is checked against `ADMIN_EMAIL`. Only a match is considered an admin.
-3. Unauthorized users are redirected to login; authenticated non-admins are treated as guests (no redirect loop).
-4. Every write API route independently re-verifies admin status via `requireAdmin()` — defense in depth, never trusting the client.
-
-**Protected routes** — all dashboard screens live under the `(panel)` route group and are unreachable without passing the middleware gate.
-
-The dashboard manages:
-
-| Module | Capabilities |
-| ------ | ------------ |
-| **Dashboard** | Central entry point to all content modules. |
-| **Project management** | Create/edit projects: tech stack, categories, images, links, and engineering write-ups. |
-| **Category management** | Define and order project categories. |
-| **Skills management** | Group skills by category and proficiency level. |
-| **Experience management** | Roles, companies, dates, descriptions, and skills. |
-| **Education management** | Institutions, degrees, achievements, and media. |
-| **Research management** | Research interests and papers (venue, year, abstract, DOI, linked project). |
-| **Blog management** | Posts and topics with a draft/publish workflow. |
-| **Settings management** | Global site identity, bio, SEO metadata, and images. |
-| **Image uploads** | Validated uploads to Supabase Storage with instant public URLs. |
-
-**Content publishing workflow** — content is created as structured records in Postgres. Blog posts support an explicit **draft → published** state; unpublished drafts are never returned to public requests (draft access is admin-gated). Updates appear on the live site immediately, with no rebuild or redeploy.
-
----
-
-## Performance Optimization
-
-- **Next.js optimizations** — App Router with selective static generation and on-demand server rendering per route.
-- **Server Components** — data-heavy UI renders on the server, shipping less JavaScript to the browser.
-- **Image optimization** — `next/image` with an **AVIF → WebP** format pipeline powered by **Sharp**, plus restricted remote image origins.
-- **Caching strategies** — route-level cache headers and revalidation on cacheable endpoints (e.g. GitHub activity and the sitemap).
-- **Bundle optimization** — `@next/bundle-analyzer` for monitoring bundle size; production builds strip `console` calls (keeping `error`/`warn`).
-- **Dynamic imports** — heavier client widgets are loaded only when needed.
-- **Analytics optimization** — PostHog is reverse-proxied through the app to avoid third-party request blocking and keep instrumentation lightweight.
-- **Edge runtime usage** — dynamic OG image generation runs on the edge for low-latency social previews.
-
----
-
-## SEO Features
-
-- **Metadata** — per-route titles and descriptions via the Next.js Metadata API.
-- **Open Graph** — rich link previews for social platforms.
-- **Twitter Cards** — optimized previews for Twitter/X.
-- **Dynamic OG generation** — edge-rendered share images via `next/og`, customized per page from query parameters.
-- **Structured content** — content modeled in Postgres and rendered server-side, so crawlers receive complete HTML.
-- **Sitemap generation** — a generated sitemap exposes public routes to search engines.
-- **Search engine optimization** — semantic markup and crawlable server-rendered pages.
-- **Social sharing optimization** — consistent OG/Twitter metadata across every shareable page.
-
----
-
-## Development Setup
-
-### Prerequisites
-- **Node.js 18.18+** (Node 20+ recommended for Next.js 15)
-- **pnpm** (or npm)
-- A **Supabase** project (free tier is sufficient)
-- *(Optional)* an **Upstash Redis** database for distributed rate limiting
-
-### Installation
-```bash
-git clone https://github.com/Vedaang17/Vedaang-Sharma-Portfolio.git
-cd Vedaang-Sharma-Portfolio
-pnpm install        # or: npm install
-```
-
-### Environment Variables
-Create a `.env.local` in the project root (see the [table below](#environment-variables)):
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
-SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
-ADMIN_EMAIL=<your-admin-email>
-
-# Optional — distributed rate limiting
-UPSTASH_REDIS_REST_URL=<upstash-url>
-UPSTASH_REDIS_REST_TOKEN=<upstash-token>
-
-# Contact form & resume download notification (SMTP)
-SMTP_HOST=
-SMTP_PORT=587
-SMTP_USER=
-SMTP_PASS=
-SMTP_TO=<inbox@example.com>
-
-# Resume download notification (optional overrides)
-RESUME_NOTIFICATION_EMAIL=<inbox@example.com>
-# RESEND_API_KEY=<optional-resend-key>
-```
-
-### Database Setup
-Create the Supabase tables backing each content type (projects, categories, skills, experience, education, socials, certifications, blog posts/topics, research interests/papers, and `site_settings`). The expected shapes are documented implicitly by [`lib/supabase/mappers.js`](lib/supabase/mappers.js) and the `/api/*` route handlers.
-
-### Storage Setup
-Create a public Supabase Storage bucket named **`images`** for project media, screenshots, and the résumé PDF (stored at `resume/current.pdf`).
-
-### Admin User Creation
-1. In the Supabase dashboard, create a user (Authentication → Users) with your email.
-2. Set `ADMIN_EMAIL` to that exact email.
-3. **Disable public sign-ups** in Supabase Auth so no one else can register.
-
-> Without `ADMIN_EMAIL` set, the admin dashboard is intentionally locked for everyone (the authorization gate fails closed).
-
-### Running Locally
-```bash
-pnpm dev            # http://localhost:3000 (Turbopack)
-```
-
-### Building
-```bash
-pnpm build
-pnpm start
-```
-
-### Linting
-```bash
-pnpm lint
-```
-
-### Deployment
-Push to GitHub and import the repository into Vercel. Configure the environment variables in the Vercel dashboard and deploy. See [Deployment](#deployment) for the full guide.
 
 ---
 
 ## Environment Variables
 
-| Variable | Scope | Purpose | Security Implication |
-| -------- | ----- | ------- | -------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL` | 🌐 Public | Supabase project URL used by browser & server clients. | Safe to expose; identifies the project only. |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 🌐 Public | Anonymous key for RLS-bound client access. | Safe to expose; constrained by Row Level Security. |
-| `SUPABASE_SERVICE_ROLE_KEY` | 🔒 Server-only | Privileged key for admin writes and trusted reads. | **Never** expose. Bypasses RLS; used only after `requireAdmin()`. |
-| `ADMIN_EMAIL` | 🔒 Server-only | The single authorized admin email. | Defines the authorization boundary for the whole admin surface. |
-| `UPSTASH_REDIS_REST_URL` | 🔒 Server-only | Upstash Redis REST endpoint for rate limiting. | Optional; enables distributed throttling. |
-| `UPSTASH_REDIS_REST_TOKEN` | 🔒 Server-only | Upstash Redis REST auth token. | Secret; grants access to the rate-limit store. |
-
-> Server-only variables have **no** `NEXT_PUBLIC_` prefix and are never bundled into client-side JavaScript.
-
----
-
-## Deployment
-
-A production deployment on **Vercel**:
-
-1. **GitHub** — push the repository to GitHub.
-2. **Vercel** — import the repo; Vercel auto-detects Next.js. Every push gets a preview deployment; `main` deploys to production.
-3. **Environment configuration** — add all variables from the table above in **Vercel → Project → Settings → Environment Variables** (Production + Preview).
-4. **Admin setup** — create your Supabase user, set `ADMIN_EMAIL` to match, and disable public sign-ups.
-5. **Storage setup** — create the public `images` bucket and confirm the remote image origin is allowed in `next.config.js`.
-6. **Rate limiting setup** — *(optional)* create an Upstash Redis database and add its REST URL/token; otherwise the in-memory fallback applies per instance.
-7. **Production security considerations:**
-   - Verify `ADMIN_EMAIL` is set and Supabase sign-ups are disabled.
-   - Confirm the service-role key is server-only.
-   - Review the **Report-Only CSP** against real reports, then promote it to an enforcing `Content-Security-Policy`.
-   - Confirm HSTS, Referrer-Policy, and Permissions-Policy headers are present on responses.
+| Variable | Scope | Description |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | 🌐 Public | Canonical domain URL (`https://vedaangsharma.in`). |
+| `NEXT_PUBLIC_SUPABASE_URL` | 🌐 Public | Supabase project API gateway. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 🌐 Public | Anonymous key for client-side queries bound by RLS. |
+| `SUPABASE_SERVICE_ROLE_KEY` | 🔒 Server-only | Privileged service key for admin CMS writes and secure operations. |
+| `ADMIN_EMAIL` | 🔒 Server-only | Verified email address authorized for `/admin` access. |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`| 🌐 Public | Cloudflare Turnstile public site key. |
+| `TURNSTILE_SECRET_KEY` | 🔒 Server-only | Cloudflare Turnstile secret validation key. |
+| `UPSTASH_REDIS_REST_URL` | 🔒 Server-only | REST endpoint for Upstash Redis distributed rate limiting. |
+| `UPSTASH_REDIS_REST_TOKEN` | 🔒 Server-only | Auth token for Upstash Redis. |
+| `SMTP_HOST` / `SMTP_PORT` | 🔒 Server-only | SMTP server configuration for contact and alert notifications. |
+| `SMTP_USER` / `SMTP_PASS` | 🔒 Server-only | SMTP authentication credentials. |
+| `SMTP_TO` | 🔒 Server-only | Destination inbox for inquiries and download telemetry alerts. |
 
 ---
 
-## What I Learned
+## Local Development
 
-Building this platform end to end developed practical, production-grade skills:
+### Prerequisites
+- **Node.js 20+**
+- **pnpm** (or npm)
+- **Supabase Account** with PostgreSQL database and `images` storage bucket
+- *(Optional)* **Upstash Redis** & **Cloudflare Turnstile** accounts
 
-- **Full-stack development** — integrating a Next.js frontend, server APIs, a database, and object storage into one coherent system.
-- **Authentication** — cookie-based SSR sessions across middleware, server components, and route handlers.
-- **Authorization** — designing a trust boundary (allowlist + `requireAdmin`) that is independent of authentication.
-- **Database design** — modeling many related content types in PostgreSQL with clean DB↔API mapping.
-- **Storage systems** — handling binary assets safely and serving them efficiently.
-- **API design** — consistent REST handlers with a public/private split and a stable response contract.
-- **Security engineering** — upload validation, rate limiting, spam protection, security headers, CSP, and safe error handling.
-- **Performance optimization** — Server Components, image pipelines, caching, and bundle analysis.
-- **Deployment workflows** — environment management, preview deployments, and production hardening on Vercel.
-- **CMS architecture** — decoupling content from code so a product can evolve without engineering.
+### Setup Steps
+```bash
+# 1. Clone repository
+git clone https://github.com/gtathelegend/Vedaang-Sharma-Portfolio.git
+cd Vedaang-Sharma-Portfolio
 
----
+# 2. Install dependencies
+pnpm install
 
-## Future Roadmap
+# 3. Configure environment variables
+cp .env.example .env.local
+# Populate .env.local with your Supabase, Turnstile, and SMTP keys
 
-- [ ] Multi-admin roles and granular permissions
-- [ ] Audit logging for admin actions
-- [ ] In-app analytics dashboard
-- [ ] AI-powered content search
-- [ ] Rich blog editor improvements
-- [ ] CMS workflow improvements (scheduling, previews)
-- [ ] Content versioning and rollback
-- [ ] Theme customization
+# 4. Start local development server (Turbopack)
+pnpm dev
 
----
-
-## Contributing
-
-Contributions, issues, and feature suggestions are welcome.
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/your-feature`.
-3. Commit your changes with clear messages.
-4. Run `pnpm lint` and `pnpm build` to verify the project is healthy.
-5. Push the branch and open a Pull Request describing the change and how it was tested.
-
-Please keep pull requests focused and ensure existing functionality remains intact.
+# 5. Run linting & production build validation
+pnpm lint
+pnpm build
+```
 
 ---
 
 ## License
 
-This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**.
-You may use, modify, and distribute it under the terms of that license. See the [LICENSE](LICENSE) file for the full text.
+This project is open-sourced under the **GNU General Public License v3.0 (GPL-3.0)**.  
+See the [LICENSE](LICENSE) file for complete details.
 
-> Copyright © 2025 Vedaang Sharma
+> Copyright © 2025–2026 Vedaang Sharma. All rights reserved.
 
 ---
 
 <div align="center">
 
-**[🌐 Live Site](https://vedaangsharma.in)** · Built with Next.js 15, React 19, and Supabase
+**[🌐 Official Website](https://vedaangsharma.in)** · **[💼 LinkedIn](https://www.linkedin.com/in/vedaangsharma2006/)** · **[🐙 GitHub](https://github.com/gtathelegend)**
 
 </div>
