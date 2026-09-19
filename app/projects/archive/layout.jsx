@@ -3,38 +3,39 @@ import { SITE_URL } from "@/lib/seo/config";
 import { getBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata = {
-  title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
+  title: "Project Archive | Vedaang Sharma",
   description:
-    "Technical articles and software engineering write-ups by Vedaang Sharma on AI systems, distributed backends, performance optimization, and modern web applications.",
-  alternates: { canonical: "/blog" },
+    "Complete chronological archive of software projects, open-source tools, and technical experiments developed by Vedaang Sharma.",
+  alternates: { canonical: "/projects/archive" },
   openGraph: {
-    title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
+    title: "Project Archive | Vedaang Sharma",
     description:
-      "Technical writing by Vedaang Sharma on full-stack engineering, AI/ML architectures, and production software patterns.",
-    url: `${SITE_URL}/blog`,
+      "Complete chronological archive of software projects, open-source tools, and experiments by Vedaang Sharma.",
+    url: `${SITE_URL}/projects/archive`,
     type: "website",
     images: [
       {
         url: "/og-image-rev.png",
         width: 1200,
         height: 630,
-        alt: "Vedaang Sharma Technical Blog",
+        alt: "Vedaang Sharma Project Archive",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vedaang Sharma Blog | AI Systems, Web & Software Engineering",
+    title: "Project Archive | Vedaang Sharma",
     description:
-      "Technical insights and architectural deep-dives by Vedaang Sharma.",
+      "Chronological catalog of engineering projects and open-source contributions by Vedaang Sharma.",
     images: ["/og-image-rev.png"],
   },
 };
 
-export default function BlogLayout({ children }) {
+export default function ProjectArchiveLayout({ children }) {
   const breadcrumbsJsonLd = getBreadcrumbSchema([
     { name: "Home", url: "/" },
-    { name: "Blog", url: "/blog" },
+    { name: "Projects", url: "/projects" },
+    { name: "Archive", url: "/projects/archive" },
   ]);
 
   return (

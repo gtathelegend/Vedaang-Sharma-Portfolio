@@ -6,6 +6,7 @@ export const metadata = {
   title: "Privacy Policy | Vedaang Sharma",
   description:
     "Privacy and data collection policy for Vedaang Sharma's portfolio, detailing resume download logging, approximate geolocation, and security practices.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

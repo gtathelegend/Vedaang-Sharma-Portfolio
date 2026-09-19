@@ -1121,10 +1121,10 @@ export default function MyPage() {
 	}, []);
 
 	const fullName = settings?.full_name || "Vedaang Sharma";
-	const tagline = settings?.tagline || "Full Stack & AI Systems Developer";
+	const tagline = settings?.tagline || "Full Stack Developer, AI & Cloud Developer";
 	const heroSubtitle =
 		settings?.hero_subtitle ||
-		"Building intelligent applications - AI agents, distributed systems, computer vision, and cloud-native architectures. CS student, published researcher, full-stack engineer.";
+		"Full Stack Developer specializing in Cloud Computing, AI/ML, and backend engineering. BCA student at Vivekananda Global University, Jaipur, building production-grade web applications and intelligent systems.";
 	const cvUrl = "/api/download-resume";
 
 	return (

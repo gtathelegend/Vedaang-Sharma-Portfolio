@@ -133,7 +133,7 @@ export default function FlyRankBadge({ className = "", style = {} }) {
             lineHeight: "1.3",
           }}
         >
-          Machine Learning
+          Backend AI Engineering
         </span>
       </span>
       <span
