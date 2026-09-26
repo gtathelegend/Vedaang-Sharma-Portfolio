@@ -30,7 +30,9 @@ export default function About() {
       className="mx-auto container gap-8 px-6 sm:px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 py-12 md:py-24"
       itemScope
       itemType="https://schema.org/Person"
+      itemID="https://vedaangsharma.in/#person"
     >
+
       <motion.div
         className="flex justify-center items-center"
         initial={{ opacity: 0, x: -60 }}
